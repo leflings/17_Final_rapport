@@ -1,4 +1,4 @@
 \select@language {danish}
-\contentsline {section}{\numberline {1}Timeregnskab}{3}
-\contentsline {section}{\numberline {2}Poster}{3}
-\contentsline {section}{\numberline {3}Vejledning}{4}
+\contentsline {section}{\numberline {1}Vejledning}{3}
+\contentsline {section}{\numberline {2}Poster}{4}
+\contentsline {section}{\numberline {3}Milestone 1}{5}
