@@ -1,4 +1,12 @@
 \select@language {danish}
-\contentsline {section}{\numberline {1}Vejledning}{3}
-\contentsline {section}{\numberline {2}Poster}{4}
-\contentsline {section}{\numberline {3}Milestone 1}{5}
+\contentsline {section}{\numberline {1}Timeregnskab}{1}
+\contentsline {section}{\numberline {2}Vejledning}{2}
+\contentsline {section}{\numberline {3}Poster}{3}
+\contentsline {section}{\numberline {4}Milestone 1}{4}
+\contentsline {subsection}{\numberline {4.1}Kravspecifikation}{4}
+\contentsline {subsection}{\numberline {4.2}Databasemodel}{4}
+\contentsline {subsection}{\numberline {4.3}Opgavens omfang og prioriteringer}{4}
+\contentsline {subsection}{\numberline {4.4}Arbejdsfordeling}{5}
+\contentsline {subsection}{\numberline {4.5}Tidsplan}{5}
+\contentsline {paragraph}{Uge 1}{5}
+\contentsline {paragraph}{Uge 2}{5}

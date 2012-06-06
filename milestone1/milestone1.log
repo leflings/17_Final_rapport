@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  4 JUN 2012 16:56
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  5 JUN 2012 19:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -597,34 +597,39 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 36.
+(./milestone1.toc
+LaTeX Font Info:    Try loading font information for U+msa on input line 6.
+
 (/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 36.
+LaTeX Font Info:    Try loading font information for U+msb on input line 6.
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-) [1
+))
+\tf@toc=\write3
+\openout3 = `milestone1.toc'.
+
+ [1
 
 {/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2
 
 ] [3
 
 ]
-<graphics/db.png, id=15, 648.4225pt x 628.3475pt>
+<graphics/db.png, id=16, 648.4225pt x 646.415pt>
 File: graphics/db.png Graphic file (type png)
  <use graphics/db.png>
-Package pdftex.def Info: graphics/db.png used on input line 90.
-(pdftex.def)             Requested size: 389.0565pt x 377.0114pt.
-
-[4
+Package pdftex.def Info: graphics/db.png used on input line 103.
+(pdftex.def)             Requested size: 389.0565pt x 387.85199pt.
+ [4
 
  <./graphics/db.png>] [5] (./milestone1.aux) ) 
 Here is how much of TeX's memory you used:
- 5724 strings out of 493633
- 77302 string characters out of 3143378
- 163445 words of memory out of 3000000
+ 5727 strings out of 493633
+ 77336 string characters out of 3143378
+ 165445 words of memory out of 3000000
  8904 multiletter control sequences out of 15000+200000
  13404 words of font info for 38 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
@@ -636,7 +641,7 @@ onts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2011/texmf-dist/fon
 ts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2011/texmf-dist/fonts
 /type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2011/texmf-dist/fonts/t
 ype1/public/cm-super/sfti1000.pfb>
-Output written on milestone1.pdf (5 pages, 143283 bytes).
+Output written on milestone1.pdf (5 pages, 147663 bytes).
 PDF statistics:
  42 PDF objects out of 1000 (max. 8388607)
  28 compressed objects within 1 object stream
