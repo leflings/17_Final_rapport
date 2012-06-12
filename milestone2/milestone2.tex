@@ -11,16 +11,6 @@
 
 \usepackage[top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry}
 
-\lstset{
-  inputencoding=utf8,
-  columns=flexible,
-  basicstyle=\tt,
-  language=bash,
-  tabsize=3,
-  showspaces=false,
-  showstringspaces=false,
-  breaklines=false
-}
 
 \title{02324: Milestone 2}
 \author{
@@ -44,13 +34,13 @@
   & \begin{sideways}Andet\end{sideways} 
   & \begin{sideways}Total\end{sideways} \\
   \hline
-  s113933 & Flemming Madsen              & 2 & 5  & 0  & 4 & 2 & 13 \\
-  s093018 & Christian Walldeskog Nielsen & 4 & 6  & 0  & 0 & 0 & 10 \\
-  s103799 & Martin Roland Hartvig        & 0 & 16 & 12 & 0 & 0 & 28 \\
-  s113618 & Tobias Brasch                & 2 & 10 & 0  & 0 & 0 & 12 \\
-  s113610 & Lavdrim Elmazi               & 0 & 0  & 0  & 0 & 5 & 5 \\
+  s113933 & Flemming Madsen              & 5 & 13 & 8  & 7 & 4  & 37 \\
+  s093018 & Christian Walldeskog Nielsen & 7 & 14 & 10 & 6 & 0  & 37 \\
+  s103799 & Martin Roland Hartvig        & 0 & 24 & 12 & 10 & 0 & 46 \\
+  s113618 & Tobias Brasch                & 2 & 37 & 4  & 3 & 3  & 49 \\
+  s113610 & Lavdrim Elmazi               & 0 & 0  & 5  & 0 & 15 & 20 \\
   \hline
-  -       & -                            & 8 & 37 & 12 & 4 & 7 & 68
+  -       & -                            & 14 & 88 & 39 & 26 & 22 & 189
   
 \end{tabular}
 
@@ -58,26 +48,41 @@
 
 \clearpage
 
-%\tableofcontents
-
-%\clearpage
-
 \section{Vejledning} % (fold)
 \label{sec:Vejledning}
 
-\subsection{WebSite} % (fold)
+\subsection*{WebSite} % (fold)
 \label{sub:WebSite}
 
 Vores hjemmeside forefindes i source-folderen \texttt{WebSite}. Under pakken \texttt{web.controller} ligger filen \texttt{WebController.java}. Køres denne startes hjemmesiden (givet at en TomCat server allerede er konfigureret)
+\\
+\\
+Den primære bruger på hjemmesiden er:
+\begin{itemize}
+  \item \textbf{ID:} 10
+  \item \textbf{PW:} 02324
+\end{itemize}
 
 % subsection WebSite (end)
+
+\subsection*{Vægtsimulator} % (fold)
+
+Vores vægtsimulator (med GUI) findes under source-folderen \texttt{Simulator}. Fra pakken \texttt{simulator} køres filen \texttt{Scale.java} og simulatoren starter. Denne lytter som standard på port 8000.
+
+% subsection Vægtsimulator (end)
+
+\subsection*{Afvejnings Styrings Enhed} % (fold)
+\label{sub:Afvejnings Styrings Enhed}
+
+Vores afvejningsstyringsenhed findes i source-folderen \texttt{ASE}. Fra pakken \texttt{wcu} køres \texttt{WCU.java}. Ved opstart bliver man bedt om at indtaste ip-adresse på den vægt man vil forbinde til. Hvis ASE'en skal køres op imod simulatoren, er adressen \texttt{localhost}
+
+% subsection Afvejnings Styrings Enhed (end)
 
 % section Vejledning (end)
 
 \clearpage
 
 \section{Poster} % (fold)
-\label{sec:Poster}
 
 Ingen poster
 
@@ -85,80 +90,55 @@ Ingen poster
 
 \clearpage
 
-\section{Milestone 1} % (fold)
-\label{sec:Milestone 1}
+\section{Milestone 2} % (fold)
 
-\subsection{Kravspecifikation} % (fold)
-\label{sub:Kravspecifikation}
+\subsection{Projektets status} % (fold)
 
-Kravspecifikation er læst og forstået, og vi ikke har umiddelbart yderlige ting at tilføje eller specificere ved den. Dette kan selvfølgelig ændre sig senere når vi når længere med processen med at designe en fornuftig dialog med operatøren
+I forhold til sidste milestone's tidsplan er projektet forløbet planmæssigt. Programmeringsdelen er afsluttet, og programmerne er rent funktionelt og design mæssigt hvor vi ønsker dem.
 
-% subsection Kravspecifikation (end)
+% subsection Projektets status (end)
 
-\subsection{Databasemodel} % (fold)
-\label{sub:Databasemodel}
+\subsection{Vægtsimulator} % (fold)
 
-Vores database er stort set oversat fra de givne Data Transfer Objekts udleveret i projektbeskrivelsen. Angivelse af primary- og foreign-keys er sket ud fra nærlæsning af use case beskrivelser i opgavestillingen.
+Vægtsimulatoren implementerer alle de funktioner der er nødvendige for at vores ASE kan gennemføre afvejning af komponenter til produktbatches.
+\begin{itemize}
+  \item S
+  \item T
+  \item Z
+  \item RM20 8
+  \item RM30
+  \item RM39
+  \item RM49
+  \item P110
+  \item P111
+\end{itemize}
 
-Se nedenstående figur for en grafisk repræsenation
+% subsection Vægtsimulator (end)
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[scale=0.6]{graphics/db.png}
-    \caption{Database}
-\end{figure}
+\subsection{Afvejnings Styrings Enhed} % (fold)
+\label{sub:Afvejnings Styrings Enhed}
 
-% subsection Databasemodel (end)
+Vores ASE er istand at gennemføre afmålinger af komponenter til produktbatches. Det er ikke nødvendigt at afslutte produktionen af et batch, man kan nøjes med at afmåle enkelte komponenter og senere genoptage arbejdet. Komponenterne bliver løbende gemt som de bliver afvejet. Endvidere er det ikke muligt at arbejde på et allerede afsluttet produktbatch.
 
-\subsection{Opgavens omfang og prioriteringer} % (fold)
-\label{sub:Opgavens omfang og prioriteringer}
+Der er lagt vægt på at assistere operatøren bedst muligt under arbejdet. Således oplyses operatøren blandt andet om hvilke råvare-batches der er tilgængelige for et givet komponent (der tages højde for at batchet har en tilstrækkelig mængde tilbage osv.), i hvilket område afmålingen skal være (netto +- tolerance).
 
-Vi satser på at nå alle de dele der er foreslået i opgavebeskrivelsen. Da vi i tidligere CDIO-delopgaver i fagene 02324 og 02325 har lavet størstedelen af de komponenter der skal bruges i det samlede system, anslår vi at have god tid til at få alle dele til at arbejde sammen, samt raffinere design/kode i de forskellige dele.
+% subsection Afvejnings Styrings Enhed (end)
 
-Det prioriteres også at have tid til at lave ordentlige tests af vores komponenter. På nuværende tidspunkt regner med at folk skriver tests til komponenter de ikke selv har lavet, dels for at sikre at man får en bedre viden om flere dele af koden, samt at testene såvidt muligt er objektive (altså ikke tester mod en specifik implementation, men mod specifik funktionalitet)
+\subsection{Website} % (fold)
 
-Hvis vi på et senere tidspunkt kommer i tidspres, vil vi priotere det højest at have et fuldt funktionelt system, som kan have mangler i brugerinterfacet. Vores vægtsimulator prioriteres kun til at understøtte de funktioner vi rent faktisk selv bruger i vores afvejnings styrings enhed.
+Hjemmesiden indeholder fuld funktionalitet i forhold til Use Case 1-5 i opgaveformuleringen.
 
-% subsection Opgavens omfang og prioriteringer (end)
+Der er benyttet et gennemgående farvetema på hjemmesiden, således at blå knapper er til oprettelse af data, hvide knapper er til redigering/visning af data og røde knapper er til sletning af data.
 
-\subsection{Arbejdsfordeling} % (fold)
-\label{sub:Arbejdsfordeling}
+Alle input valideres både client-side og server-side. Client-side validering giver mulighed for at give brugeren visuel feedback så snart værdier indtastes, således at det ikke er nødvendigt at submit'e data før man får feedback.
 
-Vi har valgt at inddele den første del af opgaven i 4 komponenter og har uddelt det overordnede ansvar for dem som følger:
+Der er desuden udviklet en mobil version af hjemmesiden, der specielt er tiltænkt at kunne benyttes af Operatører, sådan at Værkføreren ikke længere behøver at udskrive en produktionsforskrift, men operatøren istedet kan tilgå en speciel designet hjemmeside der giver alle nødvendige informationer til fremstilling af et produkt batch
 
-\begin{description}
-  \item[Web service]\hfill
-    \\Martin (UC 1-5)
-  \item[Vægt simulator (GUI)]\hfill
-    \\Tobias
-  \item[MySQL DAO implementation]\hfill
-    \\Christian
-  \item[Afvejnings Styrings Enhed]\hfill
-    \\Flemming (UC 6)
-\end{description}
-
-Lavdrim hjælper hvor der er behov, og folk hjælper løbende hinanden hvis behovet opstår.
-
-% subsection Arbejdsfordeling (end)
+% subsection Website (end)
 
 \subsection{Tidsplan} % (fold)
-\label{sub:Tidsplan}
 
-Tidsplanen forventes løbende justeres
-
-\paragraph{Uge 1} % (fold)
-\label{par:Uge 1}
-
-Vi satser på at vi sidst på dagen torsdag har de enkelte komponenter klar, således at sen torsdag/start fredag kan begynde at teste systemet som en sammensat helhed. Der opfordres til at folk løbende skriver på en rapport tekst der dokumenterer arbejds- og designprocessen for komponentet.
-
-% paragraph Uge 1 (end)
-
-\paragraph{Uge 2} % (fold)
-\label{par:Uge 2}
-
-Hvis systemet som helhed fungerer om fredagen, satser vi på at uge 2 bruges på at optimere samt udforme rapport og modeller. 
-
-% paragraph Uge 2 (end)
+Indtil projektets afslutning er fokus primært på rapportskrivning, samt tilpasning af detaljer og refaktorering af kode.
 
 % subsection Tidsplan (end)
 
