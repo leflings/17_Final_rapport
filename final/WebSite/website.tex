@@ -1,0 +1,176 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[T1]{fontenc}
+\renewcommand{\danishhyphenmins}{22}
+\renewcommand{\arraystretch}{1.3}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\title{Website}
+\author{
+  Martin Roland Hartvig
+}
+
+\begin{document}
+%\maketitle
+
+\section{Hjemmeside} % (fold)
+
+\subsection{Analyse} % (fold)
+
+Hjemmesiden skal fungere som administrations konsol til afvejningen og dens tilhørerne processor.  Det skal være muligt at styre produktionen af medicin fra oprettelsen af brugere til opfølgningen og styring af recepterne.  Hjemmesiden skal være delt op i forskellige lag, således at det er muligt at styre hvilke brugere der har adgange til hvilke del elementer i produktionen. I systemet er der 4 forskellige brugerniveauer
+\begin{itemize}
+  \item Operatøren: Har adgang til afvejningen af råvare samt til at se hvilke råvare der skal i produktionsbatches.
+  \item Værksføreren: Har administrationen af råvarebatches og produktbatches samt operatørens rettigheder.
+  \item Farmaceuten: Adgang til administrationen af råvare og recepter samt værksførerens adgange. 
+  \item Administratoren: Har adgang til alle dele af systemet, kan yderligere oprette, slettet og redigerer brugere.
+\end{itemize}
+I kundens oplæg til produktet er det en del af værksførerens opgaver, at ud printe og uddelegerer en produktion batch til en operatør. Vi har grunden udbredelsen af smartphones valgt i stedet at lave et website, optimeret til at virke på små skærme, hvor på operatøren kan logge ind og se hvilke råvare der mangler at blive afvejet til en hvilken som helst produktionsbatch. 
+
+% subsection Analyse (end)
+
+\subsection{Design} % (fold)
+
+Hjemmesiden bliver kodet efter Model–View–Controller principperne. Siden vil blive styret af en Java servlet som står funger som Controller. Viewet vil blive genereret af JSP sider, og Java Beans er modellen.  Hjemmesiden er event baseret, og controlleren vil ud fra disse events genererer de nødvendige modeller og dirigere brugeren ud på de korrekt views.
+
+\begin{center}
+  \textbf{Indsæt billede af MVC-model}
+\end{center}
+
+De forskellige views vil ikke komme til at kende hinanden, da det er controlleren som har det overordnede kendskab til alle jsp siderne. Dette betyder også at adgangskontroller kun ligger et centralt sted, og derved er det nemt at styre.
+
+\subsubsection{Grafisk design} % (fold)
+
+Til at designe den grafiske del af hjemmesiden har vi valgt at benytte 3. parts biblioteket Twitter Bootstrap .  Twitter Bootstrap er et simpelt og fleksibelt CSS og JavaScipt bibliotek som gør det nemt at sætte hjemmeside ens op på tværs af browsere. Siden vil blive bygget op af i 3 dele. Menuen som vil blive placeret yderst til venstre og altid vil være synlig. Til højre for menuen der blive vist hvad end brugeren har valgt, det kunne for eksempel være brugeradministrationen vinduet. Under dette vil der være beskeder til brugeren, det kunne være beskeder om den valgte operation er gået godt eller har fejlet.
+
+\begin{center}
+  \textbf{Indsæt billede af design-mockup}
+\end{center}
+
+% subsubsection Grafisk design (end)
+
+\subsubsection{Input validering} % (fold)
+
+For at gøre oplevelsen af hjemmesiden så brugervenlig som muligt benytter vi os af inputvalidering både på serversiden, men også på klientsiden. Valideringen på klient siden gør at vi kan gøre brugeren opmærksom på problemer lige så snart informationen er indtastet i inputfelterne. Hvis der opstår et problem, vil brugeren blive gjort opmærksom på dette ved at inputfelterne lyser rødt, og at der kommer en lille besked om hvad feltet kræver.  Før at klientside valideringen er tilfreds, er det ikke muligt at trykke på ”Ok” eller ”Godkend” knapperne.  
+Til at lave klient valideringen benytter vi 3. parts JavaScript biblioteket  jQuery  og dens plugin ”validator”. Grunden til at vi benytter jQuery er at det er funger på alle browsere, hvilket gør det nemt at få funktioner til at virke uanset hvilken browser brugeren bruger. 
+Lige vise hvordan det er sat op
+For at sikre at udefremkommende ikke kan lave ulovlige ændringer, har vi også en serverside validering som består af en masse regular expressions. Denne validering fremtvinger ikke en pæn fejlmeddelelse, men gør kun brugeren opmærksom på at der er sket en fejl i valideringen. Det er derfor ikke muligt at gennemtvinge oprettelser eller ændringer ved bare at ændre på vores klientside validering. 
+
+% subsubsection Input validering (end)
+
+\subsubsection{Hjemmesidens opbygning} % (fold)
+
+Siden er opbygget 5 hovedsider. 
+\begin{itemize}
+  \item Brugere
+  \item Råvarer
+  \item Råvare batch
+  \item Recepter
+  \item Produktions batch
+\end{itemize}
+
+Disse sider fungerer som administrations vinduer hvert emne.  Det er her at man oprette, slette eller rediger elementer inde for hvert område. 
+SITEMAP HER
+Hvis man tager et kig på brugeradministrationen. Så kan man se at i toppen af siden er der knapper til at Oprette, Rediger og Slette brugere. Under knapperne er listen af brugere der er oprettet i systemet. I listen står der brugerens ID, deres navn samt hvilket niveau de har. Hvis man yderligere trykker ind på en bruger, får man alle informationer præsenteret som systemet rummer.  Disse oplysninger, undtagen brugeres ID, er mulige at ændre. 
+
+% subsubsection Hjemmesidens opbygning (end)
+
+% subsection Design (end)
+
+\subsection{Implementation} % (fold)
+
+Når en brugeren trykker på en knap bliver der sendt et event via POST som WebController opfanger og behandler. Flowet for hvordan et event på hjemmesiden bevæger sig igennem WebControlleren kan illustreres på denne måde. 
+ 
+\begin{center}
+  \textbf{ Figure 1 - WebControllerens behandling af et event }
+\end{center}
+
+Hvis konverteringen af  eventet fra en String til et Enum fejler eller hvis eventet ikke er sat, vil det blive sat til at være LoginPage hvilket vil få siden til at dirigerer brugeren hen til login siden. I setup funktionen bliver alle funktion klasser oprettet hvis de endnu ikke er oprettet. Dette sker første gang at siden bliver loadet, og de vil efterfølgende bliver lagt ind applikationens scopet. Første gang brugeren oprette forbindelse til siden bliver der lagt en login bean ind i sessions scopet. Det er denne bean som tjekker, og holder styr på om brugeren er logget ind eller om der er fejl. Hvis brugeren er logget ind, går controlleren videre til at udfører den handling brugeren har ønsket. En handling kunne være at gå til brugeradministrationen, at oprette en bruger eller noget tredje. 
+
+\textbf{Vis linje 69 til 95 fra WebController}
+
+\subsubsection{Data fra databasen ud til brugeren} % (fold)
+
+Måden data bliver sendt fra databasen og ud til brugeren er vedhjælp af session og request scopet. Hvis brugeren ønsker at lave en ændring, vil dataen blive sendt via et sessions objekt ellers bliver den sendt som et request.  Alt data bliver indhentet og håndteret af servlet, dettes gøres således at der ikke er nogen direkte forbindelse mellem jsp siderne og databasen, men kun til DTO objekterne.   
+
+% subsubsection Data fra databasen ud til brugeren (end)
+
+\subsubsection{Sikring mod ændring af ID numre} % (fold)
+
+Når brugeren ønsker at lave en ændring på et af dataobjekterne, f.eks. en operator, bliver den valgtes operators informationer sendt ud til brugeren vedhjælp af session scopet. For at sikre at brugeren ikke ændrer på ID nummeret direkte i html koden, hentes alle tidligere informationer ud af session scopet igen.  Dernæst opdateres alle andre felter end ID feltet med det brugeren har indtastet.
+
+% subsubsection Sikring mod ændring af ID numre (end)
+
+\subsubsection{Beskeder til brugeren} % (fold)
+
+Til at kunne kommunikerer med brugeren, er der blevet implementeret til et besked system. Besked systemet er lavet sådan at det er muligt at give 3 forskellige niveauer info, fejl og succes. Alt efter hvilket niveau beskeden er, ændre farven sig på beskeden. 
+
+Beskeder bliver videregivet via et Arraylists af Messenges i request scopet. På hver side på hjemmesiden bliver Messenges.jsp inkluderet. Det er på Messenges.jsp at beskederne bliver håndteret og vist for brugeren. Ved at sende det via request scopet er vi sikre på at levetiden på dem, kun er for den enkelte side. Det gør at vi altid at sikre på at beskeder bliver givet på de korrekt tidspunkt, og forsvinder igen når der ikke er brug for dem.
+
+\textbf{BIILED af Beskeder / Ligger i Grafik jpg - png}
+
+% subsubsection Beskeder til brugeren (end)
+
+\subsubsection{Web.XML} % (fold)
+
+Alle jsp siderne er blevet beskyttet mod at man direkte kan tilgå dem. Dette er gjort for at sikre at alle brugere bliver styret at WebControlleren. Metoden vi har brugt til at gøre dette er ved at alle jsp siderne ligger i kataloget WEB-INF. Dette katalog kan ikke direkte tilgås, men kun ved at blive redirectet fra WebControlleren. 
+
+Når folk går ind på siden vil de vedhjælp af web.xml filen blive dirigeret til WebControlleren. Dette gøres ved at tilføje WebControlleren som en servlet, samt at tilføje servlet navnet til welcome listen. Yderligere har vi tilføjet /m,/M,/mobile og /mobile til XML filen, det gør at man vedhjælp af disse henvisninger kan få fat i den mobile udgave af hjemmesiden.
+
+\textbf{Vis et aktuelt billede af Web.XML}
+
+% subsubsection Web.XML (end)
+
+\subsubsection{Error handling} % (fold)
+
+På hjemmesiden kan der opstår mange former for fejl. De mest kritiske fejl der kan ske, er hvis der opstår SQL fejl. Sådanne fej vil, hvis der ikke tages hånd om dem, resultere i at hjemmesiden stopper med at virke. Der kan opstå 2 kritiske SQL fejl, den ene er at der ikke kan oprettes forbindelse til databasen, i sådanne tilfælde vil brugerne blive sendt til en fejlside hvor på der står at de skal forsøge igen senere, da hjemmesiden ikke vil virke. Den anden SQL fejl der kan komme er hvis der sker en fejl med en query eller update, disse fejl er ikke så kritiske at siden skal lukke ned, men brugeren skal stadig gøres opmærksom på at der er opstået en fejl. Hvis der sker sådanne en fejl, vil brugeren blive sendt tilbage til oversigts siden for det respektive område og der vil være en rød informations boks som orientere brugeren om fejlen.
+
+% subsubsection Error handling (end)
+
+\subsubsection{Mobil side} % (fold)
+
+Vi har lavet en side til brug på mobiltelefoner og tablets. Fra denne side er det muligt at få et overblik over hvilke råvare der mangler at blive afvejet for alle de produktionsbatche der endnu ikke er afsluttet. Ideen er at i stedet for at skulle printe en liste af produktionskomponenterne ud, kan operatørerne vedhjælp af deres telefon altid få et hurtigt og altid opdateret overblik. 
+
+\begin{center}
+  Billeder af: Login, Produktionsbatch, Overview (i den rækkefølge, ligger i mobil hjemmeside, må gerne stå på række)
+\end{center}
+
+Siden er opbygget på samme måde som den normale udgave. Forskellen er at den er grafiskoptimeret til at fungerer på meget små skærme. Derfor tjekkes det om brugeren bruger en mobil webbrowser, hvis det ikke er tilfældet, sendes brugeren hen til den normale version af hjemmesiden. Metoden vi benytter til at tjekke browser versionen er ved at sammenligne brugerens user-agent, som man får ved at kalde request.getHeader("user-agent"), med en liste af forskellige kendte mobilbrowsere. Det er derfor muligt, hvis brugeren manuelt ændrer deres user-agent, at komme ind på mobilsiden, men det har vi dog valgt at se bort fra, da det ikke er kritisk at afskærme brugeren.  Mobil siden er designet med et responsive style sheet, det gør at alt efter hvor stor opløsning browseren har, ændre designet sig så det passer.
+
+Dette gøres ved at lave nogle regler for hvornår hvilke sektioner af css filen skal benyttes, måden man gør dette på er ved at skrive f.eks. @media (max-width: 767px) \{. Det betyder, at alt der kommer inden i \{ \} kun skal bruges så længe browseren har en opløsning på mindre end 767px.
+
+% subsubsection Mobil side (end)
+
+\subsubsection{Diagrammer} % (fold)
+
+Sekvensdiagrammer
+Recept tilføjelse
+Når man ønsker at tilføje en ny recept skal man først oprette navnet på recepten. Derefter tilføjer man de komponenter man ønsker at recepten skal indeholde. Dette gøres ved at men en efter en vælger hvilken råvare man vil benytte, mængden samt hvilken en tolerance man ønsker. 
+BILLED: Flowdiagram - Opret Recept.png
+
+
+% subsubsection Diagrammer (end)
+
+% subsection Implementation (end)
+
+\subsection{Test} % (fold)
+
+For at få testet hjemmesiden funktionalitet har vi opdelt testen i flere små dele.
+
+\begin{itemize}
+  \item Validering
+    \begin{itemize}
+      \item Klient side
+      \item Server side
+    \end{itemize}
+\item Funktionalitets test
+\end{itemize}
+
+Ved funktionalitetstesten har vi forsøgt at kører alle senarier igennem. Vi har taget alle use-cases og afprøvet, og sikret os at alle sider funger efter hensigten. Da udviklingen af hjemmesiden har været præget af en iterativ udviklings proces, hvor vi har udviklet en funktion af gangen. Er der også undervejs blevet test og afprøvet at hver enkel funktion har gjort hvad den var tiltænkt. Under test processen opdagede vi flere steder ting som ikke opførte sig som de skulle, der var flere steder hvor knapper ikke førte de til de korrekte sider andre små ting som efterfølgende er blevet rettet. 
+
+Testen af serverside valideringen er blevet lavet i 2 omgange, først har vi vedhjælp af siden http://gskinner.com/RegExr/, testet vores regular expression for at sikre at de virker. Dernæst har vi testet vores validator for også at sikre den fungerede med udtrykkene. Grunden måden jQuery validator er bygget op, har vi testet denne vedhjælp af en grænseværdi test. Vi har i alle inputfelter indtastet kritiske værdier for at teste om det virker, dvs. at hvis et input felt skal have mellem 2 og 20 karakterer har vi forsøgt at indtaste 1,2,20 og 21 karaktere.  
+
+% subsection Test (end)
+
+% section Hjemmeside (end)
+
+\end{document}

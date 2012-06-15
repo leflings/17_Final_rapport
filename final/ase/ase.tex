@@ -1,0 +1,185 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[T1]{fontenc}
+\renewcommand{\danishhyphenmins}{22}
+\renewcommand{\arraystretch}{1.3}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\title{Afvejnings Styrings Enhed}
+\author{
+  Flemming Madsen\\
+  s113933
+}
+
+\begin{document}
+%\maketitle
+\tableofcontents
+\clearpage
+
+\section{Afvejnings Styrings Enhed} % (fold)
+
+\subsection{Analyse} % (fold)
+
+Afvejnings Styrings Enhed (herfra omtalt ASE) har ansvaret for at håndtere afvejnings proceduren som operatøren foretager ved vægten. Vægten er som sådan et "dumt" apperat og kan på egen hånd ikke foretage andet end at give operatøren umiddelbare resultater af afvejningen i dens display. Det er derfor nødvendigt med et komponent som gør at operatøren kan handle op imod informationer der er lagret i databasen.
+
+For at kunne konkretisere dette, er det nødvendigt at se på hvordan en afvejningsprocedure (kan) forløbe. Ud fra kundens oplæg til afvejningsproceduren er følgende antagelser gjort.
+
+\paragraph{Operatøren skal kunne identificere sig overfor vægten} % (fold)
+
+I databasen er operatører repræsenteret ved deres unikke operatør ID. Grundet dette, og det faktum at vægten har begrænsede muligheder for bruger input, er det oplagt at operatøren identificerer sig ved sit ID. Det er kort og koncist.
+
+Operatører, ligesom alle andre brugere, har også et password tilknyttet. Det vil være oplagt at operatøren også skulle angive dette når denne identificerer sig ved vægten, sådan at det rent faktisk kan bekræftes at det er denne operatør. Den eneste måde vægten kan tage imod input er via dens "tastatur", som på et givent tidspunkt kun tage imod input på én af følgende tre måder:
+\begin{itemize}
+  \item Heltal
+  \item Små bogstaver
+  \item Store bogstaver
+\end{itemize}
+Vægten kan i princippet tage imod flere typer af input, men essensen er at der kun er én af disse typer der kan være aktiv på samme tidspunkt. Passwords er ofte angivet som en kombination af alle disse tre typer, hvorfor det ikke som udgangspunkt er muligt at kræve at operatøren indtaster dette.
+
+Når en operatør har indtastet sit ID, skal ASE'en tjekke at det indtastede ID rent faktisk tilhører en operatør (og ikke en værkfører, adminstrator eller lignende), og efterfølgende præsentere operatørens navn i vægtens display, sådan at denne kan be- eller afkræfte at den korrekte operatør er fundet.
+
+% paragraph Operatøren skal kunne identificere sig overfor vægten (end)
+
+\paragraph{Operatøren skal vælge et produktbatch} % (fold)
+
+Værkføreren opretter ud fra systemets recepter, produktbatches som ønskes produceret, hvilket er operatørens opgave.
+
+Produktbatches er repræsenteret ved et entydigt produktbatch-id. Når en operatør indtaster dette skal denne præsenteres for navnet på recepten som produktbatchet skal produceres ud fra, og herefter bekræfte om dette er korrekt.
+
+ASE'en skal tillige tjekke om et valgt produktbatch allerede er afsluttet. Er dette tilfældet bedes operatøren vælge et andet batch.
+
+% paragraph Operatøren skal vælge et produktbatch (end)
+
+\paragraph{Operatøren skal vælge et råvarebatch} % (fold)
+
+Et produktbatch er baseret på en recept. En recept består af forskellige råvarer i variende mængde. Når operatøren har valgt et produktbatch som skal produceres, skal denne altså afveje én eller flere råvarer der indgår i recepten som produktbatchet er baseret på. Råvarer opgivet i recepten er dog ikke konkrete råvarer der er på lager, men findes istedet som råvarebatches. For hver råvare der skal afvejes skal operatøren således angive et råvarebatch som der afmåles fra.
+
+ASE'ens opgave er her at præsentere operatøren for den råvare der nu skal afvejes, således at operatøren kan gå ud på lageret og finde et råvarebatch af den specifikke råvare. Her er det oplagt at ASE'en præsenterer operatøren for de råvarebatches (angivet ved deres unikke id) som er af den rette type. Desuden er det oplagt at ASE'en også tager højde for om råvarebatchet indeholder tilstrækkelig mængde af råvaren (i forhold til den netto værdi der er angivet i recepten).
+
+Når operatøren har fundet et råvarebatch indtaster han dets unikke ID, og ASE'en tjekker om
+\begin{enumerate}
+  \item Råvarebatchet er af den korrekte råvare
+  \item Råvare batchet indeholder tilstrækkelig mængde
+\end{enumerate}
+
+Er der tale om et korrekt råvarebatch kan ASE'en fortsætte til selve afvejningsproceduren
+
+% paragraph Operatøren skal vælge et raavarebatch (end)
+
+\paragraph{Vægten skal være tom inden tarering og afvejning} % (fold)
+
+Inden at vægten kan tareres, er det vægten at kontrollere at vægten er tom, således at det sikres at der ikke er materiale på vægten der kan give en forkert afmåling. ASE'en skal derfor bede operatøren om at kontrollere dette og bekræfte. ASE'en tarerer herefter vægten, og tjekker om tarerings værdien er lige nul. Er dette ikke tilfældet bedes operatøren tjekke igen. Dette fortsætter indtil ASE'en bekræfter at vægten er tareret med tareringsværdi på nul.
+
+% paragraph Vægten skal være tom inden tarering og afvejning (end)
+
+\paragraph{Tara beholderens vægt skal registreres og vægten tareres} % (fold)
+
+For at kunne registrere en afvejnings netto værdi, er det vigtigt at vægten af beholderen som råvaren afmåles i er registreret. ASE'en skal derfor bede operatøren om at placere beholderen på vægten og trykke OK når denne er klar til at tarere.
+
+Ved tryk på OK sender ASE'en signal til vægten om at tarere, og ASE'en registrerer den svarede tarerings værdi for dette produktbatchkomponent.
+
+% paragraph Tara beholderens vægt skal registreres og vægten tareres (end)
+
+\paragraph{Råvare skal afvejes i korrekt mængde} % (fold)
+
+Et recept komponent er angivet ved en nominel netto værdi af en råvare, plus en tolerance for denne værdi. Tolerancen kan være mellem 0.1\% og 10\% af den nominelle netto værdi. Dette betyder altså at er den nominielle netto værdi for et recept komponent \textbf{1 kg} og tolerancen er \textbf{10\%} er en korrekt afmåling mellem \textbf{0.900 kg} og \textbf{1.100 kg}.
+
+ASE'en skal derfor bede operatøren afmåle en mængde af råvaren der ligger i dette interval. Når operatøren har gjort dette, trykker denne ok og ASE'en tjekker om afmålingen rent faktisk ligger i intervallet. Er dette ikke tilfældet bedes operatøren om at justere afvejningen indtil denne er korrekt.
+
+Er afvejningen korrekt gemmes denne og proceduren starter "forfra", hvor operatøren skal afveje en ny råvare og dermed vælge et nyt råvarebatch.
+
+% paragraph Råvare skal afvejes i korrekt mængde (end)
+
+\paragraph{ASE'en skal registrere start- og slutdato for produktionen} % (fold)
+
+Et produktbatch kan have én af følgende tre tilstande:
+\begin{itemize}
+  \item Ikke påbegyndt
+  \item Under produktion
+  \item Afsluttet
+\end{itemize}
+
+Når et produktbatch oprettes, er dette som standard i en endnu ikke påbegyndt tilstand. Når en operatør har afvejet det første komponent er produktbatchet under produktion. Når alle komponenter er afvejet er produktionen afsluttet.
+
+ASE'en skal derfor ved første afvejning sætte tilstanden til 'under produktion' og registrere starttidspunktet for produktionen. Når ASE'en registrerer at alle komponenter er afvejet sættes tilstanden til 'afsluttet' og sluttidspunktet for produktionen registreres.
+
+% paragraph ASE'en skal registrere start- og slutdato for produktionen (end)
+
+\paragraph{En produktion kan afbrydes undervejs og genoptages senere} % (fold)
+
+Det er ikke nødvendigt for en operatør at afveje alle komponenter for et produktbatch, men kan afveje ét eller flere i en session. Afbrydes der undervejs skal ASE'en således kun gemme \emph{korrekte, afsluttede} afvejninger.
+
+Genoptages produktionen på et senere tidspunkt, skal ASE'en således holde styr på hvilke komponenter der allerede ér afvejet, og således kun lede operatøren igennem afvejningen af de resterende komponenter.
+
+% paragraph En produktion kan afbrydes undervejs (end)
+
+% subsection Analyse (end)
+
+\subsection{Design} % (fold)
+
+Efter at have specificeret hvad ASE'en skal kunne, og forretningsreglerne for proceduren er præciseret, kan vi designe den generelle tilstandsmaskine der skal styre ASE'en.
+
+Proceduren for afvejning er inkrementerende, forstået på den måde at for at nå til et senere punkt i proceduren, må operatøren nødvendigvis have gennemgået de punkter der leder op til. På sin vis kan ASE'en derfor designes som en lang procedure der kører fra start til slut. Med fordel kan der dog indføres tilstande i proceduren som er en form for gruppering af række under-procedurer. På den måde kan maskinen gå fra én tilstand til en anden, på baggrund af specifikke begivenheder.
+
+\subsubsection{Tilstande} % (fold)
+
+Vores ASE er inddelt i 4 tilstande, der er som følger:
+\begin{itemize}
+  \item \textbf{LOGIN} Tilstanden hvor operatøren skal identificere sig. Overgang til næste tilstand kan kun ske når operatøren har identificeret sig ved et gyldigt ID og bekræftet at der er tale om den rette bruger.
+  \item \textbf{SELECT\_BATCH} Tilstanden hvor operatøren skal vælge et produktbatch. Overgang kan kun ske når operatøren har valgt et gyldigt produkt batch ID, for et batch der endnu ikke er afsluttet, og bekræftet at der er tale om det rette batch (ud fra den rette recept).
+  \item \textbf{MEASURING} Tilstanden hvor selve afvejningen af komponenter foregår. Her indgår flere af de underprocedurer der er påkrævet for korrekt at afveje råvare til et produktions batch komponent. Denne tilstand "gentages" for hvert påkrævet komponent i recepten, indtil alle komponenter er afvejet, hvorefter ASE'en overgår til næste tilstand. Undervejs i afvejningen kan operatøren vælge at afbryde produktionen, hvorefter maskinen også vil overgå til næste tilstand.
+  \item \textbf{FINISHED} Tilstanden hvor operatøren enten helt, eller delvist, har afsluttet produktionen af et produktbatch. Denne tilstand sikrer at alle afvejede komponenter er korrekt gemt (disse bliver løbende gemt som de bliver afvejet) og sikrer at produktiones batchet har den rette status (ikke påbegyndt, under produktion eller afsluttet). Herefter nulstiller ASE'en sig og tilstanden overgår til \texttt{LOGIN}.
+\end{itemize}
+
+ASE'en er som sådan ikke en komplet tilstandmaskine, idet de forskellige tilstande ikke entydigt repræsenterer et bestemt output. Ligeledes er systemets begivenheder (beskrevet senere) ikke direkte årsag til skift mellem tilstande, men medførende til at opfylde den række af kriterier der skal være opfyldt før maskinen kan skifte til en ny tilstand.
+
+% subsubsection Tilstande (end)
+
+\subsubsection{Begivenheder} % (fold)
+
+Kommunikationen med vægten (eller simulatoren) foregår via TCP/IP protokollen, via hvilken der sendes forespørgsler og svar. En forespørgsel fra ASE til vægt giver altid et eller flere svar. Når der sendes en bestemt forespørgsel forventes altså altid et eller flere bestemte svar der svarer specifikt til forespørgslen. På baggrund af dette, er der i ASE'en oprettet en række begivenheder (Events) der, som tidligere nævnt, ikke altid direkte ændrer tilstanden i ASE'en, men medivrker til at opfylde en række kriterier der gør at der kan skiftes tilstand.
+
+Begivenhederne er som følger:
+
+\begin{itemize}
+  \item \textbf{COMMAND\_UNDERSTOOD} Antyder at en forespørgsel er forstået, og at der \emph{kan} forventes opfølgende svar. Dette sker eksempelvis ved en \texttt{RM20} kommando, hvor vægten først svarer om kommandoen er forstået (og klar til at blive udført - altså der ikke er andre aktive forespørgsler der har precedens over den aktuelle forespørgsel), og efterfølgende svarer med resultatet af forespørgslen på baggrund af operatørens input
+  \item \textbf{OK\_PRESSED} Antyder at brugeren har bekræftet en dialogboks fra en \texttt{RM49} kommando, eller at der er trykker OK i forbindelse med tarering/afvejning. I den sammenhæng antyder et ok, at ASE'en kan sende en forespørgsel om vægtens belastning (eller tareringsværdi) og at et korrekt resultat forventes.
+  \item \textbf{CANCEL\_PRESSED} Antyder at brugeren har "annuleret" en dialog, eller trykket Cancel/annuler under en afvejning
+  \item \textbf{EXIT\_PRESSED} Antyder at brugeren har trykket 'Afslut' og ønsker at afbryde afvejningen
+  \item \textbf{SCALE\_READ} Antyder at vægten har svaret på en \texttt{S}-kommando med vægtens belastning
+  \item \textbf{SCALE\_TARED} Antyder at vægten har svaret på en \texttt{T}-kommando (tarering), hvor vægten er blevet tareret og tarerings værdien fremgår af svaret.
+  \item \textbf{SCALE\_ZEROED} Antyder at vægten er blevet nulstillet, altså primært at tarerings værdien er blevet nulstillet.
+  \item \textbf{INTEGER\_RECEIVED} Antyder at operatøren har svaret på en \texttt{RM20}-dialog med et heltal. Eksempelvis når operatøren skal indtaste sit ID.
+  \item \textbf{EMPTY} \textbf{!!! Fjern evt denne !!!}
+  \item \textbf{NOTHING} \textbf{!!! Fjern evt denne !!!}
+\end{itemize}
+
+Ved begivenheder hvor der er tilknyttet et resultat (\texttt{SCALE\_READ}, \texttt{SCALE\_TARED} og \texttt{INTEGER\_RECEIVED}) bliver dette lagret i passende attributter som ASE'en kan tilgå.
+
+% subsubsection Begivenheder (end)
+
+\subsubsection{Kommunikation med vægt} % (fold)
+
+Hvordan den asynkront kan sende og modtage data fra vægten.
+
+Skriv om klassen til at håndtere kommunikation
+
+% subsubsection Kommunikation med vægt (end)
+
+% subsection Design (end)
+
+\subsection{Implementation} % (fold)
+
+
+
+% subsection Implementation (end)
+
+\subsection{Test} % (fold)
+
+
+
+% subsection Test (end)
+
+% section Afvejnings Styrings Enhed (end)
+
+\end{document}

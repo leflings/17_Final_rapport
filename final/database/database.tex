@@ -1,0 +1,49 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[T1]{fontenc}
+\renewcommand{\danishhyphenmins}{22}
+\renewcommand{\arraystretch}{1.3}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\title{Database}
+\author{
+  Christan Walldeskog
+}
+
+\begin{document}
+\maketitle
+
+\section{Database} % (fold)
+
+\subsection{Analyse} % (fold)
+
+Databasens opgave er at opbevare de data som brugerne af systemet gemmer, således at det gemte data kan tilgås på et andet tidspunkt. En database er opbygget af en eller flere entiteter indeholdende en eller flere felter. Databasen entiteter kan være knyttet til hinanden ved hjælp af primære nøgler og fremmednøgler. Det er muligt at tilgå en database på mange forskellige måde og derfor skal man også være påpasselig når man integrer en database i sit system, da man ikke altid vil have alle dele af systemet skal have mulighed for at tilgå databasen. Der findes flere design mønstre der tager hånd om dette problem men en af de mere udbredte er Data Access Object eller DAO og Data Transfer Object eller DTO. Når en del af et system så skal have data ud af en database kontakter delsystemet DAO’et som tilgår databasen og gemmer de udtagende data i et DTO, som delsystemet så kan tilgå. På den måde sikre man at resten af systemet ikke kan tilgå databasen. Man kan sige at DAO er et abstrakt interface til en entitet i databasen.
+
+I kundens oplæg systemet fremgår det at databasen skal inde holde følgende entiteter: ”Raavare, RaavareBatch, Recept, ProduktBatch, og Operatoer. Disse entiteter indeholder forskellige felter. Hvert felt har et område af lovlige værdier som det data der skal lagres skal være indenfor.
+Systemet skal være bygget op således at man adskiller databasen fra de andre dele af systemet ved hjælp af et data acces lag.
+
+
+% subsection Analyse (end)
+
+\subsection{Design} % (fold)
+
+Vi har valgt at vores design af DAO’er og DTO’er til dels følger det forslag som oplæget foreslog. Det vil sige at vi for hver entitet i databasen har et DAO interface og et DTO. Hvert DAO interface har desuden en klasse der implementer interfacet.  Vi har udover forslaget valgt at oprette en entitet ReceptKomp. 
+
+% subsection Design (end)
+
+\subsection{Implementation} % (fold)
+
+% subsection Implementation (end)
+
+\subsection{Test} % (fold)
+
+Da vores DTO’er kun består af get’er og set’er og en for DTO’ets egne felter og en equal-metode har vi ment at JUnit tests ikke var nødvendig. Vi har lavet black box testing af vores database og DAO’er ved hjælp af systemets webservice del. Her har vi prøvet at oprette, slette og ændre de forskellige eniteter og felter i databasen. Nedenfor ses et skemaer over de forskellige black box test vi har lavet.
+
+% subsection Test (end)
+
+% section Database (end)
+
+
+\end{document}
+
+

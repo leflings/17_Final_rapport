@@ -1,0 +1,197 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[T1]{fontenc}
+\renewcommand{\danishhyphenmins}{22}
+\renewcommand{\arraystretch}{1.3}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\title{Kravspecifikation}
+\author{
+  Lavdrim Elmazi
+}
+
+\begin{document}
+\maketitle
+
+\section{Kravspecifikation} % (fold)
+
+\subsection{Analyse} % (fold)
+Fra kundens side er der følgende krav til hvad hjemmesiden skal kunne:
+
+\begin{itemize}
+  \item Oprette, se, ændre samt slette brugere
+  \item Oprette, se og ændre på råvarer
+  \item Oprette og se råvarebatch 
+  \item Oprette og se recepter
+  \item Oprette og se produktionsbatch
+  \item Adgangskontrol samt forskellige niveauer
+\end{itemize}
+
+Det er også vigtigt at der er stor fokus på brugervenligheden, samt at sikre sig mod at brugerne indtaster forkert data. På hjemmesiden skal brugerne være inddelt i 4 niveauer:
+
+\begin{itemize}
+  \item Administrator: Alle rettigheder
+  \item Farmaceut: Har ikke adgang til brugeradministration
+  \item Værkfører: Har ikke adgang til råvare, recept og bruger administrationen 
+  \item Operatør: Har kun adgang til afvejningssystemet. 
+\end{itemize}
+
+For alle brugere er der forskellige rettigheder, i forhold til hvilket niveau man hører til. F.eks. har administratoren flere rettigheder end alle andre brugere i systemet. Disse er også delt i use-cases som beskrevet for neden, hvor der specifikt beskrives hvad brugeren kan. 
+
+% subsection Analyse (end)
+
+\subsection{Use Cases} % (fold)
+
+Der er 6 use-cases i systemet
+
+\subsubsection{UC1: Bruger adminstration} % (fold)
+
+Det er kun brugere med niveauet administrator som kan administrer brugere. En bruger består af følgende informationer.
+
+\begin{itemize}
+  \item Bruger ID
+  \item Navn
+  \item Initialer
+  \item Kodeord
+  \item Niveau
+\end{itemize}
+
+En bruger med niveauet Operatør skal ikke kunne slettes eller hæves i niveau når de først er oprettet.  Alle andre brugere skal kunne slettes og opdateres. Det er vigtigt at administratorer ikke kan slette eller sænke sig selv i niveau.   
+
+% subsubsection UC1: Bruger adminstration (end)
+
+\subsubsection{UC2: Råvare adminstration} % (fold)
+
+Farmaceut aktøren står for administrationen af råvarerne i systemet, denne skal kunne oprette, rette og vise råvarer i systemet.
+
+En råvare defineres således:
+
+\begin{itemize}
+  \item råvareNr (brugervalgt og entydigt)
+  \item råvareNavn
+  \item leverandør
+\end{itemize}
+
+% subsubsection UC2: Råvare adminstration (end)
+
+\subsubsection{UC3: Recept adminstration} % (fold)
+
+Farmaceut aktøren står for recept administrationen, denne skal kunne oprette og vise recepter i systemet.
+
+En recept defineres således:
+\begin{itemize}
+  \item receptNr (brugervalgt og entydigt)
+  \item receptNavn
+  \item sekvens af receptkomponenter
+\end{itemize}
+
+En receptkomponent består af råvareType, mængde, og en tolerance.
+
+% subsubsection UC3: Recept adminstration (end)
+
+\subsubsection{UC4: Råvarebatch adminstration} % (fold)
+
+Værkfører aktøren står for administrationen af råvarebatches i systemet. Denne skal kunne oprette og vise råvarebatches i systemet. 
+
+En råvarebatch defineres således:
+
+\begin{itemize}
+  \item råvarebatchNr (brugervalgt og entydigt)
+  \item mængde
+\end{itemize}
+
+% subsubsection UC4: Råvarebatch adminstration (end)
+
+\subsubsection{UC5: Produktbatch adminstration} % (fold)
+Værkfører aktøren står for administrationen af produktbatches i systemet. Denne skal kunne oprette og vise produktbatches i systemet.
+
+En produktbatch defineres således:
+
+\begin{itemize}
+  \item produktbatchNr (entydigt)
+  \item nummeret på recepten produktbatchen produceres udfra
+  \item oprettelses dato
+  \item oplysinger om batchens status, status kan være: oprettet/ under produktion/ afsluttet.
+\end{itemize}
+
+Resultaterne af de enkelte receptkomponenter gemmes som en produktbatchkomponent i produktbatchen samtidig med at produktet fremstilles.
+
+Efter værkføren har oprettet en ny produktbatch, udprintes den og uddeles til en udvalgt operatør. Operatøren har derefter ansvaret for produktionen. 
+
+For ovennævnte UC1-UC5 ønskes at der fokuseres på brugervenlighed samt input validering.
+
+% subsubsection UC5: Produktbatch adminstration (end)
+
+\subsubsection{UC6: Afvejning} % (fold)
+
+Operatøren arbejder ved en vejeterminal og starter med at identificere sig overfor den. Det gøres ved at indtaste operatørNr på vejeterminalens tastatur. Vejeterminalen svarer derefter tilbage med operatørens navn som vises på displayet, herefter indtaster operatøren nummeret på den produktbatch der skal produceres.
+
+Vejeterminalen beder derefter operatøren om at placere en tarabeholder på vejeplatformen, hvor beholderens vægt registreres i produktbatchkomponenten. Herefter sender vejeterminalen oplysninger om hvilket råvare nummer der skal afvejes. Når operatøren har hentet en passende mængde af den ønskede råvare, skal han oplyse hvilket batch nummer denne aktuelle råvarebatch har.
+
+Herefter foretages der en afvejning på vejeterminalen, afvejningsresultatet accepteres først når det ligger indenfor den tolerance der er angivet i recepten. Når afvejningsresultatet er blevet accepteret, registreres det i produktbatchkomponenten. 
+
+Proceduren bliver gentaget for samtlige råvarer i recepten. Undervejs i forløbet, ændres status i produktbatchen fra ”oprettet” til ”under produktion”, når første komponent er afvejet, til sidst ændres den til ”afsluttet” når alle komponenter i recepten er afvejet.
+
+Det vigtige for virksomheden er, at det nye softwaresystem ikke ændrer operatørernes vante arbejdsrutiner, som de kender fra det nuværende system.
+
+Der lægges vægt på at afvejningsproceduren er brugervenlig, intuitiv, fejltolerant samt sikre at det aktuelle afvejede afspejler det ønskede og at de konkrete afvejningsresultater registreres.
+
+% subsubsection UC6: Afvejning (end)
+
+% subsection Use Cases (end)
+
+\subsection{Systemarkitektur} % (fold)
+
+Systemet skal bestå af disse delkomponenter:
+
+\begin{itemize}
+  \item En database der indeholder oplysninger om operatører, råvarer, råvarebatches, recepter, samt de planlagte og færdigproducerede produktbatches. 
+    \begin{itemize}
+      \item Datalaget der er i applikationen skal implementeres som en MysSql database.
+    \end{itemize}
+  \item Et webinterface (GUI), hvor farmaceuten kan administrere recepterne og råvarerne, og hvor værkføreren kan oprette produktbatches og vise deres status.
+  \item En række vejeterminaler som er udstyret med vejeplade, tastatur og display. Alle vægte har et ethernet interface. 
+  \item Et program (ASE) til styrelse af alle vejeterminaler og gemmer dens data i databasen.
+\end{itemize}
+
+% subsection Systemarkitektur (end)
+
+\subsection{ASE specifikation} % (fold)
+
+Afvejnings styrings endheden (ASE) er en applikation, denne står for at styre afvejningsproceduren på vægten. Applikationen styrer vægten/vægtsimulatoren. 
+
+Programmet skal starte med at bede om operatør nr. operatøren indtaster derefter sit operatør nr. og denne afvejnings procedure følger herefter.
+
+ (Afvejningsprocedure)
+
+Den afvejningsprocedure som der tages udgangspunkt i, er den fra opgaveformuleringen som var beskrevet i bilag 4. De nærmere specifikationer for den modificerede afvejnigsprocedure som vi har brugt, er beskrevet i et andet afsnit. 
+
+% subsection ASE specifikation (end)
+
+\subsection{Website specifikation} % (fold)
+
+Web applikationen skal implementere use-casene 1-5.
+
+Når brugerne er i gang med en login session skal der foretages en authentikering. I forhold til den rolle brugeren har, skal siderne vises tilpasset brugerens rettigheder, herunder relevante menuer.
+
+Input felterne skal valideres i henhold til gyldige områder, og der skal vises passende fejlmeddelelser ved fejl. Websiderne bør valideres i henhold til W3C standarderne, og det gælder her både HTML og Cascading Style Sheets (CSS).
+
+% subsection Website specifikation (end)
+
+\subsection{Simulator specifikation} % (fold)
+
+Vi har valgt at implementere en GUI baseret simulator, hvor vi også har valgt disse kommandoer som en del af implementeringen.
+
+Kommandoer:
+
+\begin{itemize}
+  \item S, T, Z
+  \item RM20 8, RM30, RM39, RM49 2, RM49 4
+  \item P111, P110
+\end{itemize}
+
+% subsection Simulator specifikation (end)
+
+% section Kravspecifikation (end)
+
+\end{document}

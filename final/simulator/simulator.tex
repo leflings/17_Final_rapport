@@ -1,0 +1,146 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[T1]{fontenc}
+\renewcommand{\danishhyphenmins}{22}
+\renewcommand{\arraystretch}{1.3}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\title{Simulator}
+\author{
+  Tobias Brasch
+}
+
+\begin{document}
+\maketitle
+
+\section{Simulator} % (fold)
+
+\subsection{Analyse} % (fold)
+
+% subsection Analyse (end)
+
+\subsection{Design} % (fold)
+
+% subsection Design (end)
+
+\subsection{Implementation} % (fold)
+
+I implementeringen af vægt simulatoren, har vi benyttede os af nogle af de forskellige emner vi har været i gennem i løbet af semestret. Vi har blandt andet benyttede os af Threads for at få serveren og, protokollen til at køre samme tid. Der er også blevet benyttet socket programmering, til at konstruere vores server, så den er i stand til at kommunikere med vores ASE. Til sidst for at gøre det mere brugervenligt har vi også implementeret en GUI, for at gøre simulatoren mere overskuelig at benytte. Vi har dog valgt kun at implementere de kommandoer vi benytter os (se krav for kommandoer).
+
+\subsubsection{Threads} % (fold)
+
+Tråde, har vi også valgt at benytte, i vores vægt simulator, da det gjorde det nemmere, at få forespørgsler ind, og samme tid få simulatoren til at behandle dem. Måden vi har sat det op på, er ved at få 2 tråde til at køre, en der kørte protokollen, og en der kørte serveren. For at sørger for at vi altid behandler den nyeste forespørgsel, benytter vi os af java’s egen buffer ”ArrayBlockingQueue”. I denne benytter vi os af put, til at tilføje forespørgsler, og take til at hive forespørgslerne ud. Take sørger samme tid for at vente på en forespørgsel, hvis der ikke er en i bufferen. I koden neden under ses hvordan vores protokol tråden køre, hvor man kan se, at vi benytter os af queue.take(), til at hente og fjerne det første request, der er i bufferen queue.
+
+\begin{center}
+ScaleProtocol.java linje 30-42
+
+Tilhørende tekst: Denne metode, er tråden der tilhører vores ScaleProtocol.
+\end{center}
+
+% subsubsection Threads (end)
+
+\subsubsection{Server} % (fold)
+
+For at få sat vores server op, benyttede vi os af sockets, for at kunne åbne en forbindelse, der benyttes af vores vægt simulator, som lytter på en selv valgt port som ikke bliver benyttet, i vores tilfælde er det port 8000.
+
+For at kunne få vægt simulatoren til at acceptere klienter, stater vi med at oprette en ServerSocket på port 8000. Efterfulgt af dette, skal vi gøre det muligt for en klient at skabe en forbindelse til vores server, dette gør vi ved brug af serverSocket.accept() (se kode neden under). Denne metode lytter efter en forbindelse, og venter på at en forbindelse er skabt, denne forbindelse bliver så lig en ny Socket, som så er vores klient. 
+
+\begin{center}
+ScaleServer.java linje 57-68
+Tilhørende tekst: Denne metode, sørger for at simulatoren kan acceptere en klient.
+\end{center}
+
+Efter dette åbner vi så op for strømmene så vi kan få forespørgsler ind og sender svar til klienten. Klienten kan blandt andet være vores ASE, men vi kan dog også forbinde til vægt simulatoren via en Telnet klient, dette vil vi dog kommer mere ind på i test.
+
+% subsubsection Server (end)
+
+\subsubsection{Graphical User Interface} % (fold)
+
+I vores implementering af GUI, har vi både benyttede os af swing og awt, da swing bliver benyttede til at sætte alle elementer op vi skal bruge som knapper, tekst felter. Awt bliver brugt til fx at lave forskellige kommandoer når man trykker på en knap, det benyttes dog også, til at definere forskellige indstillinger i swing elementerne, som fx layout. På billedet neden under ses hvordan vi har designet vores gui, der skal dog siges at den er lavet uden brug af en gui builder.
+
+\begin{center}
+screenDumb1.png
+
+Tilhørende tekst: Når programmet starter, ser gui’en således ud, hvor man kan se, at den venter på at en klient, forbinder til den.
+\end{center}
+
+Det layout vi har valgt at benytte os af er ”GridBagLayout”, da det giver større frihed med designet. Måden det fungere på, er at det er sat op som et gitter, hvor man så kan bestemme hvor i gitteret det skal placeres, og hvor mange felter det skal fylde. Det vi benytter os til at definere positionen i vores panel er GridBagConstraints, hvor man så kan vælge positionen, bredden, højden og meget mere.
+
+\begin{center}
+GUIDisplay.java linje 87-99
+
+Tilhørende tekst: Metoden vi benytter til at bestemme, komponenternes position, og hvordan det skal sættes op i vores panel.
+\end{center}
+
+Måden vi har valgt at implementere vores knapper, er lidt mere anderledes, inde de andre komponenter vi benytter os. Det vi har gjort, er at kreere 5 JButton’s arrays som alle består af 6 Jbutten’s, hvor 4 er dem er forskellige. Grunden til vi benytter os af så mange, er at det er forskelligt hvad knapperne skal gøre, for hver kommando der skal benytte sig af knapperne. Hver gang der kommer en ny kommando ind, som skal bruge et andet sæt knapper, sørger vi så for at skifte det nuværende panel ud, med det panel der høre til den kommando. For altid at kunne referere til det rigtige sæt af knapper, har vi et ekstra array, som så hele tiden bliver sat lig det nuværende sæt, så det altid er de rigtige knapper vi refererer til.
+
+\begin{center}
+GUI.java linje 67-77
+
+Tilhørende tekst: Metoden vi benytter når vi går hen til en ny kommando.
+\end{center}
+
+For at forbedre brugervenligheden i GUI, fik vi også implementeret en KeyListener. Her valgte vi at få den til trykke den femte knap ned, når man har fokus, i det tekst felt der kan skrives i, og man trykker på enter.
+
+% subsubsection Graphical User Interface (end)
+
+
+% subsection Implementation (end)
+
+\subsection{Test} % (fold)
+
+For at kunne teste simulatoren, har vi skulle bruge en klient, der kunne oprette forbindelse simulatorens server. Her brugte vi blandt andet en telnet klient, for at teste hver enkelt kommando, for at se om alle de svar den kunne komme med, virkede. Vi har dog også fået testet det via vores ASE, for at sikre overgange fra kommando til kommando.
+
+\subsubsection{Telnet} % (fold)
+
+I billedet der ses nedenunder, benytter vi os af putty’s telnet klient, til at oprette forbindelse til vores simulator. Det man kan se vi tester, er de mere simple kommandoer S, T og Z, som står for at hente, tara’ere og nulstille vægten. Som der ses på billedet, starter vi med at tjekke hvad vi egentlig har på vægten ved brug af S, her efter tara’ere vi vægten med T, og tjekker hvor meget der så er på vægten bagefter. Herefter lægger vi mere på vægten, hvorefter vi ser hvor meget vægt der ligger på vægten. Til sidst nulstiller vi så vægten med Z, og undersøger om den er blevet nulstillet med S.
+
+\begin{center}
+screenDumb2.png
+
+Tilhørende tekst: Test af S, T og Z kommandoerne, se bilag screenDumb3.png for billede af simulator efter der er tilføjet 0,87 kg.
+\end{center}
+
+Nogle af de fejl vi stødte på ved brug disse kommandoer, var måden vi tara’ere i simulatoren var forkert. Det der var meningen simulatoren skulle gøre, var at sætte tara lig den nuværende netto, det den dog gjorde, var at ligge netto til tara. Så hvis tara er lig 0.5 kg og netto er lig 1.3 kg, og man tara’ere så vil tara blive lig 1.8 kg og netto lig 0.0 kg, det den dog skulle gøre var at sætte tara lig 1.3 kg og netto lig 0.0 kg.
+
+Med de mere komplicerede kommandoer, kan der komme flere svar tilbage til klienten, som alle skal testes. Vi starter med RM20 kommandoen, og når kommandoen er sat i gang, kan man kun kontakte simulatoren med S, T og Z, ind til kommandoen er overstået, hvis man prøver andre kommandoer, kommer svaret ”RM20 I” tilbage. Derfor valgte vi med at teste taste fejl til at starte med, og så længe kommandoen starter med RM20, kan simulatoren ligesom vægten forstå kommandoen, men ikke udeføre den da en parameter er forkert. Hvis kommandoen er skrevet korrekt (RM20 8 ”Tekst” ”” ””), vil simulatoren sende ”RM20 B”, hvilket betyder kommandoen er udført, og venter på bruger input. Dette vil få vores simulator til at vise teksten, og skifte til knapperne for RM20, samt vente på bruger input, som kan ses på billedet neden under.
+
+\begin{center}
+screenDumb6.png
+
+Tilhørende tekst: Efter RM20 8 Kommandoen er sendt til simulatoren.
+\end{center}
+
+Som der ses på screenDumb6.png, er der 2 knapper ok og cancel, hvis ok knappen bliver tastet bliver der sendt RM20 A ”Tekst” tilbage, hvor ”Tekst” er det brugeren har skrevet. Hvorimod hvis der bliver trykket cancel ville klienten få RM20 C svaret.
+
+\begin{center}
+screenDumb5.png
+
+Tilhørende tekst: Telnet konsollen for vores test af RM20 8 kommandoen.
+\end{center}
+
+Ved denne test, stødte vi dog ikke på nogen større fejl programmet, en af fejlene vi stødte på var at vi havde glemt at tilføje svaret hvis en kommando havde fået en forkert parameter ind.
+
+Billedere af de andre test der lavet i telnet kan findes i bilag.
+
+% subsubsection Telnet (end)
+
+\subsubsection{ASE} % (fold)
+
+Ved test op af ASE’en, gav det os en bedre mulighed, for at teste kommandoerne oppe af hinanden, for at se om overgangen mellem dem, kørte som den skulle, og at der ikke poppede nogen fejl op. Efter første udlæg af gui’en, da vi testede det op af ASE’en, fandt vi ud af at måden vi havde lavet knapperne på, ikke fungerede ordenligt, da det endte med at der blev udført flere kommandoer når der blev trukket på en knap. Dette gjorde at vi måtte lave dette design om, hvilket betød at vi endte med at benyttede flere arrays af knapper (Se Implementering GUI).
+
+Ved næste test op af ASE’en endte vi med en fejl, vi ikke kunne forstå kom, da det ikke gav mening, at fejlen dukkede op på det tidspunkt, og ikke noget andet tidspunkt. Der fejlen opstod, var, når vi prøvet at sætte teksten i et JTextField, men ikke hver gang, og ikke på alle computere. Det fejlen gjorde, var at fryse vores program, så vi ikke kunne gøre noget, og der poppede ikke nogle exception op. Denne fejl fiksede vi ved ændre det JTextField der skabte problemet til JTextArea, dette gjorde at problemet ikke længere opstod. Vi fandt dog aldrig ud af hvorfor denne fejl opstod. Men da den kun kom frem på nogle computere, tænkte vi at det nok have noget at gøre, med hvilken version af java, der blev benyttede på de forskellige computere.
+
+Da dette blev rettet, begyndte en NullPointerException i ”AWT-EventQueue-0” tråden, at poppe op nogle gange. Denne exception skaber dog ikke problemer, i vores program, den popper bare nogle gange op, når der bliver tastet på knapperne, det er dog sjældent, og som den forrige fejl poppede den kun op på nogle computere.
+
+\begin{center}
+  Fejl fra skolens computere 
+\end{center}
+
+% subsubsection ASE (end)
+
+% subsection Test (end)
+
+% section Simulator (end)
+
+\end{document}
