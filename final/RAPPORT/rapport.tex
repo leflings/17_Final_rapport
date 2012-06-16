@@ -302,6 +302,10 @@ public interface IReceptDAO {
 	void updateRecept(ReceptDTO recept) throws DALException;
 }
 \end{lstlisting}
+\begin{figure}[h!]
+  \caption{Interface for Recept DAO}
+\end{figure}
+
 
 De metoder der skal oprette eller ændre noget i databasen tager den tilsvarendes entitets DTO som parameter. På den måde sikre man sig at resten af system kun kan tilgå en entitets DTO som så bruges af entitetens DAO til at tilgå databasen. De entiteter der oprettes med et unikt ID returnere et DTO, så resten af systemet kan tilgå dette ID, mens de entiteter der ikke oprettes med et unikt ID ikke skal returner noget.  De metoder der kun skal tilgå data i databasen, uden at ændre i dataet, behøver ikke et DTO som parameter. Disse metoder returnere et DTO med de tilgåede data, som resten af systemet kan tilgå. Hvis der sker en fejl i DAO’et så kastes en exception.
 
@@ -332,6 +336,10 @@ public void setRaavareId(int raavareId) {
   this.raavareId = raavareId;
 }
 \end{lstlisting}
+\begin{figure}[h!]
+  \caption{Udvalg af metoder fra Recept DTO}
+\end{figure}
+
 
 % subsubsection DTO (end)
 
@@ -355,6 +363,10 @@ public void createReceptKomp(ReceptKompDTO receptkomponent) throws DALException 
   Connector.doUpdate(cmd);
 }
 \end{lstlisting}
+\begin{figure}[h!]
+  \caption{RecepKompDAOs implementation af createReceptKomp()}
+\end{figure}
+
 
 I de metoder hvor vi skal have alle data fra f.eks. recepter opretter vi i DAO’et en arrayliste af DTO’er hvor hver DTO indeholder en recept med dertilhørende data.
 
@@ -501,6 +513,10 @@ void doPost(HttpServletRequest request, HttpServletResponse response) throws Ser
 }}
 \end{lstlisting}
 \end{changemargin}
+\begin{figure}[h!]
+  \caption{Udpluk fra WebController'ens håndtering af POST}
+\end{figure}
+
 
 
 \subsubsection{Data fra databasen ud til brugeren} % (fold)
@@ -521,7 +537,7 @@ Til at kunne kommunikerer med brugeren, er der blevet implementeret til et beske
 
 Beskeder bliver videregivet via et Arraylists af Messenges i request scopet. På hver side på hjemmesiden bliver Messenges.jsp inkluderet. Det er på Messenges.jsp at beskederne bliver håndteret og vist for brugeren. Ved at sende det via request scopet er vi sikre på at levetiden på dem, kun er for den enkelte side. Det gør at vi altid at sikre på at beskeder bliver givet på de korrekt tidspunkt, og forsvinder igen når der ikke er brug for dem.
 
-\begin{figure}[h!]
+\begin{figure}[H]
   \centering
   \includegraphics[scale=0.6]{graphics/website/beskeder.png}
   \caption{Beskeder til brugeren}
@@ -570,11 +586,9 @@ Dette gøres ved at lave nogle regler for hvornår hvilke sektioner af css filen
 Når man ønsker at tilføje en ny recept skal man først oprette navnet på recepten. Derefter tilføjer man de komponenter man ønsker at recepten skal indeholde. Dette gøres ved at men en efter en vælger hvilken råvare man vil benytte, mængden samt hvilken en tolerance man ønsker. 
 
 \begin{figure}[H]
-%\begin{changemargin}{}{}
   \centering
   \includegraphics[scale=1]{graphics/website/flow-opret-recept.png}
-  \caption{}
-%\end{changemargin}
+  \caption{Flow Diagram for oprettelse af recept}
 \end{figure}
 
 % paragraph Recept tilføjelse (end)
@@ -840,7 +854,6 @@ Da dette blev rettet, begyndte en NullPointerException i ”AWT-EventQueue-0” 
 
 
 
-
 \section{Afvejnings Styrings Enhed} % (fold)
 
 \subsection{Analyse} % (fold)
@@ -1089,6 +1102,10 @@ void run() {
 
       } } }
 \end{lstlisting}
+\begin{figure}[h!]
+  \caption{Simplificeret uddrag af controllerens overordnede løkke}
+\end{figure}
+
 
 Sædvanligvis kan løkker med flere forgreninger styres ved at have en række boolske variabler der kan ændres når/hvis der ønskes at skifte vej i forgreningen, og ellers have en fornuftig struktur af if-else statements. Der er dog tilfælde i proceduren hvor der \emph{kan} komme svar fra der afviger ``kraftigt'' fra det forventede forløb. Eksempelvis kan der i del-proceduren hvor der sikre en gyldig afmåling af råvare-materiale til enhver tid trykkes Afslut, hvorfra afvejningsproceduren med det samme afsluttes og tilstanden ændres til \texttt{FINISHED} (der sikrer at data er gemt korrekt). Hvis disse tilfælde skal håndteres uden brug af navngivne loops, vil det forøge kompleksiteten af de forgreninger der i forvejen er nok af.
 
@@ -1110,6 +1127,10 @@ boolean askForScaleWeight() {
   }
 }
 \end{lstlisting}
+\begin{figure}[h!]
+  \caption{Metoden der anvendes når der spørges efter den nuværende vægt}
+\end{figure}
+
 
 Årsagen til at den returnerer en \texttt{boolean} er at vægten ikke kan svare med en værdi hvis vægten ikke er stabil (altså at belastningen ikke har stabiliseret sig). På denne måde kan controlleren nemt tage højde for dette i dens forgrenings-logik.
 
@@ -1134,6 +1155,10 @@ Event fetchReplyAndParse() {
   ...
 }
 \end{lstlisting}
+\begin{figure}[h!]
+  \caption{Udpluk af metoden der analyserer svar fra vægten}
+\end{figure}
+
 
 Hvis svaret starter med \texttt{"S S "} ved vi at vægten har svaret med en stabil afvejning og vi kan roligt gennemsøge svaret på den egentlige afvejning. Mønsteret vi vil lede efter klargøres først, og ser ud som følger:
 
