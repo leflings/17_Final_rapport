@@ -2,9 +2,49 @@
 \usepackage[utf8]{inputenc}
 \usepackage[danish]{babel}
 \usepackage[T1]{fontenc}
+\usepackage{multirow}
 \renewcommand{\danishhyphenmins}{22}
 \renewcommand{\arraystretch}{1.3}
-\usepackage{amsmath,amssymb,bm,mathtools}
+%\usepackage{amsmath,amssymb,bm,mathtools}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{
+  inputencoding=utf8,
+  columns=flexible,
+  basicstyle=\tt,
+  numbers=left,
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,  
+  numberfirstline=true,
+  language=Java,
+  tabsize=3,
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{gray},       % comment style
+  stringstyle=\color{dkgreen},
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  morekeywords={State, Event, String}
+}
+
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
 \title{Rapport: Gruppe 17 - CDIO Final}
 \author{
   Alle
@@ -13,8 +53,28 @@
 \begin{document}
 \maketitle
 
+\section*{Installationsvejledning} % (fold)
+
+Sådan her installerer du lortet
+
+% section Installationsvejledning (end)
+
 \tableofcontents
 \clearpage
+
+\section{Indledning} % (fold)
+
+Det her handler det om
+
+\subsection{Projektforløb} % (fold)
+
+Sådan her er lortet forløbet
+
+% subsection Projektforløb (end)
+
+% section Indledning (end)
+
+
 
 \section{Kravspecifikation} % (fold)
 
@@ -198,25 +258,100 @@ Kommandoer:
 
 % section Kravspecifikation (end)
 
+
+
 \section{Database} % (fold)
 
 \subsection{Analyse} % (fold)
 
-Databasens opgave er at opbevare de data som brugerne af systemet gemmer, således at det gemte data kan tilgås på et andet tidspunkt. En database er opbygget af en eller flere entiteter indeholdende en eller flere felter. Databasen entiteter kan være knyttet til hinanden ved hjælp af primære nøgler og fremmednøgler. Det er muligt at tilgå en database på mange forskellige måde og derfor skal man også være påpasselig når man integrer en database i sit system, da man ikke altid vil have alle dele af systemet skal have mulighed for at tilgå databasen. Der findes flere design mønstre der tager hånd om dette problem men en af de mere udbredte er Data Access Object eller DAO og Data Transfer Object eller DTO. Når en del af et system så skal have data ud af en database kontakter delsystemet DAO’et som tilgår databasen og gemmer de udtagende data i et DTO, som delsystemet så kan tilgå. På den måde sikre man at resten af systemet ikke kan tilgå databasen. Man kan sige at DAO er et abstrakt interface til en entitet i databasen.
+Databasens opgave er at opbevare de data som brugerne af systemet gemmer, således at det gemte data kan tilgås på et andet tidspunkt. En database er opbygget af en eller flere entiteter indeholdende en eller flere felter. Databasen entiteter kan være knyttet til hinanden ved hjælp af primære nøgler og fremmednøgler. Det er muligt at tilgå en database på mange forskellige måde og derfor skal man også være påpasselig når man integrer en database i sit system, da man ikke altid vil have alle dele af systemet skal have mulighed for at tilgå databasen. 
+
+Der findes flere design mønstre der tager hånd om dette problem men en af de mere udbredte er Data Access Object (eller DAO) og Data Transfer Object (eller DTO). Når en del af et system så skal have data ud af en database kontakter delsystemet DAO’et som tilgår databasen og gemmer de udtagende data i et DTO, som delsystemet så kan tilgå. På den måde sikre man at resten af systemet ikke kan tilgå databasen. Man kan sige at DAO er et abstrakt interface til en entitet i databasen.
 
 I kundens oplæg systemet fremgår det at databasen skal inde holde følgende entiteter: ”Raavare, RaavareBatch, Recept, ProduktBatch, og Operatoer. Disse entiteter indeholder forskellige felter. Hvert felt har et område af lovlige værdier som det data der skal lagres skal være indenfor.
 Systemet skal være bygget op således at man adskiller databasen fra de andre dele af systemet ved hjælp af et data acces lag.
-
 
 % subsection Analyse (end)
 
 \subsection{Design} % (fold)
 
-Vi har valgt at vores design af DAO’er og DTO’er til dels følger det forslag som oplæget foreslog. Det vil sige at vi for hver entitet i databasen har et DAO interface og et DTO. Hvert DAO interface har desuden en klasse der implementer interfacet.  Vi har udover forslaget valgt at oprette en entitet ReceptKomp. 
+Vi har valgt at vores design af DAO’er og DTO’er til dels følger det forslag som oplæget foreslog. Det vil sige at vi for hver entitet i databasen har et DAO interface og et DTO. Hvert DAO interface har desuden en klasse der implementer interfacet. Vi har desuden udvidet databasen med en ekstra entitet ReceptKomp som indeholder de komponenter en recept indeholder.
+
+\subsubsection{DTO} % (fold)
+
+Vores DTO’er eneste opgave er at være mellemled mellem DAO og resten af systemet. DTO’erne skal derfor bestå af lokale variabler for de felter entiteterne i databasen indeholder. Resten af systemet skal således have mulighed for at hente og ændre i de lokale variabler.  
+
+% subsubsection DTO (end)
+
+\subsubsection{DAO} % (fold)
+
+Hver DAO interface består af metoder der tilgår databasen og har som minimum en create-metode, en update-metode, en get-metode, og en list-metode. Create-metoden og update-metoden bruges til at ændre i databasen, mens get-metoden og list-metoden bruges til at hente data ud af databasen. Et eksempel på et DAO interface ses herunder.
+
+\begin{lstlisting}
+public interface IReceptDAO {
+	ReceptDTO getRecept(int receptId) throws DALException;
+	List<ReceptDTO> getReceptList() throws DALException;
+	ReceptDTO createRecept(ReceptDTO recept) throws DALException;
+	void updateRecept(ReceptDTO recept) throws DALException;
+}
+\end{lstlisting}
+
+De metoder der skal oprette eller ændre noget i databasen tager den tilsvarendes entitets DTO som parameter. På den måde sikre man sig at resten af system kun kan tilgå en entitets DTO som så bruges af entitetens DAO til at tilgå databasen. De entiteter der oprettes med et unikt ID returnere et DTO, så resten af systemet kan tilgå dette ID, mens de entiteter der ikke oprettes med et unikt ID ikke skal returner noget.  De metoder der kun skal tilgå data i databasen, uden at ændre i dataet, behøver ikke et DTO som parameter. Disse metoder returnere et DTO med de tilgåede data, som resten af systemet kan tilgå. Hvis der sker en fejl i DAO’et så kastes en exception.
+
+% subsubsection DAO (end)
 
 % subsection Design (end)
 
 \subsection{Implementation} % (fold)
+
+\subsubsection{DTO} % (fold)
+
+Hvert DTO er blevet implementeret med get-metoder og set-metoder for hvert felt den til tilsvarende database entitet indeholder. Desuden indeholder hvert DTO en equals-metode til at sammenligne om et DTO er det samme som et andet DTO. Herunder ses en entitet og et udkast af dens tilhørende DTO.
+
+\begin{lstlisting}
+public int getReceptId() {
+  return receptId;
+}
+
+public void setReceptId(int receptId) {
+  this.receptId = receptId;
+}
+
+public int getRaavareId() {
+  return raavareId;
+}
+
+public void setRaavareId(int raavareId) {
+  this.raavareId = raavareId;
+}
+\end{lstlisting}
+
+% subsubsection DTO (end)
+
+\subsubsection{DAO} % (fold)
+
+DAO’erne indeholder som beskrevet tidligere nogle metoder til at oprette, gemme, ændre data. Desuden indeholder operatør DAO’et også en slet-metode, og receptkomp DAO’et indeholder en metode der laver en liste af de komponenter der mangler at blive afmålt før en recept er færdiggjort.
+
+Til vores implementering af disse DAO’er har vi brugt pakken java.sql. Denne pakke indeholder metoder til at forbinde vores DAO’er med databasen. Hver metode i DAO’en sender en sql-kommando til databasen som alt efter kommandoen opretter, sletter, ændrer, eller henter data. Herunder ses et eksempel på receptKomp DAO’ens create-metode.
+
+\begin{lstlisting}
+public void createReceptKomp(ReceptKompDTO receptkomponent) throws DALException {
+ String cmd = String.format(new Locale("en"),
+  "INSERT INTO ReceptKomp " 
+  + "(receptId, raavareId, nomNetto, tolerance) "
+  + "VALUES (%d, %d, %f, %f)",
+    receptkomponent.getReceptId(),
+    receptkomponent.getRaavareId(),
+    receptkomponent.getNomNetto(),
+    receptkomponent.getTolerance() );
+
+  Connector.doUpdate(cmd);
+}
+\end{lstlisting}
+
+I de metoder hvor vi skal have alle data fra f.eks. recepter opretter vi i DAO’et en arrayliste af DTO’er hvor hver DTO indeholder en recept med dertilhørende data.
+
+% subsubsection DAO (end)
 
 % subsection Implementation (end)
 
@@ -227,6 +362,8 @@ Da vores DTO’er kun består af get’er og set’er og en for DTO’ets egne f
 % subsection Test (end)
 
 % section Database (end)
+
+
 
 \section{Hjemmeside} % (fold)
 
@@ -388,13 +525,54 @@ Testen af serverside valideringen er blevet lavet i 2 omgange, først har vi ved
 
 % section Hjemmeside (end)
 
+
+
 \section{Simulator} % (fold)
 
 \subsection{Analyse} % (fold)
 
+Som specificeret i krav specifikationerne, har vi valgt kun at implementere de kommandoer, vi benytter os af i ASE’en. Kommandoerne vi benytter er S, T, Z, RM20, RM30, RM39, RM49, P110 og P111. Hvad de forskellige kommandoer gør, kan ses i listen nedenunder.
+
+\begin{itemize}
+  \item	S bruges, når klienten skal hente den vægt, der står på vægten. Ex på svar fra simulator, ”S S       1.34 kg”.
+
+  \item	T benytter klienten når han vil tara’ere vægten. Klienten for så svaret ”T S       1.34 kg” tilbage, hvis vi går ud fra der ligger 1.34 kg på vægten.
+
+  \item Z benyttes når man vil nulstille vægten, svaret der kommer til klienten er ”Z A”
+
+  \item P111, benytter man sig af når man vil have tekst frem nederst på displayet. Kommandoen ser så ledes ud ”P111 ”Denne tekst kommer frem””. Klienten for så svaret ”P111 A” tilbage hvis kommandoen er accepteret, hvis der så er skrevet noget forkert ved parametrene efter P111, vil klienten så få svaret ”P111 L” som betyder kommando forstået, men der er en forkert parameter.
+
+  \item	P110 bruges til at rydde det nederste felt, og klienten for ”P110 A” tilbage.
+
+  \item RM20 kommandoen har en ekstra parameter man skal definere, som går fra 1-11, her valgte vi dog kun at benytte os af 8, da vi ikke havde brug for de andre. Klienten ville så se således ud 
+  ”RM20 8 ”Forespørgsel” ”” ”””, de svar klienten kan få tilbage er ”RM20 L” som betyder det som L svaret fra P111, ”RM20 I” som betyder at en anden kommando køre på vægten, eller ”RM20 B” som er kommando kørt venter på svar fra bruger. De efter følgende svar der så kan komme tilbage er ”RM20 A ”Brugerens input””, hvilket kommer når der bliver trykket ok, eller ”RM20 C” som bliver sendt hvis der bliver trykket på cancel.
+
+  \item	RM30 står for at gøre knapperne klar til RM39 kommandoen, og skrives ”RM30” efterfulgt af 6 string parameter. På vægten var det dog ikke nødvendigt at have alle 6 med, hvis man fx kun skal benytte de 3 første, vi har dog valgt at gøre, så man skal have dem alle med, da det gjorde det nemmere. Hvis rækkefølgen skal der også benyttes en anden kommando hvilket vi også valgte at droppe. Ligesom i de tidligere kommandoer, hvis der kommer en forkert parameter ind, vil den svare med ”RM30 L”, og ellers vil svaret være ”RM30 B”. Når RM39 så har aktiveret knapperne, vil RM30 så sende svar tilbage hver gang der bliver trykket på en knap, svaret vil med en værdi fra 1-6, som kommer an på hvilken knap der bliver trykket, svaret der bliver sendt fra simulatoren er ”RM30 C x” hvor x er den varierende værdi.
+
+  \item RM39 sørger for at aktivere RM30 knapperne, og ligesom i de andre kommandoer har den svarene ”RM39 A”, ”RM39 L” og ”RM39 I”. Der er dog en ekstra parameter der sendes med som går fra 0-2, vi har dog valgt ikke at bruge 2, da ASE’en ikke benytter sig af den kommando. Det 2 gør er at de aktivere RM30, hvor 1 aktivere den og 0 sletter den.
+
+  \item RM49 kan man kalde en form besked som kan have 2 muligheder, da man skal give den 2 parameter, en string og et tal mellem 1 og 4, som så bestemmer hvilke muligheder man skal have og hvad der skal på displayet. Vi har dog kun at implementere 2 og 4, hvor 2 kun viser ok knappen og 4 viser både ok og cancel knapperne. Kommandoen skrives således ”RM49 x ”tekst””, hvor x er tallet 1-4, og som nogle af de tidligere kommandoer, har denne også L I og B svarende. Det andet svar der så vil komme fra simulatoren vil enten være ”RM49 A 1” eller ”RM49 A 2”, som kommer an på hvilken knap der bliver trykket.
+\end{itemize}
+
+
 % subsection Analyse (end)
 
 \subsection{Design} % (fold)
+
+Efter vi havde fået specificeret hvilke kommandoer, og krav vi havde til vores simulator, skulle til at finde ud af hvordan vi skulle designe det. Vi havde allerede i forvejen tænkt os at bruge Threads, da det gjorde det nemmere at få tingene til at køre sammen, med en buffer til kommandoerne.
+
+\subsubsection*{Klassediagram} % (fold)
+
+Ud fra vores kode, fik vi så konstrueret et klasse diagram, vi har dog valgt at begrænse det, til kun at vise public metoder og parameter. Dette valgte vi da private, ikke kan benyttes af andre klasser, og der bliver ikke benyttede nogle med protected. Billedet der kan ses, er et uddrag fra vores klasse diagram af simulatoren, det man kan se ud fra billedet, er hvordan gui og selve simulatoren sidder sammen. Som der ses, har vi valgt også at tilføje ScaleProtocol til vores GUIButtons, da det gjorde det meget nemmere at få sendt de rigtige kommandoer, af sted til klienten.
+
+\begin{center}
+Uddrag.png
+
+Tilhørende tekst: Et uddrag fra klasse diagrammet over vores simulator, der fulde kan ses i bilaget.
+
+\end{center}
+
+% subsubsection Klassediagram (end)
 
 % subsection Design (end)
 
@@ -461,6 +639,7 @@ For at forbedre brugervenligheden i GUI, fik vi også implementeret en KeyListen
 
 % subsection Implementation (end)
 
+
 \subsection{Test} % (fold)
 
 For at kunne teste simulatoren, har vi skulle bruge en klient, der kunne oprette forbindelse simulatorens server. Her brugte vi blandt andet en telnet klient, for at teste hver enkelt kommando, for at se om alle de svar den kunne komme med, virkede. Vi har dog også fået testet det via vores ASE, for at sikre overgange fra kommando til kommando.
@@ -516,6 +695,8 @@ Da dette blev rettet, begyndte en NullPointerException i ”AWT-EventQueue-0” 
 % subsection Test (end)
 
 % section Simulator (end)
+
+
 
 \section{Afvejnings Styrings Enhed} % (fold)
 
@@ -661,9 +842,14 @@ Ved begivenheder hvor der er tilknyttet et resultat (\texttt{SCALE\_READ}, \text
 
 \subsubsection{Kommunikation med vægt} % (fold)
 
-Hvordan den asynkront kan sende og modtage data fra vægten.
+Det er nødvendigt med asynkron kommunikation mellem ASE og vægt(simulator), samtidig med at svar behandles, hvorfor ASE'en er designet til at have to tråde (threads) kørende. Den ene lytter kontinuerligt efter input på forbindelse. Disse placeres uden yderligere behandling i en kø (First In First Out), hvorfra vores anden tråd kan udtage svar efter behov og behandle disse. Fordi denne kø tilgås af flere tråde, er det naturligvis nødvendigt med en kø-implementation der er Thread-safe.
 
-Skriv om klassen til at håndtere kommunikation
+Forespørgsler og svar følger et helt bestemt mønster, hvorfor det er naturligt at lave en klasse der
+\begin{enumerate}
+  \item Kan formulere forespørgsler og sende disse
+  \item Behandle svar på de formulerede forespørgsler og oversætte disse til begivenheder i ASE'ens kontekst.
+\end{enumerate}
+Denne vil naturligvis bruge vores \texttt{ScaleConnection}, men uafhængigt af tråden der lytter efter svar.
 
 % subsubsection Kommunikation med vægt (end)
 
@@ -671,12 +857,232 @@ Skriv om klassen til at håndtere kommunikation
 
 \subsection{Implementation} % (fold)
 
+ASE'en består af 3 klasser og 2 enum's. De er som følger:
+
+\begin{itemize}
+  \item \textbf{State} \texttt{Enum} der definerer de tilstande der er beskrevet i design afsnittet.
+  \item \textbf{Event} \texttt{Enum} der definerer de begivender der er beskrevet i design afsnittet.
+  \item \textbf{ASE} Main-klassen der er ansvarlig for afviklingen af programmet. Denne instantierer de andre klasser og starter de nødvendige tråde. Hvis ikke der er defineret standard en standard adresse og port (på en vægt) der skal forbindes til, varetager den også at tage imod disse input fra konsollen.
+  \item \textbf{ScaleConnection} Repræsenterer en forbindelse til en vægt. Implementerer \texttt{Runnable} interfacet således at \texttt{ASE}-klassen kan igangsætte en tråd der kontinuerligt lytter på input fra vægten, som direkte placeres i køen. Indeholder funktionen der benyttes når der skal sendes forespørgsler til vægten.
+
+    Indeholder instansen af en \texttt{java.util.concurrent.ArrayBlockingQueue} der fungerer som køen der benyttes af programmet.
+  \item \textbf{Controller} Selve hovedklassen i programmet. Når der er etableret forbindelse til en vægt varetager denne resten af forløbet i afvejningsproceduren.
+
+    Indeholder en privat indre klasse:
+    \begin{itemize}
+      \item \textbf{Communicator} Indeholder funktionalitet til at formulere forespørgsler og behandle svar.
+    \end{itemize}
+\end{itemize}
+
+Klasserne er vist i nedenstående klassediagram:
+
+\begin{center}
+  Vis klassediagram
+\end{center}
+
+Specifikke implementationer i klasserne er nærmere beskrevet i følgende del afsnit.
+
+\subsubsection{ASE} % (fold)
+
+Hvis der ikke er defineret en standard adresse (og port) til en vægt der kan forbindes til, vil brugeren bliver bedt om input via konsollen. Input'et til adressen valideres ved brug af regulære udtryk. Hvis ikke inputtet er \texttt{localhost} vil det blive tjekket efter følgende regulære udtryk:
+
+\begin{verbatim}
+^\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}$ 
+\end{verbatim}
+
+Dette tjekker efter fire heltal (på 1-3 cifre) adskilt af punktum. Disse skal optræde i starten og slutningen af strengen, således der sikres at der ikke er mellemrum før eller efter. Udtrykket tjekker ikke for om de fire heltal ligger i intervallet 0-255, men i det tilfælde vil der ikke kunne skabes forbindelse og \texttt{ScaleConnection} vil kaste en \texttt{UnknownHostExpection}
+
+Efter at der er oprettet forbindelse til vægten, startes en ny tråd, hvor i \texttt{ScaleConnection}'s \texttt{run()} eksekveres.
+
+Der sendes en række nulstillingskommandoer der skal sikre at vægten er på sin "normalform". Der ventes 1 sekund før køen tømmes, for at sikre at vægten svarer på disse kommandoer, hvorefter køen tømmes så disse svar ikke har efterfølgede indflydelse.
+
+Slutteligt overgives kontrollen til \texttt{Controller}'en
+
+% subsubsection ASE (end)
+
+\subsubsection{ScaleConnection} % (fold)
+
+Valget af \texttt{ArrayBlockingQueue} som implementation af vores kø faldt meget naturligt, da den opfylder de krav vi havde til køen.
+
+\begin{itemize}
+  \item \textbf{First In First Out} Svar behandles/udtages i den rækkefølge som de indløber fra vægten
+  \item \textbf{Thread safe} Kan håndtere at flere tråde sideløbende indsætter i og udtager fra køen.
+\end{itemize}
+
+Desuden er \texttt{Blocking} elementet i køen ønskværdigt i det at vores Controller ofte skal vente på et svar fra vægten. Ved at bruge metoden \texttt{take()} vil den returnere \texttt{head} fra køen hvis det er tilgængeligt (altså at køen ikke er tom), og ellers vente (og dermed blokere) til at et element er tilgængeligt.
+
+Klassen indeholder en metode \texttt{sendReply(String)} der automatisk tilføjer \texttt{\textbackslash r\textbackslash n} til den udgående kommando, sådan at der ikke skal tages højde for dette andre steder i programmet.
+
+% subsubsection ScaleConnection (end)
+
+\subsubsection{Controller} % (fold)
+
+Controlleren er, som tidligere beskrevet, designet som en tilstandsmaskine der autonomt kan varetage  afvejningsproceduren når først den har fået overdraget kontrollen.
+
+Logikken for hele proceduren er placeret i et navngivet loop, hvori der \texttt{switch}'es på tilstanden der er repræsenteret ved en privat instansvariabel. Ved at navngive loopet kan der fra nestede loops i proceduren kaldes forgrenings-kommandoen \texttt{continue} på det navngivne ydre loop. På denne måde kan der når som helst det ønskes, skiftes tilstand for ASE'en ved at ændre tilstands-variablen og bruge \texttt{continue}-kommandoen til at skippe den aktive iteration af loopet.
+
+I nedenstående figur er der vist simplificeret uddrag af den overordnede løkke.
+
+\begin{lstlisting}
+void run() {
+
+  running:
+  while(true) {
+
+    switch(state) {
+
+      case LOGIN:
+        // handle identification of operator
+        break;
+
+      case SELECT_BATCH:
+        // handle selection of product batch
+        break;
+
+      ...
+
+      default:
+        break;
+
+      } } }
+\end{lstlisting}
+
+Sædvanligvis kan løkker med flere forgreninger styres ved at have en række boolske variabler der kan ændres når/hvis der ønskes at skifte vej i forgreningen, og ellers have en fornuftig struktur af if-else statements. Der er dog tilfælde i proceduren hvor der \emph{kan} komme svar fra der afviger ``kraftigt'' fra det forventede forløb. Eksempelvis kan der i del-proceduren hvor der sikre en gyldig afmåling af råvare-materiale til enhver tid trykkes Afslut, hvorfra afvejningsproceduren med det samme afsluttes og tilstanden ændres til \texttt{FINISHED} (der sikrer at data er gemt korrekt). Hvis disse tilfælde skal håndteres uden brug af navngivne loops, vil det forøge kompleksiteten af de forgreninger der i forvejen er nok af.
+
+% subsubsection Controller (end)
+
+\subsubsection{Communicator} % (fold)
+
+Denne klasse indeholder en række metoder til at formulere forespørgsler og behandle svar fra vægten. Grundstenen i dette arbejde er metoden \texttt{fetchReplyAndParse()} der udtager forreste element fra køen og matcher dette imod en række regulære udtryk for derefter at returnere en begivenhed (\texttt{Event}). Denne metode kaldes kun yderst sjældent direkte fra controlleren, men bruges af klassens andre metoder der har mere specifikke formål.
+
+Et eksempel på dette er når der ønskes en status på vægtens nuværende belastning. Til dette formål bruges metoden \texttt{askForScaleWeight()}. Denne ser ud som følger:
+
+\begin{lstlisting}
+boolean askForScaleWeight() {
+  sc.sendReply("S");
+  if(fetchReplyAndParse() == Event.SCALE_READ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+\end{lstlisting}
+
+Årsagen til at den returnerer en \texttt{boolean} er at vægten ikke kan svare med en værdi hvis vægten ikke er stabil (altså at belastningen ikke har stabiliseret sig). På denne måde kan controlleren nemt tage højde for dette i dens forgrenings-logik.
+
+I \texttt{fetchReplyAndParse()} ser det ud som følger:
+
+\begin{lstlisting}
+Event fetchReplyAndParse() {
+  String input = sc.receive(); // hent svar fra queue
+  ...
+  else if(input.startsWith("S S ")) {
+    Pattern p = Pattern
+                  .compile("S S\\s*(decimal) (\\w+)"
+                  .replace("decimal", "\\d+(?:\\.\\d+)?"));
+    Matcher m = p.matcher(input);
+
+    if(m.find()) {
+      lastDoubleReceived = Double.parseDouble(m.group(1));
+    }
+
+    return Event.SCALE_READ;
+  }
+  ...
+}
+\end{lstlisting}
+
+Hvis svaret starter med \texttt{"S S "} ved vi at vægten har svaret med en stabil afvejning og vi kan roligt gennemsøge svaret på den egentlige afvejning. Mønsteret vi vil lede efter klargøres først, og ser ud som følger:
+
+\begin{verbatim}
+S S\\s*(decimal) (\\w+)
+\end{verbatim}
+
+og læses: sekvensen \texttt{S S}, efterfulgt af ét eller flere mellemrum, efterfulgt af et decimal tal (afvejningen), efterfulgt af ét eller bogstaver (enheden). Mønsteret der bruges til at finde decimaltallet ser ud som følger:
+\begin{verbatim}
+\\d+(?:\\.\\d+)? 
+\end{verbatim}
+og læses: ét eller flere heltal, der \emph{kan} være efterfulgt af et punktum \emph{og} ét eller flere heltal.
+
+% subsubsection Communicator (end)
+
 % subsection Implementation (end)
 
 \subsection{Test} % (fold)
 
+Vi har testet således at vi har forsøgt at dække alle scenarier der kan opstå i proceduren. Ved hver dialog har vi haft en liste af input der indeholder både ``korrekte, forventede input'', samt input der ikke modsvarer hvad der forventes for at nå til næste skridt i proceduren. Disse input har samtidig haft en note om hvilket trin i afvejningsproceduren ASE'en bør gå til. Ved at sammenligne denne liste med hvad vi ser på vægten, kan vi fastslå om ASE'en opfører sig som forventet.
+
+\begin{enumerate}
+  \item Indtast operatør-ID
+    \begin{enumerate}
+      \item Operatør fundet \texttt{<navn>} - korrekt?
+        \begin{enumerate}
+          \item Ja: gå til \texttt{2}
+          \item Nej: gå til \texttt{1}
+        \end{enumerate}
+      \item Operatør ikke fundet - gå til \texttt{1}
+    \end{enumerate}
+  \item Indtast produktbatch id
+    \begin{enumerate}
+      \item Produktbatch fundet ud fra recept \texttt{<recept navn>} - korrekt?
+        \begin{enumerate}
+          \item Ja: gå til \texttt{3}
+          \item Nej: gå til \texttt{2}
+        \end{enumerate}
+      \item Produktbatch ikke fundet - gå til \texttt{2}
+      \item Produktbatch allerede afsluttet - gå til \texttt{2}
+    \end{enumerate}
+    \emph{Trin 3 til 8 gentages for hvert recept komponent}
+  \item Find råvarebatch med råvare \texttt{<råvare id>}
+    \begin{enumerate}
+      \item Der findes ingen gyldige råvarebatches - gå til \texttt{3} for næste komponent
+    \end{enumerate}
+  \item Indtast råvarebatch nr
+    \begin{enumerate}
+      \item Råvarebatch findes ikke - gå til \texttt{4}
+      \item Råvarebatch er ikke korrekt råvare - gå til \texttt{4}
+      \item Råvarebatch indeholder ikke tilstrækkelig mængde - gå til \texttt{4}
+    \end{enumerate}
+  \item Kontroller at vægt er tom
+    \begin{enumerate}
+      \item Vægt ikke tom - gå til \texttt{5}
+    \end{enumerate}
+  \item Placer skål på vægt og tryk OK for at tarere
+  \item Afmål mellem \texttt{xx} - \texttt{xx} kg og tryk ok
+    \begin{enumerate}
+      \item For lidt afmålt - gå til \texttt{7}
+      \item For meget afmålt - gå til \texttt{7}
+    \end{enumerate}
+  \item Afmåling gemt
+    \begin{enumerate}
+      \item Produktbatch afsluttet: gå til \texttt{9}
+      \item Ej afsluttet: gå til \texttt{3}
+    \end{enumerate}
+  \item Produktbatch afsluttet
+    \begin{enumerate}
+      \item Produktbatch ikke afsluttet - kan genoptages senere
+    \end{enumerate}
+  \item Gå til \texttt{1}
+\end{enumerate}
+
 % subsection Test (end)
 
 % section Afvejnings Styrings Enhed (end)
+
+
+
+\section{Forbedringer} % (fold)
+
+De her forbedringer kan man laver
+
+% section Forbedringer (end)
+
+
+
+\section{Konklusion} % (fold)
+
+Sådan her lyder konklusionen (lortet virker jo)
+
+% section Konklusion (end)
 
 \end{document}
