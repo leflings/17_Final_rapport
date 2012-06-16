@@ -9,9 +9,12 @@
 \usepackage{amsmath,amssymb,bm,mathtools}
 \usepackage[top=3cm,bottom=3cm,left=4cm,right=4cm]{geometry}
 \usepackage{float}
+\usepackage{rotating}
 
 \usepackage{listings}
 \usepackage{color}
+
+\renewcommand{\labelitemii}{$\ast$}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -29,6 +32,7 @@
   numberfirstline=true,
   language=Java,
   tabsize=3,
+  lineskip=-0.5pt,
   keywordstyle=\color{blue},          % keyword style
   commentstyle=\color{gray},       % comment style
   stringstyle=\color{dkgreen},
@@ -39,6 +43,19 @@
   aboveskip=0pt,
   belowskip=-15pt
 }
+\newenvironment{my_enumerate}
+{\begin{enumerate}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}}
+{\end{enumerate}}
+
+\newenvironment{my_itemize}
+{\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}}
+{\end{itemize}}
 
 \newenvironment{changemargin}[2]{%
 \begin{list}{}{%
@@ -57,11 +74,84 @@
 }
 
 \begin{document}
-\section*{Installationsvejledning} % (fold)
+\section*{Forside placeholder} % (fold)
 
-Sådan her installerer du lortet
+% section Forside placeholder (end)
+\clearpage
+
+\section*{Timeregnskab} % (fold)
+
+\begin{tabular}{l l | c c c c c | c}
+
+  \emph{Studienr} & \emph{Navn}
+  & \begin{sideways}Design\end{sideways} 
+  & \begin{sideways}Implementation\end{sideways} 
+  & \begin{sideways}Test\end{sideways} 
+  & \begin{sideways}Dokumentation\end{sideways} 
+  & \begin{sideways}Andet\end{sideways} 
+  & \begin{sideways}Total\end{sideways} \\
+  \hline
+  s113618 & Tobias Brasch                & 4 & 43 & 5  & 18 & 3 & 73 \\
+  s103799 & Martin Roland Hartvig        & 9 & 20 & 12 & 15 & 0 & 56 \\
+  s113933 & Flemming Madsen              & 5 & 16 & 11 & 32 & 4 & 68 \\
+  s093018 & Christian Walldeskog Nielsen & 7 & 15 & 10 & 24 & 0 & 56 \\
+  s113610 & Lavdrim Elmazi               & 0 & 7  & 6  & 15 & 10 & 38 \\
+  \hline
+  -       & -                            & 25 & 101 & 44 & 104 & 17 & 291
+\end{tabular}
+\\ \\Specificerede timeregnskab for hvert medlem kan ses i bilag A.1-5
+
+% section Timeregnskab (end)
+\clearpage
+
+\section*{Installations- og brugsvejledning} % (fold)
+
+For at systemet kan fungere skal det have forbindelse til en MySQL database. Systemet er sat op til at forbinde til at DTU's MySQL (\texttt{sunq10.gbar.dtu.dk}). Testes systemet indenfor DTU's netværk vil dette fungere uden problemer.
+
+Er man imidlertid placeret udenfor DTU's netværk er det ikke muligt at oprette forbindelse til denne server. I dette tilfælde kan en lokal server benyttes. Indeholdt i Eclipse projektet er der et mysqldump (\texttt{s113933.sql}) af databasen med passende data. For at ændre i opsætningen af hvilken server der forbindes til skal der redigeres i Java filen \texttt{Constant.java} der findes under \texttt{src.utility}
+
+\subsection*{Systemets brugere} % (fold)
+
+\begin{tabular}{c l l l}
+  Id & Navn & Password & Niveau \\
+  \hline
+  10 & Stig Høgh & 02324 & Adminstrator \\
+  14 & Mads Nybord & 02324 & Farmaceut \\
+  15 & Daniel Kolditz & 02324 & Værkfører \\
+  16 & Jens Andersson & 02324 & Operatør \\
+\end{tabular}
+
+% subsection Systemets brugere (end)
+
+\subsection*{Afvikling} % (fold)
+
+\paragraph{Hjemmeside} % (fold)
+
+Hjemmesiden findes i source-foldere \texttt{WebSite}. Under pakken \texttt{web.controller} ligger filen \texttt{WebController.java}. Køres denne startes hjemme (givet at der allerede er opsat en TomCat server i workspacet)
+
+% paragraph Hjemmeside (end)
+
+\paragraph{Vægtsimulator} % (fold)
+
+Vægtsimulatoren med GUI findes under source-folderen \texttt{Simulator}. Fra pakken \texttt{simulator} køres files \texttt{Scale.java}. Simulatoren lytter som standard på port 8000. Dette kan ændres ved at køre programmet med port nummer som første parameter.
+
+% paragraph Vægtsimulator (end)
+
+\paragraph{Afvejnings Styrings Enhed} % (fold)
+
+ASE'en findes i source-folderen \texttt{ASE}. Fra pakken \texttt{ase} køres \texttt{ASE.java}. Ved opstart bliver man bedt om at indtaste ip-adressen på den vægt man vil forbinde til. Hvis ASE'en skal køres op imod simulatoren er adressen \texttt{localhost}
+
+% paragraph Afvejnings Styrings Enhed (end)
+
+% subsection Afvikling (end)
 
 % section Installationsvejledning (end)
+\clearpage
+
+\section*{Poster placeholder} % (fold)
+
+% section Poster placeholder (end)
+\clearpage
 
 \tableofcontents
 \clearpage
@@ -73,11 +163,11 @@ Nærværende rapport dokumenterer Gruppe 17's arbejde under 3 ugers projektet p�
 Projektet omhandler udviklingen af et softwaresystem der skal assistere en medicinalvirksomhed i arbejdet med produktion, lagerstyring samt dokumentation. Systemet skal baseres på en nuværende struktur, hvorfor det er krav at det nye system overholder de samme forretningsregler som det gamle system.
 
 Et kort oprids af firmaets ønsker:
-\begin{itemize}
+\begin{my_itemize}
   \item Der ønskes udviklet en webapplikation hvorfra udvalgte ansatte kan styre virksomhedens lager, deres produkter og selve produktionen.
   \item Der ønskes udviklet en program der kan styre afvejningen af råvarer der indgår i produkterne.
   \item Begge ovenstående enheder skal arbejde ud fra en fælles database
-\end{itemize}
+\end{my_itemize}
 Der ønskes desuden udviklet et program der kan simulere de vægte firmaet anvender til afvejning.
 
 \subsection{Projektforløb} % (fold)
@@ -86,14 +176,14 @@ Gruppen har inddelt imellem sådan at medlemmerne hver især har fået hovedansv
 
 Arbejdsfordelingen har været som følger:
 
-\begin{itemize}
+\begin{my_itemize}
   \item Tobias har stået for udvikling og dokumentation af vægtsimulatoren
   \item Christian har haft ansvaret for database design, udvikling af datalaget, samt dokumenteret disse.
   \item Martin har haft ansvaret for udvikling og dokumentation af hjemmesiden, samt udarbejdelse af poster.
   \item Lavdrim har haft ansvaret for kravspecifikation, udarbejdelse af diverse diagrammer samt hjulpet til hvor der har været behov.
   \item Flemming har stået for udvikling og dokumentation af afvejningsstyringsenheden, udarbejdelse af rapportens øvrige tekst, samt opsætning af rapport. Har i øvrigt fungeret som projektleder med ansvar for aflevering af milestones og den endelige rapport.
  
-\end{itemize}
+\end{my_itemize}
 
 % subsection Projektforløb (end)
 
@@ -103,27 +193,28 @@ Arbejdsfordelingen har været som følger:
 
 
 \section{Kravspecifikation} % (fold)
+\emph{Skrevet af Lavdrim}
 
 \subsection{Analyse} % (fold)
 Fra kundens side er der følgende krav til hvad hjemmesiden skal kunne:
 
-\begin{itemize}
+\begin{my_itemize}
   \item Oprette, se, ændre samt slette brugere
   \item Oprette, se og ændre på råvarer
-  \item Oprette og se råvarebatch 
+  \item Oprette og se råvarebatches
   \item Oprette og se recepter
   \item Oprette og se produktionsbatch
   \item Adgangskontrol samt forskellige niveauer
-\end{itemize}
+\end{my_itemize}
 
 Det er også vigtigt at der er stor fokus på brugervenligheden, samt at sikre sig mod at brugerne indtaster forkert data. På hjemmesiden skal brugerne være inddelt i 4 niveauer:
 
-\begin{itemize}
+\begin{my_itemize}
   \item Administrator: Alle rettigheder
   \item Farmaceut: Har ikke adgang til brugeradministration
-  \item Værkfører: Har ikke adgang til råvare, recept og bruger administrationen 
+  \item Værkfører: Har ikke adgang til råvare-, recept- og brugeradministrationen 
   \item Operatør: Har kun adgang til afvejningssystemet. 
-\end{itemize}
+\end{my_itemize}
 
 For alle brugere er der forskellige rettigheder, i forhold til hvilket niveau man hører til. F.eks. har administratoren flere rettigheder end alle andre brugere i systemet. Disse er også delt i use-cases som beskrevet for neden, hvor der specifikt beskrives hvad brugeren kan. 
 
@@ -131,88 +222,96 @@ For alle brugere er der forskellige rettigheder, i forhold til hvilket niveau ma
 
 \subsection{Use Cases} % (fold)
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{graphics/UseCaseDiagram1.png}
+  \caption{Use Case diagram}
+\end{figure}
+
+
 Der er 6 use-cases i systemet
 
-\subsubsection{UC1: Bruger adminstration} % (fold)
+\subsubsection*{UC1: Bruger adminstration} % (fold)
 
 Det er kun brugere med niveauet administrator som kan administrer brugere. En bruger består af følgende informationer.
 
-\begin{itemize}
+\begin{my_itemize}
   \item Bruger ID
   \item Navn
   \item Initialer
   \item Kodeord
   \item Niveau
-\end{itemize}
+\end{my_itemize}
 
 En bruger med niveauet Operatør skal ikke kunne slettes eller hæves i niveau når de først er oprettet.  Alle andre brugere skal kunne slettes og opdateres. Det er vigtigt at administratorer ikke kan slette eller sænke sig selv i niveau.   
 
 % subsubsection UC1: Bruger adminstration (end)
 
-\subsubsection{UC2: Råvare adminstration} % (fold)
+\subsubsection*{UC2: Råvare adminstration} % (fold)
 
 Farmaceut aktøren står for administrationen af råvarerne i systemet, denne skal kunne oprette, rette og vise råvarer i systemet.
 
 En råvare defineres således:
 
-\begin{itemize}
-  \item råvareNr (brugervalgt og entydigt)
-  \item råvareNavn
+\begin{my_itemize}
+  \item råvare id
+  \item råvare navn
   \item leverandør
-\end{itemize}
+\end{my_itemize}
 
 % subsubsection UC2: Råvare adminstration (end)
 
-\subsubsection{UC3: Recept adminstration} % (fold)
+\subsubsection*{UC3: Recept adminstration} % (fold)
 
 Farmaceut aktøren står for recept administrationen, denne skal kunne oprette og vise recepter i systemet.
 
 En recept defineres således:
-\begin{itemize}
-  \item receptNr (brugervalgt og entydigt)
-  \item receptNavn
-  \item sekvens af receptkomponenter
-\end{itemize}
-
-En receptkomponent består af råvareType, mængde, og en tolerance.
+\begin{my_itemize}
+  \item recept id
+  \item recept navn
+  \item ét eller flere receptkomponenter:
+    \begin{my_itemize}
+      \item råvare id
+      \item nominel netto
+      \item tolerance (0.1\%-10\%, dog mindst 1g)
+    \end{my_itemize}
+\end{my_itemize}
 
 % subsubsection UC3: Recept adminstration (end)
 
-\subsubsection{UC4: Råvarebatch adminstration} % (fold)
+\subsubsection*{UC4: Råvarebatch adminstration} % (fold)
 
-Værkfører aktøren står for administrationen af råvarebatches i systemet. Denne skal kunne oprette og vise råvarebatches i systemet. 
+Værkfører aktøren står for administrationen af råvarebatches i systemet. Denne skal kunne oprette, vise og redigere råvarebatches i systemet. 
 
 En råvarebatch defineres således:
 
-\begin{itemize}
-  \item råvarebatchNr (brugervalgt og entydigt)
+\begin{my_itemize}
+  \item råvarebatch nummer
+  \item råvare id
   \item mængde
-\end{itemize}
+\end{my_itemize}
 
 % subsubsection UC4: Råvarebatch adminstration (end)
 
-\subsubsection{UC5: Produktbatch adminstration} % (fold)
+\subsubsection*{UC5: Produktbatch adminstration} % (fold)
 
 Værkfører aktøren står for administrationen af produktbatches i systemet. Denne skal kunne oprette og vise produktbatches i systemet.
 
 En produktbatch defineres således:
 
-\begin{itemize}
-  \item produktbatchNr (entydigt)
-  \item nummeret på recepten produktbatchen produceres udfra
-  \item oprettelses dato
+\begin{my_itemize}
+  \item produktbatch id
+  \item recept id
+  \item start dato
+  \item slut dato
   \item oplysinger om batchens status, status kan være: oprettet/ under produktion/ afsluttet.
-\end{itemize}
-
-Resultaterne af de enkelte receptkomponenter gemmes som en produktbatchkomponent i produktbatchen samtidig med at produktet fremstilles.
-
-Efter værkføren har oprettet en ny produktbatch, udprintes den og uddeles til en udvalgt operatør. Operatøren har derefter ansvaret for produktionen. 
+\end{my_itemize}
 
 For ovennævnte UC1-UC5 ønskes at der fokuseres på brugervenlighed samt input validering.
 
 % subsubsection UC5: Produktbatch adminstration (end)
 
-\subsubsection{UC6: Afvejning} % (fold)
+\subsubsection*{UC6: Afvejning} % (fold)
 
 Operatøren arbejder ved en vejeterminal og starter med at identificere sig overfor den. Det gøres ved at indtaste operatørNr på vejeterminalens tastatur. Vejeterminalen svarer derefter tilbage med operatørens navn som vises på displayet, herefter indtaster operatøren nummeret på den produktbatch der skal produceres.
 
@@ -234,15 +333,15 @@ Der lægges vægt på at afvejningsproceduren er brugervenlig, intuitiv, fejltol
 
 Systemet skal bestå af disse delkomponenter:
 
-\begin{itemize}
+\begin{my_itemize}
   \item En database der indeholder oplysninger om operatører, råvarer, råvarebatches, recepter, samt de planlagte og færdigproducerede produktbatches. 
-    \begin{itemize}
+    \begin{my_itemize}
       \item Datalaget der er i applikationen skal implementeres som en MysSql database.
-    \end{itemize}
-  \item Et webinterface (GUI), hvor farmaceuten kan administrere recepterne og råvarerne, og hvor værkføreren kan oprette produktbatches og vise deres status.
+    \end{my_itemize}
+  \item Et webinterface, hvor farmaceuten kan administrere recepterne og råvarerne, og hvor værkføreren kan oprette produktbatches og vise deres status.
   \item En række vejeterminaler som er udstyret med vejeplade, tastatur og display. Alle vægte har et ethernet interface. 
   \item Et program (ASE) til styrelse af alle vejeterminaler og gemmer dens data i databasen.
-\end{itemize}
+\end{my_itemize}
 
 % subsection Systemarkitektur (end)
 
@@ -250,11 +349,7 @@ Systemet skal bestå af disse delkomponenter:
 
 Afvejnings styrings endheden (ASE) er en applikation, denne står for at styre afvejningsproceduren på vægten. Applikationen styrer vægten/vægtsimulatoren. 
 
-Programmet skal starte med at bede om operatør nr. operatøren indtaster derefter sit operatør nr. og denne afvejnings procedure følger herefter.
-
- (Afvejningsprocedure)
-
-Den afvejningsprocedure som der tages udgangspunkt i, er den fra opgaveformuleringen som var beskrevet i bilag 4. De nærmere specifikationer for den modificerede afvejnigsprocedure som vi har brugt, er beskrevet i et andet afsnit. 
+Den afvejningsprocedure som der tages udgangspunkt i, er den fra opgaveformuleringen som var beskrevet i bilag 4. De nærmere specifikationer for den modificerede afvejnigsprocedure som vi har brugt, er beskrevet i design afsnittet for ASE'en
 
 % subsection ASE specifikation (end)
 
@@ -264,21 +359,21 @@ Web applikationen skal implementere use-casene 1-5.
 
 Når brugerne er i gang med en login session skal der foretages en authentikering. I forhold til den rolle brugeren har, skal siderne vises tilpasset brugerens rettigheder, herunder relevante menuer.
 
-Input felterne skal valideres i henhold til gyldige områder, og der skal vises passende fejlmeddelelser ved fejl. Websiderne bør valideres i henhold til W3C standarderne, og det gælder her både HTML og Cascading Style Sheets (CSS).
+Input felterne skal valideres i henhold til gyldige områder, og der skal vises passende fejlmeddelelser ved fejl.
 
 % subsection Website specifikation (end)
 
 \subsection{Simulator specifikation} % (fold)
 
-Vi har valgt at implementere en GUI baseret simulator, hvor vi også har valgt disse kommandoer som en del af implementeringen.
+Simulatoren skal kunne træde i stedet for en egentlig vægt. Det kræves derfor at den implementerer de kommandoer der anvendes af ASE'en.
 
-Kommandoer:
+Disse er som følger:
 
-\begin{itemize}
+\begin{my_itemize}
   \item S, T, Z
   \item RM20 8, RM30, RM39, RM49 2, RM49 4
   \item P111, P110
-\end{itemize}
+\end{my_itemize}
 
 % subsection Simulator specifikation (end)
 
@@ -288,12 +383,13 @@ Kommandoer:
 
 
 \section{Database} % (fold)
+\emph{Skrevet af Christian}
 
 \subsection{Analyse} % (fold)
 
-Databasens opgave er at opbevare de data som brugerne af systemet gemmer, således at det gemte data kan tilgås på et andet tidspunkt. En database er opbygget af en eller flere entiteter indeholdende en eller flere felter. Databasen entiteter kan være knyttet til hinanden ved hjælp af primære nøgler og fremmednøgler. Det er muligt at tilgå en database på mange forskellige måde og derfor skal man også være påpasselig når man integrer en database i sit system, da man ikke altid vil have alle dele af systemet skal have mulighed for at tilgå databasen. 
+Databasens opgave er at opbevare de data som brugerne af systemet gemmer, således at de gemte data kan tilgås på et andet tidspunkt. En database er opbygget af en eller flere entiteter indeholdende en eller flere felter. Databasen entiteter kan være knyttet til hinanden ved hjælp af primære nøgler og fremmednøgler. Det er muligt at tilgå en database på mange forskellige måder og derfor skal man også være påpasselig når man integrerer en database i sit system, da man ikke altid vil have alle dele af systemet skal have mulighed for at tilgå databasen. 
 
-Der findes flere design mønstre der tager hånd om dette problem men en af de mere udbredte er Data Access Object (eller DAO) og Data Transfer Object (eller DTO). Når en del af et system så skal have data ud af en database kontakter delsystemet DAO’et som tilgår databasen og gemmer de udtagende data i et DTO, som delsystemet så kan tilgå. På den måde sikre man at resten af systemet ikke kan tilgå databasen. Man kan sige at DAO er et abstrakt interface til en entitet i databasen.
+Der findes flere design mønstre der tager hånd om dette problem men et af de mere udbredte er Data Access Object (eller DAO) og Data Transfer Object (eller DTO). Når en del af et system så skal have data ud af en database kontakter delsystemet en passende DAO som tilgår databasen og gemmer de udtagende data i et DTO, som delsystemet så kan tilgå. På den måde sikrer man at resten af systemet ikke kan tilgå databasen. Man kan sige at DAO er et abstrakt interface til en entitet i databasen.
 
 I kundens oplæg systemet fremgår det at databasen skal inde holde følgende entiteter: ”Raavare, RaavareBatch, Recept, ProduktBatch, og Operatoer. Disse entiteter indeholder forskellige felter. Hvert felt har et område af lovlige værdier som det data der skal lagres skal være indenfor.
 Systemet skal være bygget op således at man adskiller databasen fra de andre dele af systemet ved hjælp af et data acces lag.
@@ -302,7 +398,15 @@ Systemet skal være bygget op således at man adskiller databasen fra de andre d
 
 \subsection{Design} % (fold)
 
-Vi har valgt at vores design af DAO’er og DTO’er til dels følger det forslag som oplæget foreslog. Det vil sige at vi for hver entitet i databasen har et DAO interface og et DTO. Hvert DAO interface har desuden en klasse der implementer interfacet. Vi har desuden udvidet databasen med en ekstra entitet ReceptKomp som indeholder de komponenter en recept indeholder.
+\begin{figure}[H]
+\begin{changemargin}{-1.3cm}{-1.3cm}
+  \centering
+  \includegraphics[scale=0.7]{graphics/database/database-design.png}
+  \caption{Oversigt over database design}
+\end{changemargin}
+\end{figure}
+
+Vi har valgt at vores design af DAO’er og DTO’er til dels følger det forslag som oplægget foreslår. Det vil sige at vi for hver entitet i databasen har et DAO interface og et DTO. Hvert DAO interface har desuden en klasse der implementer interfacet. Vi har desuden udvidet databasen med en ekstra entitet ReceptKomp som indeholder de komponenter en recept indeholder.
 
 \subsubsection{DTO} % (fold)
 
@@ -312,7 +416,7 @@ Vores DTO’er eneste opgave er at være mellemled mellem DAO og resten af syste
 
 \subsubsection{DAO} % (fold)
 
-Hver DAO interface består af metoder der tilgår databasen og har som minimum en create-metode, en update-metode, en get-metode, og en list-metode. Create-metoden og update-metoden bruges til at ændre i databasen, mens get-metoden og list-metoden bruges til at hente data ud af databasen. Et eksempel på et DAO interface ses herunder.
+Hvert DAO interface består af metoder der tilgår databasen og har som minimum en create-metode, en update-metode, en get-metode, og en list-metode. Create-metoden og update-metoden bruges til at ændre i databasen, mens get-metoden og list-metoden bruges til at hente data ud af databasen. Et eksempel på et DAO interface ses herunder.
 
 \begin{lstlisting}
 public interface IReceptDAO {
@@ -327,7 +431,7 @@ public interface IReceptDAO {
 \end{figure}
 
 
-De metoder der skal oprette eller ændre noget i databasen tager den tilsvarendes entitets DTO som parameter. På den måde sikre man sig at resten af system kun kan tilgå en entitets DTO som så bruges af entitetens DAO til at tilgå databasen. De entiteter der oprettes med et unikt ID returnere et DTO, så resten af systemet kan tilgå dette ID, mens de entiteter der ikke oprettes med et unikt ID ikke skal returner noget.  De metoder der kun skal tilgå data i databasen, uden at ændre i dataet, behøver ikke et DTO som parameter. Disse metoder returnere et DTO med de tilgåede data, som resten af systemet kan tilgå. Hvis der sker en fejl i DAO’et så kastes en exception.
+De metoder der skal oprette eller ændre noget i databasen tager den tilsvarendes entitets DTO som parameter. På den måde sikrer man at resten af systemet kun kan tilgå en entitets DTO som så bruges af entitetens DAO til at tilgå databasen. De entiteter der oprettes med et unikt ID returnerer et opdateret DTO, så resten af systemet kan tilgå dette ID, mens de entiteter der ikke oprettes med et unikt ID ikke skal returner noget.  De metoder der kun skal tilgå data i databasen, uden at ændre i dataet, behøver ikke et DTO som parameter. Disse metoder returnere et DTO med de tilgåede data, som resten af systemet kan tilgå. Hvis der sker en fejl i DAO’et så kastes en exception.
 
 % subsubsection DAO (end)
 
@@ -396,7 +500,7 @@ I de metoder hvor vi skal have alle data fra f.eks. recepter opretter vi i DAO�
 
 \subsection{Test} % (fold)
 
-Da vores DTO’er kun består af get’er og set’er og en for DTO’ets egne felter og en equal-metode har vi ment at JUnit tests ikke var nødvendig. Vi har lavet black box testing af vores database og DAO’er ved hjælp af systemets webservice del. Her har vi prøvet at oprette, slette og ændre de forskellige eniteter og felter i databasen. Nedenfor ses et skemaer over de forskellige black box test vi har lavet.
+Da vores DTO’er kun består af get’er og set’er og en for DTO’ets egne felter og en equal-metode har vi ment at JUnit tests ikke var nødvendig. Vi har lavet black box testing af vores database og DAO’er ved hjælp af systemets webservice del. Her har vi prøvet at oprette, slette og ændre de forskellige eniteter og felter i databasen. 
 
 % subsection Test (end)
 
@@ -406,23 +510,26 @@ Da vores DTO’er kun består af get’er og set’er og en for DTO’ets egne f
 
 
 \section{Hjemmeside} % (fold)
+\emph{Skrevet af Martin}
 
 \subsection{Analyse} % (fold)
 
 Hjemmesiden skal fungere som administrations konsol til afvejningen og dens tilhørerne processor.  Det skal være muligt at styre produktionen af medicin fra oprettelsen af brugere til opfølgningen og styring af recepterne.  Hjemmesiden skal være delt op i forskellige lag, således at det er muligt at styre hvilke brugere der har adgange til hvilke del elementer i produktionen. I systemet er der 4 forskellige brugerniveauer
-\begin{itemize}
-  \item Operatøren: Har adgang til afvejningen af råvare samt til at se hvilke råvare der skal i produktionsbatches.
-  \item Værksføreren: Har administrationen af råvarebatches og produktbatches samt operatørens rettigheder.
-  \item Farmaceuten: Adgang til administrationen af råvare og recepter samt værksførerens adgange. 
-  \item Administratoren: Har adgang til alle dele af systemet, kan yderligere oprette, slettet og redigerer brugere.
-\end{itemize}
-I kundens oplæg til produktet er det en del af værksførerens opgaver, at ud printe og uddelegerer en produktion batch til en operatør. Vi har grunden udbredelsen af smartphones valgt i stedet at lave et website, optimeret til at virke på små skærme, hvor på operatøren kan logge ind og se hvilke råvare der mangler at blive afvejet til en hvilken som helst produktionsbatch. 
+
+\begin{my_itemize}
+  \item Operatøren: Har adgang til afvejningen af råvarer samt til at se hvilke råvare produktionsbatches indeholder.
+  \item Værkføreren: Har administrationen af råvarebatches og produktbatches, samt operatørens rettigheder.
+  \item Farmaceuten: Adgang til administrationen af råvarer og recepter, samt værksførerens rettigheder. 
+  \item Administratoren: Har adgang til alle dele af systemet, kan yderligere oprette, slette og redigere brugere.
+\end{my_itemize}
+
+I kundens oplæg til produktet er det en del af værksførerens opgaver, at ud printe og uddelegerer en produktion batch til en operatør. Vi har grunden udbredelsen af smartphones valgt i stedet at lave et website, optimeret til at virke på små skærme, hvorpå operatøren kan logge ind og se hvilke råvarer der mangler at blive afvejet, for de produktbatches som endnu ikke er afsluttet.
 
 % subsection Analyse (end)
 
 \subsection{Design} % (fold)
 
-Hjemmesiden bliver kodet efter Model–View–Controller principperne. Siden vil blive styret af en Java servlet som står funger som Controller. Viewet vil blive genereret af JSP sider, og Java Beans er modellen.  Hjemmesiden er event baseret, og controlleren vil ud fra disse events genererer de nødvendige modeller og dirigere brugeren ud på de korrekt views.
+Hjemmesiden bliver kodet efter Model–View–Controller principperne. Siden vil blive styret af en Java servlet som fungerer som Controller. Viewet vil blive genereret af JSP sider, og Java Beans er modellen.  Hjemmesiden er event baseret, og controlleren vil ud fra disse events generere de nødvendige modeller og dirigere brugeren ud på de korrekt views.
 
 \begin{figure}[h!]
 \begin{changemargin}{-2cm}{-2cm}
@@ -433,11 +540,13 @@ Hjemmesiden bliver kodet efter Model–View–Controller principperne. Siden vil
 \end{figure}
 
 
-De forskellige views vil ikke komme til at kende hinanden, da det er controlleren som har det overordnede kendskab til alle jsp siderne. Dette betyder også at adgangskontroller kun ligger et centralt sted, og derved er det nemt at styre.
+De forskellige views vil ikke komme til at kende hinanden, da det er controlleren som har det overordnede kendskab til alle jsp siderne. Det betyder også at adgangskontrollen kun ligger et centralt sted, og derved er nemt at styre.
 
 \subsubsection{Grafisk design} % (fold)
 
-Til at designe den grafiske del af hjemmesiden har vi valgt at benytte 3. parts biblioteket Twitter Bootstrap .  Twitter Bootstrap er et simpelt og fleksibelt CSS og JavaScipt bibliotek som gør det nemt at sætte hjemmeside ens op på tværs af browsere. Siden vil blive bygget op af i 3 dele. Menuen som vil blive placeret yderst til venstre og altid vil være synlig. Til højre for menuen der blive vist hvad end brugeren har valgt, det kunne for eksempel være brugeradministrationen vinduet. Under dette vil der være beskeder til brugeren, det kunne være beskeder om den valgte operation er gået godt eller har fejlet.
+Til at designe den grafiske del af hjemmesiden har vi valgt at benytte tredje parts biblioteket Twitter Bootstrap.  Twitter Bootstrap er et simpelt og fleksibelt CSS og JavaScipt bibliotek som gør det nemt at sætte hjemmesider ens op på tværs af browsere. Det indeholder en række prædefinerede stylings af gængse elementer som tables, buttons osv.
+
+Siden er bygget op i 3 dele. Menuen som vil blive placeret yderst til venstre og altid vil være synlig. Til højre for menuen der blive vist hvad end brugeren har valgt, det kunne for eksempel være brugeradministrations vinduet. Under dette vil der være beskeder til brugeren, det kunne være beskeder om den valgte operation er gået godt eller har fejlet.
 
 \begin{figure}[H]
 %\begin{changemargin}{}{}
@@ -452,9 +561,39 @@ Til at designe den grafiske del af hjemmesiden har vi valgt at benytte 3. parts 
 
 \subsubsection{Input validering} % (fold)
 
-For at gøre oplevelsen af hjemmesiden så brugervenlig som muligt benytter vi os af inputvalidering både på serversiden, men også på klientsiden. Valideringen på klient siden gør at vi kan gøre brugeren opmærksom på problemer lige så snart informationen er indtastet i inputfelterne. Hvis der opstår et problem, vil brugeren blive gjort opmærksom på dette ved at inputfelterne lyser rødt, og at der kommer en lille besked om hvad feltet kræver.  Før at klientside valideringen er tilfreds, er det ikke muligt at trykke på ”Ok” eller ”Godkend” knapperne.  
-Til at lave klient valideringen benytter vi 3. parts JavaScript biblioteket  jQuery  og dens plugin ”validator”. Grunden til at vi benytter jQuery er at det er funger på alle browsere, hvilket gør det nemt at få funktioner til at virke uanset hvilken browser brugeren bruger. 
-Lige vise hvordan det er sat op
+For at gøre oplevelsen af hjemmesiden så brugervenlig som muligt benytter vi os af inputvalidering både på serversiden og på klientsiden. Valideringen på klient siden gør at vi kan gøre brugeren opmærksom på problemer lige så snart informationen er indtastet i inputfelterne. Hvis der opstår et problem, vil brugeren blive gjort opmærksom på dette ved at inputfelterne lyser rødt, og at der kommer en lille besked om hvad feltet kræver. Det er ikke muligt at trykke på Ok eller Godkend knapperne før felterne klarer valideringen på klient siden
+
+Til at lave klient valideringen benytter vi tredje parts JavaScript biblioteket  jQuery  og dets plugin ”validator”. Grunden til at vi benytter jQuery er at det er funger på alle browsere, hvilket gør det nemt at få funktioner til at virke uanset hvilken browser brugeren bruger. Herunder ses et eksempel på opsætningen af hvordan input felter skal valideres
+
+\begin{lstlisting}
+$('#createUserFrom').validate({
+  rules : {
+    oprNavn : {
+      required : true,
+      rangelength : [ 2, 20]
+    },
+
+    ini : {
+      required : true,
+      rangelength : [ 2, 4]
+    },
+
+    cpr : {
+      required : true,
+      CPRtjek : [10],
+      digits : true
+    },
+    
+    password : {
+      required : true,
+      rangelength : [ 5, 8]
+    }
+  },
+\end{lstlisting}
+\begin{figure}[h!]
+  \caption{jQuery validator reglerne ved oprettelse af en bruger}
+\end{figure}
+
 For at sikre at udefremkommende ikke kan lave ulovlige ændringer, har vi også en serverside validering som består af en masse regular expressions. Denne validering fremtvinger ikke en pæn fejlmeddelelse, men gør kun brugeren opmærksom på at der er sket en fejl i valideringen. Det er derfor ikke muligt at gennemtvinge oprettelser eller ændringer ved bare at ændre på vores klientside validering. 
 
 % subsubsection Input validering (end)
@@ -462,17 +601,17 @@ For at sikre at udefremkommende ikke kan lave ulovlige ændringer, har vi også 
 \subsubsection{Hjemmesidens opbygning} % (fold)
 
 Siden er opbygget 5 hovedsider. 
-\begin{itemize}
+\begin{my_itemize}
   \item Brugere
   \item Råvarer
   \item Råvare batch
   \item Recepter
   \item Produktions batch
-\end{itemize}
+\end{my_itemize}
 
-Disse sider fungerer som administrations vinduer hvert emne.  Det er her at man oprette, slette eller rediger elementer inde for hvert område. 
+Disse sider fungerer som administrations vinduer for hver af systemets hoved entiteter.  Det er her at man oprette, slette eller rediger elementer inde for hvert område. 
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{changemargin}{-2cm}{-1cm}
   \centering
   \includegraphics[scale=0.75]{graphics/website/SiteMap.png}
@@ -480,18 +619,25 @@ Disse sider fungerer som administrations vinduer hvert emne.  Det er her at man 
 \end{changemargin}
 \end{figure}
 
-
 Hvis man tager et kig på brugeradministrationen. Så kan man se at i toppen af siden er der knapper til at Oprette, Rediger og Slette brugere. Under knapperne er listen af brugere der er oprettet i systemet. I listen står der brugerens ID, deres navn samt hvilket niveau de har. Hvis man yderligere trykker ind på en bruger, får man alle informationer præsenteret som systemet rummer.  Disse oplysninger, undtagen brugeres ID, er mulige at ændre. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.6]{graphics/website/beskeder.png}
+  \caption{Bruger adminstration}
+\end{figure}
+
 
 % subsubsection Hjemmesidens opbygning (end)
 
 % subsection Design (end)
 
+\clearpage
 \subsection{Implementation} % (fold)
 
-Når en brugeren trykker på en knap bliver der sendt et event via POST som WebController opfanger og behandler. Flowet for hvordan et event på hjemmesiden bevæger sig igennem WebControlleren kan illustreres på denne måde. 
+Når en bruger trykker på en knap, eller et link, bliver der sendt et event via POST som WebController opfanger og behandler. Flowet for hvordan et event på hjemmesiden bevæger sig igennem WebControlleren kan illustreres på denne måde. 
  
-\begin{figure}[h!]
+\begin{figure}[H]
 %\begin{changemargin}{}{}
   \centering
   \includegraphics[scale=1]{graphics/website/event-rejse.png}
@@ -499,9 +645,9 @@ Når en brugeren trykker på en knap bliver der sendt et event via POST som WebC
 %\end{changemargin}
 \end{figure}
 
-Hvis konverteringen af  eventet fra en String til et Enum fejler eller hvis eventet ikke er sat, vil det blive sat til at være LoginPage hvilket vil få siden til at dirigerer brugeren hen til login siden. I setup funktionen bliver alle funktion klasser oprettet hvis de endnu ikke er oprettet. Dette sker første gang at siden bliver loadet, og de vil efterfølgende bliver lagt ind applikationens scopet. Første gang brugeren oprette forbindelse til siden bliver der lagt en login bean ind i sessions scopet. Det er denne bean som tjekker, og holder styr på om brugeren er logget ind eller om der er fejl. Hvis brugeren er logget ind, går controlleren videre til at udfører den handling brugeren har ønsket. En handling kunne være at gå til brugeradministrationen, at oprette en bruger eller noget tredje. 
+Hvis konverteringen af eventet fra en String til et Enum fejler eller hvis eventet ikke er sat, vil det blive sat til at være LoginPage hvilket vil få siden til at dirigerer brugeren hen til login siden. I setup funktionen bliver alle funktions klasser oprettet hvis de endnu ikke er oprettet. Dette sker første gang at siden bliver loadet, og de vil efterfølgende bliver lagt ind applikationens scopet. Første gang brugeren opretter forbindelse til siden bliver der lagt en login bean ind i sessions scopet. Det er denne bean som tjekker, og holder styr på om brugeren er logget ind eller om der er fejl. Hvis brugeren er logget ind, går controlleren videre til at udføre den handling brugeren har ønsket. En handling kunne være at gå til brugeradministrationen, at oprette en bruger eller noget tredje. 
 
-\begin{changemargin}{-1.5cm}{-1.5c}
+\begin{changemargin}{-1.5cm}{-1.5cm}
 \begin{lstlisting}
 void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
   request.setCharacterEncoding("UTF-8");
@@ -537,50 +683,41 @@ void doPost(HttpServletRequest request, HttpServletResponse response) throws Ser
   \caption{Udpluk fra WebController'ens håndtering af POST}
 \end{figure}
 
+\subsubsection*{Data fra databasen ud til brugeren} % (fold)
 
-
-\subsubsection{Data fra databasen ud til brugeren} % (fold)
-
-Måden data bliver sendt fra databasen og ud til brugeren er vedhjælp af session og request scopet. Hvis brugeren ønsker at lave en ændring, vil dataen blive sendt via et sessions objekt ellers bliver den sendt som et request.  Alt data bliver indhentet og håndteret af servlet, dettes gøres således at der ikke er nogen direkte forbindelse mellem jsp siderne og databasen, men kun til DTO objekterne.   
+Måden data bliver sendt fra databasen og ud til brugeren er vedhjælp af session og request scopet. Hvis brugeren ønsker at lave en ændring, vil dataen blive sendt via et sessions objekt ellers bliver det sendt som et request.  Alt data bliver indhentet og håndteret af servlet, dettes gøres således at der ikke er nogen direkte forbindelse mellem jsp siderne og databasen, men kun til DTO objekterne.   
 
 % subsubsection Data fra databasen ud til brugeren (end)
 
-\subsubsection{Sikring mod ændring af ID numre} % (fold)
+\subsubsection*{Sikring mod ændring af ID numre} % (fold)
 
 Når brugeren ønsker at lave en ændring på et af dataobjekterne, f.eks. en operator, bliver den valgtes operators informationer sendt ud til brugeren vedhjælp af session scopet. For at sikre at brugeren ikke ændrer på ID nummeret direkte i html koden, hentes alle tidligere informationer ud af session scopet igen.  Dernæst opdateres alle andre felter end ID feltet med det brugeren har indtastet.
 
 % subsubsection Sikring mod ændring af ID numre (end)
 
-\subsubsection{Beskeder til brugeren} % (fold)
+\subsubsection*{Beskeder til brugeren} % (fold)
 
-Til at kunne kommunikerer med brugeren, er der blevet implementeret til et besked system. Besked systemet er lavet sådan at det er muligt at give 3 forskellige niveauer info, fejl og succes. Alt efter hvilket niveau beskeden er, ændre farven sig på beskeden. 
+Til at kunne kommunikere med brugeren, er der blevet implementeret et besked system. Besked systemet er lavet sådan at det er muligt at give 3 forskellige typer af beskeder: info, fejl og succes. Alt efter hvilket niveau beskeden er, ændrer beskeden farve.
 
-Beskeder bliver videregivet via et Arraylists af Messenges i request scopet. På hver side på hjemmesiden bliver Messenges.jsp inkluderet. Det er på Messenges.jsp at beskederne bliver håndteret og vist for brugeren. Ved at sende det via request scopet er vi sikre på at levetiden på dem, kun er for den enkelte side. Det gør at vi altid at sikre på at beskeder bliver givet på de korrekt tidspunkt, og forsvinder igen når der ikke er brug for dem.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[scale=0.6]{graphics/website/beskeder.png}
-  \caption{Beskeder til brugeren}
-\end{figure}
-
+Beskeder bliver videregivet via et ArrayLists af Messenges i request scopet. På hver side på hjemmesiden bliver Messenges.jsp inkluderet. Det er på Messenges.jsp at beskederne bliver håndteret og vist for brugeren. Ved at sende det via request scopet er vi sikre på at levetiden på dem, kun er for den enkelte side. Det gør at vi altid er sikre på at beskeder bliver givet på det korrekt tidspunkt, og forsvinder igen når der ikke er brug for dem.
 
 % subsubsection Beskeder til brugeren (end)
 
-\subsubsection{Web.XML} % (fold)
+\subsubsection*{Web.XML} % (fold)
 
-Alle jsp siderne er blevet beskyttet mod at man direkte kan tilgå dem. Dette er gjort for at sikre at alle brugere bliver styret at WebControlleren. Metoden vi har brugt til at gøre dette er ved at alle jsp siderne ligger i kataloget WEB-INF. Dette katalog kan ikke direkte tilgås, men kun ved at blive redirectet fra WebControlleren. 
+Alle JSP siderne er blevet beskyttet mod at man direkte kan tilgå dem. Dette er gjort for at sikre at alle brugere bliver styret at WebControlleren. Metoden vi har brugt til at gøre dette er ved at alle jsp siderne ligger i kataloget \texttt{WEB-INF}. Dette katalog kan ikke direkte tilgås, men kun ved at blive redirectet fra WebControlleren. 
 
 Når folk går ind på siden vil de vedhjælp af web.xml filen blive dirigeret til WebControlleren. Dette gøres ved at tilføje WebControlleren som en servlet, samt at tilføje servlet navnet til welcome listen. Yderligere har vi tilføjet /m,/M,/mobile og /mobile til XML filen, det gør at man vedhjælp af disse henvisninger kan få fat i den mobile udgave af hjemmesiden.
 
 % subsubsection Web.XML (end)
 
-\subsubsection{Error handling} % (fold)
+\subsubsection*{Error handling} % (fold)
 
-På hjemmesiden kan der opstår mange former for fejl. De mest kritiske fejl der kan ske, er hvis der opstår SQL fejl. Sådanne fej vil, hvis der ikke tages hånd om dem, resultere i at hjemmesiden stopper med at virke. Der kan opstå 2 kritiske SQL fejl, den ene er at der ikke kan oprettes forbindelse til databasen, i sådanne tilfælde vil brugerne blive sendt til en fejlside hvor på der står at de skal forsøge igen senere, da hjemmesiden ikke vil virke. Den anden SQL fejl der kan komme er hvis der sker en fejl med en query eller update, disse fejl er ikke så kritiske at siden skal lukke ned, men brugeren skal stadig gøres opmærksom på at der er opstået en fejl. Hvis der sker sådanne en fejl, vil brugeren blive sendt tilbage til oversigts siden for det respektive område og der vil være en rød informations boks som orientere brugeren om fejlen.
+På hjemmesiden kan der opstår mange former for fejl. De mest kritiske fejl der kan ske, er hvis der opstår SQL fejl. Sådanne fej vil, hvis der ikke tages hånd om dem, resultere i at hjemmesiden stopper med at virke. Der kan opstå 2 kritiske SQL fejl, den ene er at der ikke kan oprettes forbindelse til databasen. I sådanne tilfælde vil brugerne blive sendt til en fejlside hvor på der står at de skal forsøge igen senere, da hjemmesiden ikke vil virke. Den anden SQL fejl der kan komme er hvis der sker en fejl med en query eller update, disse fejl er ikke så kritiske at siden skal lukke ned, men brugeren skal stadig gøres opmærksom på at der er opstået en fejl. Hvis der sker sådanne en fejl, vil brugeren blive sendt tilbage til oversigts siden for det respektive område og der vil være en rød informations boks som orientere brugeren om fejlen.
 
 % subsubsection Error handling (end)
 
-\subsubsection{Mobil side} % (fold)
+\subsubsection*{Mobil side} % (fold)
 
 Vi har lavet en side til brug på mobiltelefoner og tablets. Fra denne side er det muligt at få et overblik over hvilke råvare der mangler at blive afvejet for alle de produktionsbatche der endnu ikke er afsluttet. Ideen er at i stedet for at skulle printe en liste af produktionskomponenterne ud, kan operatørerne vedhjælp af deres telefon altid få et hurtigt og altid opdateret overblik. 
 
@@ -593,13 +730,13 @@ Vi har lavet en side til brug på mobiltelefoner og tablets. Fra denne side er d
 \end{changemargin}
 \end{figure}
 
-Siden er opbygget på samme måde som den normale udgave. Forskellen er at den er grafiskoptimeret til at fungerer på meget små skærme. Derfor tjekkes det om brugeren bruger en mobil webbrowser, hvis det ikke er tilfældet, sendes brugeren hen til den normale version af hjemmesiden. Metoden vi benytter til at tjekke browser versionen er ved at sammenligne brugerens user-agent, som man får ved at kalde request.getHeader("user-agent"), med en liste af forskellige kendte mobilbrowsere. Det er derfor muligt, hvis brugeren manuelt ændrer deres user-agent, at komme ind på mobilsiden, men det har vi dog valgt at se bort fra, da det ikke er kritisk at afskærme brugeren.  Mobil siden er designet med et responsive style sheet, det gør at alt efter hvor stor opløsning browseren har, ændre designet sig så det passer.
+Siden er opbygget på samme måde som den normale udgave. Forskellen er at den er grafisk optimeret til at fungere på små skærme. Derfor tjekkes det om brugeren bruger en mobil webbrowser. Hvis det ikke er tilfældet, sendes brugeren hen til den normale version af hjemmesiden. Metoden vi benytter til at tjekke browser versionen er ved at sammenligne brugerens user-agent, som man får ved at kalde \texttt{request.getHeader("user-agent")}, med en liste af forskellige kendte mobilbrowsere. Det er derfor muligt, hvis brugeren manuelt ændrer deres user-agent, at komme ind på mobilsiden, men det har vi dog valgt at se bort fra, da det ikke er kritisk at afskærme brugeren.  Mobil siden er designet med et responsive style sheet, det gør at alt efter hvor stor opløsning browseren har, ændre designet sig så det passer.
 
-Dette gøres ved at lave nogle regler for hvornår hvilke sektioner af css filen skal benyttes, måden man gør dette på er ved at skrive f.eks. @media (max-width: 767px) \{. Det betyder, at alt der kommer inden i \{ \} kun skal bruges så længe browseren har en opløsning på mindre end 767px.
+Dette gøres ved at lave nogle regler for hvornår hvilke sektioner af css filen skal benyttes, måden man gør dette på er ved at skrive f.eks. \texttt{@media (max-width: 767px) \{\}}. Det betyder, at alt der kommer inden i \{ \} kun skal bruges så længe browseren har en opløsning på mindre end 767px.
 
 % subsubsection Mobil side (end)
 
-\subsubsection{Diagrammer} % (fold)
+\subsubsection*{Diagrammer} % (fold)
 
 \paragraph{Recept tilføjelse} % (fold)
 
@@ -611,6 +748,21 @@ Når man ønsker at tilføje en ny recept skal man først oprette navnet på rec
   \caption{Flow Diagram for oprettelse af recept}
 \end{figure}
 
+\paragraph{Klassediagram} % (fold)
+
+Hjemmesidens overordnede opbygning er vist i følgende klassediagram:
+
+\begin{figure}[H]
+\begin{changemargin}{-1cm}{-1cm}
+  \centering
+  \includegraphics[scale=0.65]{graphics/website/ClassDiagram1.png}
+  \caption{Klasse diagram for web.controller pakken}
+\end{changemargin}
+\end{figure}
+
+
+% paragraph Klassediagram (end)
+
 % paragraph Recept tilføjelse (end)
 
 % subsubsection Diagrammer (end)
@@ -619,20 +771,20 @@ Når man ønsker at tilføje en ny recept skal man først oprette navnet på rec
 
 \subsection{Test} % (fold)
 
-For at få testet hjemmesiden funktionalitet har vi opdelt testen i flere små dele.
+For at få testet hjemmesidens funktionalitet har vi opdelt testen i flere små dele.
 
-\begin{itemize}
+\begin{my_itemize}
   \item Validering
-    \begin{itemize}
+    \begin{my_itemize}
       \item Klient side
       \item Server side
-    \end{itemize}
+    \end{my_itemize}
 \item Funktionalitets test
-\end{itemize}
+\end{my_itemize}
 
-Ved funktionalitetstesten har vi forsøgt at kører alle senarier igennem. Vi har taget alle use-cases og afprøvet, og sikret os at alle sider funger efter hensigten. Da udviklingen af hjemmesiden har været præget af en iterativ udviklings proces, hvor vi har udviklet en funktion af gangen. Er der også undervejs blevet test og afprøvet at hver enkel funktion har gjort hvad den var tiltænkt. Under test processen opdagede vi flere steder ting som ikke opførte sig som de skulle, der var flere steder hvor knapper ikke førte de til de korrekte sider andre små ting som efterfølgende er blevet rettet. 
+Ved funktionalitetstesten har vi forsøgt at køre alle scenarier igennem. Vi har taget alle use-cases og afprøvet, og sikret osm at alle sider funger efter hensigten. Da udviklingen af hjemmesiden har været præget af en iterativ udviklings proces, hvor vi har udviklet en funktion af gangen, er der undervejs også blevet test og afprøvet at hver enkel funktion har gjort hvad den var tiltænkt. Under test processen opdagede vi flere steder ting som ikke opførte sig som de skulle, der var flere steder hvor knapper ikke førte de til de korrekte sider, og andre små ting som efterfølgende er blevet rettet. 
 
-Testen af serverside valideringen er blevet lavet i 2 omgange, først har vi vedhjælp af siden http://gskinner.com/RegExr/, testet vores regular expression for at sikre at de virker. Dernæst har vi testet vores validator for også at sikre den fungerede med udtrykkene. Grunden måden jQuery validator er bygget op, har vi testet denne vedhjælp af en grænseværdi test. Vi har i alle inputfelter indtastet kritiske værdier for at teste om det virker, dvs. at hvis et input felt skal have mellem 2 og 20 karakterer har vi forsøgt at indtaste 1,2,20 og 21 karaktere.  
+Testen af serverside valideringen er blevet lavet i 2 omgange. Først har vi ved hjælp af siden http://gskinner.com/RegExr/, testet vores regular expression for at sikre at de virker. Dernæst har vi testet vores validator for også at sikre at den fungerer med udtrykkene. Grundet måden jQuery validator er bygget op, har vi testet denne ved hjælp af en grænseværdi test. Vi har i alle inputfelter indtastet kritiske værdier for at teste om det virker, dvs. at hvis et input felt skal have mellem 2 og 20 karakterer har vi forsøgt at indtaste 1,2,20 og 21 karaktere.  
 
 % subsection Test (end)
 
@@ -642,49 +794,50 @@ Testen af serverside valideringen er blevet lavet i 2 omgange, først har vi ved
 
 
 \section{Simulator} % (fold)
+\emph{Skrevet af Tobias}
 
 \subsection{Analyse} % (fold)
 
-Som specificeret i krav specifikationerne, har vi valgt kun at implementere de kommandoer, vi benytter os af i ASE’en. Kommandoerne vi benytter er S, T, Z, RM20, RM30, RM39, RM49, P110 og P111. Hvad de forskellige kommandoer gør, kan ses i listen nedenunder.
+Som specificeret i kravspecifikationen, har vi valgt kun at implementere de kommandoer, vi benytter os af i ASE’en. Kommandoerne vi benytter er S, T, Z, RM20, RM30, RM39, RM49, P110 og P111. Hvad de forskellige kommandoer gør, kan ses i listen nedenunder.
 
-\begin{itemize}
-  \item	S bruges, når klienten skal hente den vægt, der står på vægten. Ex på svar fra simulator, ”S S       1.34 kg”.
+\begin{my_itemize}
+  \item	S bruges, når klienten skal hente den vægt, der står på vægten. Ex på svar fra simulator: \texttt{”S S       1.34 kg”}.
 
-  \item	T benytter klienten når han vil tara’ere vægten. Klienten for så svaret ”T S       1.34 kg” tilbage, hvis vi går ud fra der ligger 1.34 kg på vægten.
+  \item	T benyttes når vægten skal tareres. Klienten får så svaret \texttt{”T S       1.34 kg”} tilbage, hvis vi går ud fra der ligger 1.34 kg på vægten.
 
   \item Z benyttes når man vil nulstille vægten, svaret der kommer til klienten er ”Z A”
 
-  \item P111, benytter man sig af når man vil have tekst frem nederst på displayet. Kommandoen ser så ledes ud ”P111 ”Denne tekst kommer frem””. Klienten for så svaret ”P111 A” tilbage hvis kommandoen er accepteret, hvis der så er skrevet noget forkert ved parametrene efter P111, vil klienten så få svaret ”P111 L” som betyder kommando forstået, men der er en forkert parameter.
+  \item P111, benytter man sig af når man vil have tekst frem nederst på displayet. Kommandoen ser således ud \texttt{P111 ”Denne tekst kommer frem”}. Klienten for så svaret \texttt{P111 A} tilbage hvis kommandoen er accepteret. Hvis der er skrevet noget forkert ved parametrene efter P111, vil klienten så få svaret ”P111 L” som betyder kommando forstået, men der er en forkert parameter.
 
-  \item	P110 bruges til at rydde det nederste felt, og klienten for ”P110 A” tilbage.
+  \item	P110 bruges til at rydde det nederste felt, og klienten får \texttt{P110 A} tilbage.
 
   \item RM20 kommandoen har en ekstra parameter man skal definere, som går fra 1-11, her valgte vi dog kun at benytte os af 8, da vi ikke havde brug for de andre. Klienten ville så se således ud 
-  ”RM20 8 ”Forespørgsel” ”” ”””, de svar klienten kan få tilbage er ”RM20 L” som betyder det som L svaret fra P111, ”RM20 I” som betyder at en anden kommando køre på vægten, eller ”RM20 B” som er kommando kørt venter på svar fra bruger. De efter følgende svar der så kan komme tilbage er ”RM20 A ”Brugerens input””, hvilket kommer når der bliver trykket ok, eller ”RM20 C” som bliver sendt hvis der bliver trykket på cancel.
+    \texttt{RM20 8 ”Forespørgsel” ”” ””}, de svar klienten kan få tilbage er \texttt{RM20 L} som betyder det som L svaret fra P111, \texttt{RM20 I} som betyder at en anden kommando kører på vægten, eller \texttt{RM20 B} som er kommando kørt venter på svar fra bruger. De efter følgende svar der så kan komme tilbage er \texttt{RM20 A ”Brugerens input”}, hvilket kommer når der bliver trykket ok, eller \texttt{RM20 C} som bliver sendt hvis der bliver trykket på cancel.
 
-  \item	RM30 står for at gøre knapperne klar til RM39 kommandoen, og skrives ”RM30” efterfulgt af 6 string parameter. På vægten var det dog ikke nødvendigt at have alle 6 med, hvis man fx kun skal benytte de 3 første, vi har dog valgt at gøre, så man skal have dem alle med, da det gjorde det nemmere. Hvis rækkefølgen skal der også benyttes en anden kommando hvilket vi også valgte at droppe. Ligesom i de tidligere kommandoer, hvis der kommer en forkert parameter ind, vil den svare med ”RM30 L”, og ellers vil svaret være ”RM30 B”. Når RM39 så har aktiveret knapperne, vil RM30 så sende svar tilbage hver gang der bliver trykket på en knap, svaret vil med en værdi fra 1-6, som kommer an på hvilken knap der bliver trykket, svaret der bliver sendt fra simulatoren er ”RM30 C x” hvor x er den varierende værdi.
+  \item	RM30 står for at gøre knapperne klar til RM39 kommandoen, og skrives ”RM30” efterfulgt af 6 string parameter. På vægten var det dog ikke nødvendigt at have alle 6 med, hvis man fx kun skal benytte de 3 første. Vi har dog valgt at gøre, så man skal have dem alle med, da det gjorde det nemmere. Ligesom i de tidligere kommandoer, hvis der kommer en forkert parameter ind, vil den svare med \texttt{RM30 L}, og ellers vil svaret være \texttt{RM30 B}. Når RM39 så har aktiveret knapperne, vil RM30 så sende svar tilbage hver gang der bliver trykket på en knap, svaret vil med en værdi fra 1-6, som kommer an på hvilken knap der bliver trykket, svaret der bliver sendt fra simulatoren er \texttt{RM30 C x} hvor x er den varierende værdi.
 
-  \item RM39 sørger for at aktivere RM30 knapperne, og ligesom i de andre kommandoer har den svarene ”RM39 A”, ”RM39 L” og ”RM39 I”. Der er dog en ekstra parameter der sendes med som går fra 0-2, vi har dog valgt ikke at bruge 2, da ASE’en ikke benytter sig af den kommando. Det 2 gør er at de aktivere RM30, hvor 1 aktivere den og 0 sletter den.
+  \item RM39 sørger for at aktivere RM30 knapperne, og ligesom i de andre kommandoer har den svarene ”RM39 A”, ”RM39 L” og ”RM39 I”.
 
-  \item RM49 kan man kalde en form besked som kan have 2 muligheder, da man skal give den 2 parameter, en string og et tal mellem 1 og 4, som så bestemmer hvilke muligheder man skal have og hvad der skal på displayet. Vi har dog kun at implementere 2 og 4, hvor 2 kun viser ok knappen og 4 viser både ok og cancel knapperne. Kommandoen skrives således ”RM49 x ”tekst””, hvor x er tallet 1-4, og som nogle af de tidligere kommandoer, har denne også L I og B svarende. Det andet svar der så vil komme fra simulatoren vil enten være ”RM49 A 1” eller ”RM49 A 2”, som kommer an på hvilken knap der bliver trykket.
-\end{itemize}
+  \item RM49 bruges når operatøren skal præsenteres for en simpel dialog, til hvilken der kan svares Ok eller Cancel. Kommandoen skal indløbe på formen \texttt{RM49 x "<text>"}, hvor x kan være 2 eller 4 (ved x=4 er både Ok og Cancel knap tilgængelig, ved x=2 er kun Ok tilgængelig). Tekst strengen kan være så lange som man ønsker (i modsætning til 24-30 karakters begrænsningen ved RM20 eller P111). Svaret er \texttt{RM49 A x}, hvor x=1 antyder tryk på Ok og x=2 antyder tryk på Cancel
+\end{my_itemize}
 
 
 % subsection Analyse (end)
 
 \subsection{Design} % (fold)
 
-Efter vi havde fået specificeret hvilke kommandoer, og krav vi havde til vores simulator, skulle til at finde ud af hvordan vi skulle designe det. Vi havde allerede i forvejen tænkt os at bruge Threads, da det gjorde det nemmere at få tingene til at køre sammen, med en buffer til kommandoerne.
+Efter vi havde fået specificeret hvilke kommandoer, og krav vi havde til vores simulator, skulle vi finde ud af hvordan vi skulle designe det. Vi havde allerede i forvejen tænkt os at bruge Threads, da det gjorde det nemmere at få tingene til at køre sammen, med en buffer til kommandoerne.
 
 \subsubsection*{Klassediagram} % (fold)
 
-Ud fra vores kode, fik vi så konstrueret et klasse diagram, vi har dog valgt at begrænse det, til kun at vise public metoder og parameter. Dette valgte vi da private, ikke kan benyttes af andre klasser, og der bliver ikke benyttede nogle med protected. Billedet der kan ses, er et uddrag fra vores klasse diagram af simulatoren, det man kan se ud fra billedet, er hvordan gui og selve simulatoren sidder sammen. Som der ses, har vi valgt også at tilføje ScaleProtocol til vores GUIButtons, da det gjorde det meget nemmere at få sendt de rigtige kommandoer, af sted til klienten.
+Ud fra vores kode, fik vi så konstrueret et klasse diagram, vi har dog valgt at begrænse det, til kun at vise public metoder og parameter. Dette valgte vi da private, ikke kan benyttes af andre klasser. Billedet der kan ses, er et uddrag fra vores klasse diagram af simulatoren, det man kan se ud fra billedet, er hvordan gui og selve simulatoren sidder sammen. Som der ses, har vi valgt også at tilføje ScaleProtocol til vores GUIButtons, da det gjorde det meget nemmere at få sendt de rigtige kommandoer, af sted til klienten.
 
 \begin{figure}[H]
 \begin{changemargin}{-0.5cm}{}
   \centering
   \includegraphics[scale=0.8]{graphics/sim/uddrag.png}
 \end{changemargin}
-  \caption{Et uddrag fra klasse diagrammet over vores simulator, der fulde kan ses i bilaget.}
+  \caption{Et uddrag fra klasse diagrammet over vores simulator, det fulde kan ses bilag B.1.}
 \end{figure}
 
 % subsubsection Klassediagram (end)
@@ -693,11 +846,11 @@ Ud fra vores kode, fik vi så konstrueret et klasse diagram, vi har dog valgt at
 
 \subsection{Implementation} % (fold)
 
-I implementeringen af vægt simulatoren, har vi benyttede os af nogle af de forskellige emner vi har været i gennem i løbet af semestret. Vi har blandt andet benyttede os af Threads for at få serveren og, protokollen til at køre samme tid. Der er også blevet benyttet socket programmering, til at konstruere vores server, så den er i stand til at kommunikere med vores ASE. Til sidst for at gøre det mere brugervenligt har vi også implementeret en GUI, for at gøre simulatoren mere overskuelig at benytte. Vi har dog valgt kun at implementere de kommandoer vi benytter os (se krav for kommandoer).
+I implementeringen af vægt simulatoren, er der benyttet nogle af de forskellige emner vi har været i gennem i løbet af semestret. Vi har blandt andet benyttet os af Threads for at få serveren og protokollen til at køre på samme tid. Der er også blevet benyttet socket programmering, til at konstruere vores server, så den er i stand til at kommunikere med vores ASE. Til sidst for at gøre det mere brugervenligt har vi også implementeret et GUI, for at gøre simulatoren mere overskuelig at benytte. Vi har dog valgt kun at implementere de kommandoer vi benytter os (se krav for kommandoer).
 
 \subsubsection{Threads} % (fold)
 
-Tråde, har vi også valgt at benytte, i vores vægt simulator, da det gjorde det nemmere, at få forespørgsler ind, og samme tid få simulatoren til at behandle dem. Måden vi har sat det op på, er ved at få 2 tråde til at køre, en der kørte protokollen, og en der kørte serveren. For at sørger for at vi altid behandler den nyeste forespørgsel, benytter vi os af java’s egen buffer ”ArrayBlockingQueue”. I denne benytter vi os af put, til at tilføje forespørgsler, og take til at hive forespørgslerne ud. Take sørger samme tid for at vente på en forespørgsel, hvis der ikke er en i bufferen. I koden neden under ses hvordan vores protokol tråden køre, hvor man kan se, at vi benytter os af queue.take(), til at hente og fjerne det første request, der er i bufferen queue.
+Tråde, har vi også valgt at benytte, i vores vægt simulator, da det gjorde det nemmere, at få forespørgsler ind og på samme tid få simulatoren til at behandle dem. Måden vi har sat det op på, er ved at få 2 tråde til at køre, en der kører protokollen, og en der kører serveren. For at sørge for at vi altid behandler den nyeste forespørgsel, benytter vi os af java’s egen buffer ”ArrayBlockingQueue”. I denne benytter vi os af put, til at tilføje forespørgsler, og take til at hive forespørgslerne ud. Take sørger samme tid for at vente på en forespørgsel, hvis der ikke er en i bufferen. I koden neden under ses hvordan protokol tråden kører, hvor man kan se, at vi benytter os af queue.take(), til at hente og fjerne det første request, der er i bufferen queue.
 
 \begin{figure}[h!]
 \begin{lstlisting}
@@ -718,11 +871,11 @@ public void run() {
 
 \subsubsection{Server} % (fold)
 
-For at få sat vores server op, benyttede vi os af sockets, for at kunne åbne en forbindelse, der benyttes af vores vægt simulator, som lytter på en selv valgt port som ikke bliver benyttet, i vores tilfælde er det port 8000.
+For at få sat vores server op, benyttede vi os af sockets, til at åbne en forbindelse der lytter på en selvvalgt port. I vores tilfælde er det port 8000.
 
-For at kunne få vægt simulatoren til at acceptere klienter, stater vi med at oprette en ServerSocket på port 8000. Efterfulgt af dette, skal vi gøre det muligt for en klient at skabe en forbindelse til vores server, dette gør vi ved brug af serverSocket.accept() (se kode neden under). Denne metode lytter efter en forbindelse, og venter på at en forbindelse er skabt, denne forbindelse bliver så lig en ny Socket, som så er vores klient. 
+For at kunne få vægt simulatoren til at acceptere klienter, stater vi med at oprette en ServerSocket på port 8000. Efterfulgt af dette, skal vi gøre det muligt for en klient at skabe en forbindelse til vores server, dette gør vi ved brug af serverSocket.accept() (se nedenstående figur). Denne metode lytter efter en forbindelse, og venter på at en forbindelse er skabt, denne forbindelse bliver så lig en ny Socket.
 
-\begin{changemargin}{-1.5cm}{-1.5cm}
+\begin{changemargin}{-0.3cm}{-1.5cm}
 \begin{lstlisting}
 void acceptClient() {
   try {
@@ -745,13 +898,13 @@ void acceptClient() {
   \caption{Denne metode, sørger for at simulatoren kan acceptere en klient.}
 \end{figure}
 
-Efter dette åbner vi så op for strømmene så vi kan få forespørgsler ind og sender svar til klienten. Klienten kan blandt andet være vores ASE, men vi kan dog også forbinde til vægt simulatoren via en Telnet klient, dette vil vi dog kommer mere ind på i test.
+Efter dette åbner vi så op for strømmene så vi kan få forespørgsler ind og sende svar til klienten. Klienten kan blandt andet være vores ASE, men vi kan dog også forbinde til vægt simulatoren via en Telnet klient, dette vil vi dog komme mere ind på i test.
 
 % subsubsection Server (end)
 
 \subsubsection{Graphical User Interface} % (fold)
 
-I vores implementering af GUI, har vi både benyttede os af swing og awt, da swing bliver benyttede til at sætte alle elementer op vi skal bruge som knapper, tekst felter. Awt bliver brugt til fx at lave forskellige kommandoer når man trykker på en knap, det benyttes dog også, til at definere forskellige indstillinger i swing elementerne, som fx layout. På billedet neden under ses hvordan vi har designet vores gui, der skal dog siges at den er lavet uden brug af en gui builder.
+I vores implementering af GUI, har vi både benyttet os af Swing. Swing bliver benyttet til at sætte alle elementer op vi skal bruge som knapper, tekst felter osv. På billedet neden under ses hvordan vi har designet vores GUI. Det bemærkes at designet lavet uden brug af en GUI builder.
 
 \begin{figure}[H]
 \begin{changemargin}{-1.3cm}{}
@@ -783,7 +936,7 @@ private GridBagConstraints position(int x, int y, int width, int height, int anc
   \caption{Metoden vi benytter til at bestemme, komponenternes position, og hvordan det skal sættes op i vores panel.}
 \end{figure}
 
-Måden vi har valgt at implementere vores knapper, er lidt mere anderledes, inde de andre komponenter vi benytter os. Det vi har gjort, er at kreere 5 JButton’s arrays som alle består af 6 Jbutten’s, hvor 4 er dem er forskellige. Grunden til vi benytter os af så mange, er at det er forskelligt hvad knapperne skal gøre, for hver kommando der skal benytte sig af knapperne. Hver gang der kommer en ny kommando ind, som skal bruge et andet sæt knapper, sørger vi så for at skifte det nuværende panel ud, med det panel der høre til den kommando. For altid at kunne referere til det rigtige sæt af knapper, har vi et ekstra array, som så hele tiden bliver sat lig det nuværende sæt, så det altid er de rigtige knapper vi refererer til.
+Måden vi har valgt at implementere vores knapper, er lidt anderledes end de andre komponenter vi benytter. Det vi har gjort, er at kreere 5 arrays med JButton’s, som alle består af 6 Jbutten’s, hvor 4 er dem er forskellige. Grunden til vi benytter os af så mange, er at det er forskelligt hvad knapperne skal gøre, for hver kommando der skal benytte sig af knapperne. Hver gang der kommer en ny kommando ind, som skal bruge et andet sæt knapper, sørger vi for at skifte det nuværende panel ud, med det panel der hører til den kommando. For altid at kunne referere til det rigtige sæt af knapper, har vi et ekstra array, som så hele tiden bliver sat lig det nuværende sæt,
 
 \begin{lstlisting}
 public void newCommand(JPanel panel){
@@ -802,7 +955,7 @@ public void newCommand(JPanel panel){
   \caption{Metoden vi benytter når vi går hen til en ny kommando.}
 \end{figure}
 
-For at forbedre brugervenligheden i GUI, fik vi også implementeret en KeyListener. Her valgte vi at få den til trykke den femte knap ned, når man har fokus, i det tekst felt der kan skrives i, og man trykker på enter.
+For at forbedre brugervenligheden i GUI, er implementeret en KeyListener. Her valgte vi at få den til trykke 'OK' knappen ned, når man har fokus, i det tekst felt der kan skrives i, og man trykker på enter.
 
 % subsubsection Graphical User Interface (end)
 
@@ -811,11 +964,11 @@ For at forbedre brugervenligheden i GUI, fik vi også implementeret en KeyListen
 
 \subsection{Test} % (fold)
 
-For at kunne teste simulatoren, har vi skulle bruge en klient, der kunne oprette forbindelse simulatorens server. Her brugte vi blandt andet en telnet klient, for at teste hver enkelt kommando, for at se om alle de svar den kunne komme med, virkede. Vi har dog også fået testet det via vores ASE, for at sikre overgange fra kommando til kommando.
+For at kunne teste simulatoren, har vi skulle bruge en klient, der kunne oprette forbindelse til simulatorens server. Her brugte vi blandt andet en telnet klient, for at teste hver enkelt kommando, for at se om alle de svar den kunne komme med, virkede. Vi har også fået testet det via vores ASE, for at sikre overgange fra kommando til kommando.
 
 \subsubsection{Telnet} % (fold)
 
-I billedet der ses nedenunder, benytter vi os af putty’s telnet klient, til at oprette forbindelse til vores simulator. Det man kan se vi tester, er de mere simple kommandoer S, T og Z, som står for at hente, tara’ere og nulstille vægten. Som der ses på billedet, starter vi med at tjekke hvad vi egentlig har på vægten ved brug af S, her efter tara’ere vi vægten med T, og tjekker hvor meget der så er på vægten bagefter. Herefter lægger vi mere på vægten, hvorefter vi ser hvor meget vægt der ligger på vægten. Til sidst nulstiller vi så vægten med Z, og undersøger om den er blevet nulstillet med S.
+I billedet der ses nedenunder, benytter vi os af PuTTy’s telnet klient, til at oprette forbindelse til vores simulator. Det man kan se vi tester, er de mere simple kommandoer S, T og Z, som står for at hente, tara’ere og nulstille vægten. Som der ses på billedet, starter vi med at tjekke hvad vi egentlig har på vægten ved brug af S, her efter tara’ere vi vægten med T, og tjekker hvor meget der så er på vægten bagefter. Herefter lægger vi mere på vægten, hvorefter vi ser hvor meget vægt der ligger på vægten. Til sidst nulstiller vi så vægten med Z, og undersøger om den er blevet nulstillet med S.
 
 \begin{figure}[h!]
 \begin{changemargin}{-1cm}{}
@@ -825,9 +978,9 @@ I billedet der ses nedenunder, benytter vi os af putty’s telnet klient, til at
 \end{changemargin}
 \end{figure}
 
-Nogle af de fejl vi stødte på ved brug disse kommandoer, var måden vi tara’ere i simulatoren var forkert. Det der var meningen simulatoren skulle gøre, var at sætte tara lig den nuværende netto, det den dog gjorde, var at ligge netto til tara. Så hvis tara er lig 0.5 kg og netto er lig 1.3 kg, og man tara’ere så vil tara blive lig 1.8 kg og netto lig 0.0 kg, det den dog skulle gøre var at sætte tara lig 1.3 kg og netto lig 0.0 kg.
+Nogle af de fejl vi stødte på ved brug disse kommandoer, var måden vi tarerer i simulatoren var forkert. Det der var meningen at simulatoren skulle gøre, var at sætte tara lig den nuværende netto. Det den dog gjorde, var at lægge netto til tara. Så hvis tara er lig 0.5 kg og netto er lig 1.3 kg, og man tarerer så vil tara blive lig 1.8 kg og netto lig 0.0 kg. Det den dog skulle gøre var at sætte tara lig 1.3 kg og netto lig 0.0 kg.
 
-Med de mere komplicerede kommandoer, kan der komme flere svar tilbage til klienten, som alle skal testes. Vi starter med RM20 kommandoen, og når kommandoen er sat i gang, kan man kun kontakte simulatoren med S, T og Z, ind til kommandoen er overstået, hvis man prøver andre kommandoer, kommer svaret ”RM20 I” tilbage. Derfor valgte vi med at teste taste fejl til at starte med, og så længe kommandoen starter med RM20, kan simulatoren ligesom vægten forstå kommandoen, men ikke udeføre den da en parameter er forkert. Hvis kommandoen er skrevet korrekt (RM20 8 ”Tekst” ”” ””), vil simulatoren sende ”RM20 B”, hvilket betyder kommandoen er udført, og venter på bruger input. Dette vil få vores simulator til at vise teksten, og skifte til knapperne for RM20, samt vente på bruger input, som kan ses på billedet neden under.
+Med de mere komplicerede kommandoer, kan der komme flere svar tilbage til klienten, som alle skal testes. Vi starter med RM20 kommandoen, og når kommandoen er sat i gang, kan man kun kontakte simulatoren med S, T og Z, ind til kommandoen er overstået. Hvis man prøver andre kommandoer, kommer svaret ”RM20 I” tilbage. Derfor valgte vi at teste taste fejl til at starte med, og så længe kommandoen starter med RM20, kan simulatoren ligesom vægten forstå kommandoen, men ikke udeføre den da en parameter er forkert. Hvis kommandoen er skrevet korrekt (RM20 8 ”Tekst” ”” ””), vil simulatoren sende ”RM20 B”, hvilket betyder kommandoen er udført, og venter på bruger input. Dette vil få vores simulator til at vise teksten, og skifte til knapperne for RM20, samt vente på bruger input, som kan ses på billedet neden under.
 
 \begin{figure}[H]
 \begin{changemargin}{-1.3cm}{}
@@ -837,7 +990,7 @@ Med de mere komplicerede kommandoer, kan der komme flere svar tilbage til klient
 \end{changemargin}
 \end{figure}
 
-Som der ses på screenDumb6.png, er der 2 knapper ok og cancel, hvis ok knappen bliver tastet bliver der sendt RM20 A ”Tekst” tilbage, hvor ”Tekst” er det brugeren har skrevet. Hvorimod hvis der bliver trykket cancel ville klienten få RM20 C svaret.
+Som der ses på billedet, er der 2 knapper ok og cancel. Hvis Ok knappen bliver tastet bliver der sendt \texttt{RM20 A ”Tekst”} tilbage, hvor ”Tekst” er det brugeren har skrevet. Hvorimod hvis der bliver trykket cancel ville klienten få RM20 C svaret.
 
 \begin{figure}[H]
 \begin{changemargin}{-1cm}{}
@@ -847,23 +1000,13 @@ Som der ses på screenDumb6.png, er der 2 knapper ok og cancel, hvis ok knappen 
 \end{changemargin}
 \end{figure}
 
-Ved denne test, stødte vi dog ikke på nogen større fejl programmet, en af fejlene vi stødte på var at vi havde glemt at tilføje svaret hvis en kommando havde fået en forkert parameter ind.
-
-Billedere af de andre test der lavet i telnet kan findes i bilag.
+Ved denne test, stødte vi dog ikke på nogen større fejl i programmet. En af fejlene vi stødte på var at vi havde glemt at tilføje svaret hvis en kommando havde fået en forkert parameter ind.
 
 % subsubsection Telnet (end)
 
 \subsubsection{ASE} % (fold)
 
-Ved test op af ASE’en, gav det os en bedre mulighed, for at teste kommandoerne oppe af hinanden, for at se om overgangen mellem dem, kørte som den skulle, og at der ikke poppede nogen fejl op. Efter første udlæg af gui’en, da vi testede det op af ASE’en, fandt vi ud af at måden vi havde lavet knapperne på, ikke fungerede ordenligt, da det endte med at der blev udført flere kommandoer når der blev trukket på en knap. Dette gjorde at vi måtte lave dette design om, hvilket betød at vi endte med at benyttede flere arrays af knapper (Se Implementering GUI).
-
-Ved næste test op af ASE’en endte vi med en fejl, vi ikke kunne forstå kom, da det ikke gav mening, at fejlen dukkede op på det tidspunkt, og ikke noget andet tidspunkt. Der fejlen opstod, var, når vi prøvet at sætte teksten i et JTextField, men ikke hver gang, og ikke på alle computere. Det fejlen gjorde, var at fryse vores program, så vi ikke kunne gøre noget, og der poppede ikke nogle exception op. Denne fejl fiksede vi ved ændre det JTextField der skabte problemet til JTextArea, dette gjorde at problemet ikke længere opstod. Vi fandt dog aldrig ud af hvorfor denne fejl opstod. Men da den kun kom frem på nogle computere, tænkte vi at det nok have noget at gøre, med hvilken version af java, der blev benyttede på de forskellige computere.
-
-Da dette blev rettet, begyndte en NullPointerException i ”AWT-EventQueue-0” tråden, at poppe op nogle gange. Denne exception skaber dog ikke problemer, i vores program, den popper bare nogle gange op, når der bliver tastet på knapperne, det er dog sjældent, og som den forrige fejl poppede den kun op på nogle computere.
-
-\begin{center}
-  Fejl fra skolens computere 
-\end{center}
+Ved test op af ASE’en, gav det os en bedre mulighed, for at teste kommandoerne i forskellige rækkefølger, for at se om overgangen mellem dem, kørte som den skulle, og at der ikke poppede nogen fejl op. Efter første udlæg af GUI’en. Da vi testede det op af ASE’en, fandt vi ud af at måden vi havde lavet knapperne på, ikke fungerede ordenligt, da det endte med at der blev udført flere kommandoer når der blev trukket på en knap. Dette gjorde at vi måtte lave dette design om, hvilket betød at vi endte med at benyttede flere arrays af knapper (Se Implementering GUI).
 
 % subsubsection ASE (end)
 
@@ -875,6 +1018,7 @@ Da dette blev rettet, begyndte en NullPointerException i ”AWT-EventQueue-0” 
 
 
 \section{Afvejnings Styrings Enhed} % (fold)
+\emph{Skrevet af Flemming}
 
 \subsection{Analyse} % (fold)
 
@@ -887,11 +1031,11 @@ For at kunne konkretisere dette, er det nødvendigt at se på hvordan en afvejni
 I databasen er operatører repræsenteret ved deres unikke operatør ID. Grundet dette, og det faktum at vægten har begrænsede muligheder for bruger input, er det oplagt at operatøren identificerer sig ved sit ID. Det er kort og koncist.
 
 Operatører, ligesom alle andre brugere, har også et password tilknyttet. Det vil være oplagt at operatøren også skulle angive dette når denne identificerer sig ved vægten, sådan at det rent faktisk kan bekræftes at det er denne operatør. Den eneste måde vægten kan tage imod input er via dens "tastatur", som på et givent tidspunkt kun tage imod input på én af følgende tre måder:
-\begin{itemize}
+\begin{my_itemize}
   \item Heltal
   \item Små bogstaver
   \item Store bogstaver
-\end{itemize}
+\end{my_itemize}
 Vægten kan i princippet tage imod flere typer af input, men essensen er at der kun er én af disse typer der kan være aktiv på samme tidspunkt. Passwords er ofte angivet som en kombination af alle disse tre typer, hvorfor det ikke som udgangspunkt er muligt at kræve at operatøren indtaster dette.
 
 Når en operatør har indtastet sit ID, skal ASE'en tjekke at det indtastede ID rent faktisk tilhører en operatør (og ikke en værkfører, adminstrator eller lignende), og efterfølgende præsentere operatørens navn i vægtens display, sådan at denne kan be- eller afkræfte at den korrekte operatør er fundet.
@@ -915,10 +1059,10 @@ Et produktbatch er baseret på en recept. En recept består af forskellige råva
 ASE'ens opgave er her at præsentere operatøren for den råvare der nu skal afvejes, således at operatøren kan gå ud på lageret og finde et råvarebatch af den specifikke råvare. Her er det oplagt at ASE'en præsenterer operatøren for de råvarebatches (angivet ved deres unikke id) som er af den rette type. Desuden er det oplagt at ASE'en også tager højde for om råvarebatchet indeholder tilstrækkelig mængde af råvaren (i forhold til den netto værdi der er angivet i recepten).
 
 Når operatøren har fundet et råvarebatch indtaster han dets unikke ID, og ASE'en tjekker om
-\begin{enumerate}
+\begin{my_enumerate}
   \item Råvarebatchet er af den korrekte råvare
   \item Råvare batchet indeholder tilstrækkelig mængde
-\end{enumerate}
+\end{my_enumerate}
 
 Er der tale om et korrekt råvarebatch kan ASE'en fortsætte til selve afvejningsproceduren
 
@@ -951,11 +1095,11 @@ Er afvejningen korrekt gemmes denne og proceduren starter "forfra", hvor operat�
 \paragraph{ASE'en skal registrere start- og slutdato for produktionen} % (fold)
 
 Et produktbatch kan have én af følgende tre tilstande:
-\begin{itemize}
+\begin{my_itemize}
   \item Ikke påbegyndt
   \item Under produktion
   \item Afsluttet
-\end{itemize}
+\end{my_itemize}
 
 Når et produktbatch oprettes, er dette som standard i en endnu ikke påbegyndt tilstand. Når en operatør har afvejet det første komponent er produktbatchet under produktion. Når alle komponenter er afvejet er produktionen afsluttet.
 
@@ -982,12 +1126,12 @@ Proceduren for afvejning er inkrementerende, forstået på den måde at for at n
 \subsubsection{Tilstande} % (fold)
 
 Vores ASE er inddelt i 4 tilstande, der er som følger:
-\begin{itemize}
+\begin{my_itemize}
   \item \textbf{LOGIN} Tilstanden hvor operatøren skal identificere sig. Overgang til næste tilstand kan kun ske når operatøren har identificeret sig ved et gyldigt ID og bekræftet at der er tale om den rette bruger.
   \item \textbf{SELECT\_BATCH} Tilstanden hvor operatøren skal vælge et produktbatch. Overgang kan kun ske når operatøren har valgt et gyldigt produkt batch ID, for et batch der endnu ikke er afsluttet, og bekræftet at der er tale om det rette batch (ud fra den rette recept).
   \item \textbf{MEASURING} Tilstanden hvor selve afvejningen af komponenter foregår. Her indgår flere af de underprocedurer der er påkrævet for korrekt at afveje råvare til et produktions batch komponent. Denne tilstand "gentages" for hvert påkrævet komponent i recepten, indtil alle komponenter er afvejet, hvorefter ASE'en overgår til næste tilstand. Undervejs i afvejningen kan operatøren vælge at afbryde produktionen, hvorefter maskinen også vil overgå til næste tilstand.
   \item \textbf{FINISHED} Tilstanden hvor operatøren enten helt, eller delvist, har afsluttet produktionen af et produktbatch. Denne tilstand sikrer at alle afvejede komponenter er korrekt gemt (disse bliver løbende gemt som de bliver afvejet) og sikrer at produktiones batchet har den rette status (ikke påbegyndt, under produktion eller afsluttet). Herefter nulstiller ASE'en sig og tilstanden overgår til \texttt{LOGIN}.
-\end{itemize}
+\end{my_itemize}
 
 ASE'en er som sådan ikke en komplet tilstandmaskine, idet de forskellige tilstande ikke entydigt repræsenterer et bestemt output. Ligeledes er systemets begivenheder (beskrevet senere) ikke direkte årsag til skift mellem tilstande, men medførende til at opfylde den række af kriterier der skal være opfyldt før maskinen kan skifte til en ny tilstand.
 
@@ -999,7 +1143,7 @@ Kommunikationen med vægten (eller simulatoren) foregår via TCP/IP protokollen,
 
 Begivenhederne er som følger:
 
-\begin{itemize}
+\begin{my_itemize}
   \item \textbf{COMMAND\_UNDERSTOOD} Antyder at en forespørgsel er forstået, og at der \emph{kan} forventes opfølgende svar. Dette sker eksempelvis ved en \texttt{RM20} kommando, hvor vægten først svarer om kommandoen er forstået (og klar til at blive udført - altså der ikke er andre aktive forespørgsler der har precedens over den aktuelle forespørgsel), og efterfølgende svarer med resultatet af forespørgslen på baggrund af operatørens input
   \item \textbf{OK\_PRESSED} Antyder at brugeren har bekræftet en dialogboks fra en \texttt{RM49} kommando, eller at der er trykker OK i forbindelse med tarering/afvejning. I den sammenhæng antyder et ok, at ASE'en kan sende en forespørgsel om vægtens belastning (eller tareringsværdi) og at et korrekt resultat forventes.
   \item \textbf{CANCEL\_PRESSED} Antyder at brugeren har "annuleret" en dialog, eller trykket Cancel/annuler under en afvejning
@@ -1008,9 +1152,7 @@ Begivenhederne er som følger:
   \item \textbf{SCALE\_TARED} Antyder at vægten har svaret på en \texttt{T}-kommando (tarering), hvor vægten er blevet tareret og tarerings værdien fremgår af svaret.
   \item \textbf{SCALE\_ZEROED} Antyder at vægten er blevet nulstillet, altså primært at tarerings værdien er blevet nulstillet.
   \item \textbf{INTEGER\_RECEIVED} Antyder at operatøren har svaret på en \texttt{RM20}-dialog med et heltal. Eksempelvis når operatøren skal indtaste sit ID.
-  \item \textbf{EMPTY} \textbf{!!! Fjern evt denne !!!}
-  \item \textbf{NOTHING} \textbf{!!! Fjern evt denne !!!}
-\end{itemize}
+\end{my_itemize}
 
 Ved begivenheder hvor der er tilknyttet et resultat (\texttt{SCALE\_READ}, \texttt{SCALE\_TARED} og \texttt{INTEGER\_RECEIVED}) bliver dette lagret i passende attributter som ASE'en kan tilgå.
 
@@ -1021,13 +1163,73 @@ Ved begivenheder hvor der er tilknyttet et resultat (\texttt{SCALE\_READ}, \text
 Det er nødvendigt med asynkron kommunikation mellem ASE og vægt(simulator), samtidig med at svar behandles, hvorfor ASE'en er designet til at have to tråde (threads) kørende. Den ene lytter kontinuerligt efter input på forbindelse. Disse placeres uden yderligere behandling i en kø (First In First Out), hvorfra vores anden tråd kan udtage svar efter behov og behandle disse. Fordi denne kø tilgås af flere tråde, er det naturligvis nødvendigt med en kø-implementation der er Thread-safe.
 
 Forespørgsler og svar følger et helt bestemt mønster, hvorfor det er naturligt at lave en klasse der
-\begin{enumerate}
+\begin{my_enumerate}
   \item Kan formulere forespørgsler og sende disse
   \item Behandle svar på de formulerede forespørgsler og oversætte disse til begivenheder i ASE'ens kontekst.
-\end{enumerate}
+\end{my_enumerate}
 Denne vil naturligvis bruge vores \texttt{ScaleConnection}, men uafhængigt af tråden der lytter efter svar.
 
 % subsubsection Kommunikation med vægt (end)
+
+\subsubsection{Afvejningsprocedure} % (fold)
+
+Et af de centrale områder for projektet var at designe en fornuftig afvejningsprocedure. Vores forslag lægger sig tæt på op af den procedure der er beskrevet i opgaveformuleringen, men afviger på nogle få punkter. Herunder ses hvordan proceduren i store træk ser ud:
+
+\begin{my_enumerate}
+  \item Indtast operatør-ID
+    \begin{my_enumerate}
+      \item Operatør fundet \texttt{<navn>} - korrekt?
+        \begin{my_enumerate}
+          \item Ja: gå til \texttt{2}
+          \item Nej: gå til \texttt{1}
+        \end{my_enumerate}
+      \item Operatør ikke fundet - gå til \texttt{1}
+    \end{my_enumerate}
+  \item Indtast produktbatch id
+    \begin{my_enumerate}
+      \item Produktbatch fundet ud fra recept \texttt{<recept navn>} - korrekt?
+        \begin{my_enumerate}
+          \item Ja: gå til \texttt{3}
+          \item Nej: gå til \texttt{2}
+        \end{my_enumerate}
+      \item Produktbatch ikke fundet - gå til \texttt{2}
+      \item Produktbatch allerede afsluttet - gå til \texttt{2}
+    \end{my_enumerate}
+    \emph{Trin 3 til 8 gentages for hvert recept komponent}
+  \item Find råvarebatch med råvare \texttt{<råvare id>}
+    \begin{my_enumerate}
+      \item Der findes ingen gyldige råvarebatches - gå til \texttt{3} for næste komponent
+    \end{my_enumerate}
+  \item Indtast råvarebatch nr
+    \begin{my_enumerate}
+      \item Råvarebatch findes ikke - gå til \texttt{4}
+      \item Råvarebatch er ikke korrekt råvare - gå til \texttt{4}
+      \item Råvarebatch indeholder ikke tilstrækkelig mængde - gå til \texttt{4}
+    \end{my_enumerate}
+  \item Kontroller at vægt er tom
+    \begin{my_enumerate}
+      \item Vægt ikke tom - gå til \texttt{5}
+    \end{my_enumerate}
+  \item Placer skål på vægt og tryk OK for at tarere
+  \item Afmål mellem \texttt{xx} - \texttt{xx} kg og tryk ok
+    \begin{my_enumerate}
+      \item For lidt afmålt - gå til \texttt{7}
+      \item For meget afmålt - gå til \texttt{7}
+    \end{my_enumerate}
+  \item Afmåling gemt
+    \begin{my_enumerate}
+      \item Produktbatch afsluttet: gå til \texttt{9}
+      \item Ej afsluttet: gå til \texttt{3}
+    \end{my_enumerate}
+  \item Produktbatch afsluttet
+    \begin{my_enumerate}
+      \item Produktbatch ikke afsluttet - kan genoptages senere
+    \end{my_enumerate}
+  \item Gå til \texttt{1}
+\end{my_enumerate}
+
+
+% subsubsection Afvejningsprocedure (end)
 
 % subsection Design (end)
 
@@ -1035,7 +1237,7 @@ Denne vil naturligvis bruge vores \texttt{ScaleConnection}, men uafhængigt af t
 
 ASE'en består af 3 klasser og 2 enum's. De er som følger:
 
-\begin{itemize}
+\begin{my_itemize}
   \item \textbf{State} \texttt{Enum} der definerer de tilstande der er beskrevet i design afsnittet.
   \item \textbf{Event} \texttt{Enum} der definerer de begivender der er beskrevet i design afsnittet.
   \item \textbf{ASE} Main-klassen der er ansvarlig for afviklingen af programmet. Denne instantierer de andre klasser og starter de nødvendige tråde. Hvis ikke der er defineret standard en standard adresse og port (på en vægt) der skal forbindes til, varetager den også at tage imod disse input fra konsollen.
@@ -1045,10 +1247,10 @@ ASE'en består af 3 klasser og 2 enum's. De er som følger:
   \item \textbf{Controller} Selve hovedklassen i programmet. Når der er etableret forbindelse til en vægt varetager denne resten af forløbet i afvejningsproceduren.
 
     Indeholder en privat indre klasse:
-    \begin{itemize}
+    \begin{my_itemize}
       \item \textbf{Communicator} Indeholder funktionalitet til at formulere forespørgsler og behandle svar.
-    \end{itemize}
-\end{itemize}
+    \end{my_itemize}
+\end{my_itemize}
 
 Klasserne er vist i nedenstående klassediagram:
 
@@ -1080,10 +1282,10 @@ Slutteligt overgives kontrollen til \texttt{Controller}'en
 
 Valget af \texttt{ArrayBlockingQueue} som implementation af vores kø faldt meget naturligt, da den opfylder de krav vi havde til køen.
 
-\begin{itemize}
+\begin{my_itemize}
   \item \textbf{First In First Out} Svar behandles/udtages i den rækkefølge som de indløber fra vægten
   \item \textbf{Thread safe} Kan håndtere at flere tråde sideløbende indsætter i og udtager fra køen.
-\end{itemize}
+\end{my_itemize}
 
 Desuden er \texttt{Blocking} elementet i køen ønskværdigt i det at vores Controller ofte skal vente på et svar fra vægten. Ved at bruge metoden \texttt{take()} vil den returnere \texttt{head} fra køen hvis det er tilgængeligt (altså at køen ikke er tom), og ellers vente (og dermed blokere) til at et element er tilgængeligt.
 
@@ -1198,60 +1400,7 @@ og læses: ét eller flere heltal, der \emph{kan} være efterfulgt af et punktum
 
 \subsection{Test} % (fold)
 
-Vi har testet således at vi har forsøgt at dække alle scenarier der kan opstå i proceduren. Ved hver dialog har vi haft en liste af input der indeholder både ``korrekte, forventede input'', samt input der ikke modsvarer hvad der forventes for at nå til næste skridt i proceduren. Disse input har samtidig haft en note om hvilket trin i afvejningsproceduren ASE'en bør gå til. Ved at sammenligne denne liste med hvad vi ser på vægten, kan vi fastslå om ASE'en opfører sig som forventet.
-
-\begin{enumerate}
-  \item Indtast operatør-ID
-    \begin{enumerate}
-      \item Operatør fundet \texttt{<navn>} - korrekt?
-        \begin{enumerate}
-          \item Ja: gå til \texttt{2}
-          \item Nej: gå til \texttt{1}
-        \end{enumerate}
-      \item Operatør ikke fundet - gå til \texttt{1}
-    \end{enumerate}
-  \item Indtast produktbatch id
-    \begin{enumerate}
-      \item Produktbatch fundet ud fra recept \texttt{<recept navn>} - korrekt?
-        \begin{enumerate}
-          \item Ja: gå til \texttt{3}
-          \item Nej: gå til \texttt{2}
-        \end{enumerate}
-      \item Produktbatch ikke fundet - gå til \texttt{2}
-      \item Produktbatch allerede afsluttet - gå til \texttt{2}
-    \end{enumerate}
-    \emph{Trin 3 til 8 gentages for hvert recept komponent}
-  \item Find råvarebatch med råvare \texttt{<råvare id>}
-    \begin{enumerate}
-      \item Der findes ingen gyldige råvarebatches - gå til \texttt{3} for næste komponent
-    \end{enumerate}
-  \item Indtast råvarebatch nr
-    \begin{enumerate}
-      \item Råvarebatch findes ikke - gå til \texttt{4}
-      \item Råvarebatch er ikke korrekt råvare - gå til \texttt{4}
-      \item Råvarebatch indeholder ikke tilstrækkelig mængde - gå til \texttt{4}
-    \end{enumerate}
-  \item Kontroller at vægt er tom
-    \begin{enumerate}
-      \item Vægt ikke tom - gå til \texttt{5}
-    \end{enumerate}
-  \item Placer skål på vægt og tryk OK for at tarere
-  \item Afmål mellem \texttt{xx} - \texttt{xx} kg og tryk ok
-    \begin{enumerate}
-      \item For lidt afmålt - gå til \texttt{7}
-      \item For meget afmålt - gå til \texttt{7}
-    \end{enumerate}
-  \item Afmåling gemt
-    \begin{enumerate}
-      \item Produktbatch afsluttet: gå til \texttt{9}
-      \item Ej afsluttet: gå til \texttt{3}
-    \end{enumerate}
-  \item Produktbatch afsluttet
-    \begin{enumerate}
-      \item Produktbatch ikke afsluttet - kan genoptages senere
-    \end{enumerate}
-  \item Gå til \texttt{1}
-\end{enumerate}
+Vi har testet således at vi har forsøgt at dække alle scenarier der kan opstå i proceduren. Ved hver dialog har vi haft en liste af input der indeholder både ``korrekte, forventede input'', samt input der ikke modsvarer hvad der forventes for at nå til næste skridt i proceduren. Disse input har samtidig haft en note om hvilket trin i afvejningsproceduren (beskrevet i design afsnittet) ASE'en bør gå til. Ved at sammenligne denne liste med hvad vi ser på vægten, kan vi fastslå om ASE'en opfører sig som forventet. 
 
 % subsection Test (end)
 
@@ -1261,20 +1410,203 @@ Vi har testet således at vi har forsøgt at dække alle scenarier der kan opst�
 
 
 
-\section{Forbedringer} % (fold)
-
-De her forbedringer kan man laver
-
-% section Forbedringer (end)
-\clearpage
-
-
-
-
 \section{Konklusion} % (fold)
 
-Sådan her lyder konklusionen (lortet virker jo)
+Der er udviklet et system der til fulde overholder de krav der er stillet fra medicinal virksomheden.
 
+Fra den brugervenlige hjemmeside er det muligt at adminstrere alle aspekter af virksomhedens produkter og råvarer, og der er samtidig redundant sikring af, at input værdier overholder de gældende forretningsregler, idet disse gennemgår både client- og serverside validering. Der er anvendt et gennemgående tema og farver for alle sider, således at brugeren hurtigt lærer sidens konventioner at kende. Der er endvidere udviklet en hjemmeside specielt rettet mod smartphones, der giver operatørerne mulighed for let og hurtigt at tilgå oplysninger om de produktbatches der endnu ikke er produceret.
+
+Afvejningsstyringsenheden kan styre den procedure som operatøren skal gennemgå ved afvejning af råvarer. Enheden hjælper med opklarende beskeder hvor det er muligt, bl.a. fortæller den operatøren hvilke råvarebatches der er tilgængelige når denne skal afveje en bestemt råvare. Her tages bland andet højde for kun at inkludere råvarebatches der indeholder en tilstrækkelig mængde, i forhold til hvad recepten foreskriver. Enheden faciliterer i øvrigt at en operatør kun delvist udfører et produktbatch, hvorefter det kan genoptages af en anden operatør. Løbende som de enkelte komponenter afvejes, gemmes disse, og produktbatches status, start- samt slutdato opdateres. På den måde kan værkføreren løbende holde øje med produktionen.
+
+Simulatoren kan træde i stedet for en egentlig vægt, således at videreudvikling af ASE'en kan ske uden at have en egentlig vægt til rådighed. Simulatoren udmærker sig ved at der ved alle dialoger kan bruges udelukkende tasturets numpad og enter-tast, hvilket i høj grad formindsker den tid det tager at gennemløbe en test af ASE'en.
 % section Konklusion (end)
+\clearpage
+
+\appendix
+
+\section{Specificeret timeregnskab} % (fold)
+\label{sec:Specificeret timeregnskab}
+
+\subsection{Tobias} % (fold)
+
+\begin{tabular}{l | c c c c c | c}
+
+  \emph{Dato}
+  & \begin{sideways}Design\end{sideways} 
+  & \begin{sideways}Impl.\end{sideways} 
+  & \begin{sideways}Test\end{sideways} 
+  & \begin{sideways}Dok.\end{sideways} 
+  & \begin{sideways}Andet\end{sideways} \\
+  \hline
+  Fredag d. 1/6   &   &   &   &   & 3 \\
+  Mandag d. 4/6   &   & 5 &   &   & \\
+  Tirsdag d. 5/6  &   & 5 &   &   & \\
+  Onsdag d. 6/6   &   & 5 &   &   & \\
+  Torsdag d. 7/6  &   & 8 &   &   & \\
+  Fredag d. 8/6   &   & 8 &   &   & \\
+  Lørdag d. 9/6   &   & 3 &   &   & \\
+  Søndag d. 10/6  &   & 1 & 1 &   & \\
+  Mandag d. 11/6  &   & 1 &   &   & \\
+  Tirsdag d. 12/6 & 2 & 2 &   & 3 & \\
+  Onsdag d. 13/6  &   & 2 & 2 & 3 & \\
+  Torsdag d. 14/6 &   & 2 & 1 & 6 & \\
+  Fredag d. 15/6  & 2 & 1 & 1 & 6 & \\
+  Lørdag d. 16/6  &   &   &   &   & \\
+  Søndag d. 17/6  &   &   &   &   & \\
+
+\end{tabular}
+
+% subsection Tobias (end)
+
+\subsection{Martin} % (fold)
+
+\begin{tabular}{l | c c c c c | c}
+
+  \emph{Dato}
+  & \begin{sideways}Design\end{sideways} 
+  & \begin{sideways}Impl.\end{sideways} 
+  & \begin{sideways}Test\end{sideways} 
+  & \begin{sideways}Dok.\end{sideways} 
+  & \begin{sideways}Andet\end{sideways} \\
+  \hline
+  Fredag d. 1/6   &  &  &  &  & \\
+  Mandag d. 4/6   &  &  &  &  & \\
+  Tirsdag d. 5/6  & 2 & 4  &  &  & \\
+  Onsdag d. 6/6   & 2 & 4 &  &  & \\
+  Torsdag d. 7/6  & 2 & 4 &  &  & \\
+  Fredag d. 8/6   & 2 & 4 &  &  & \\
+  Lørdag d. 9/6   &  &  &  &  & \\
+  Søndag d. 10/6  &  &  &  &  & \\
+  Mandag d. 11/6  & 1 & 1 & 2 &  & \\
+  Tirsdag d. 12/6 &  & 1 & 2 & 2 & \\
+  Onsdag d. 13/6  &  &  &  & 5 & \\
+  Torsdag d. 14/6 &  & 2 &  & 3 & \\
+  Fredag d. 15/6  &  &  &  & 5 & \\
+  Lørdag d. 16/6  &  &  &  &  & \\
+  Søndag d. 17/6  &  &  &  &  & \\
+
+\end{tabular}
+% subsection Martin (end)
+
+\subsection{Flemming} % (fold)
+
+\begin{tabular}{l | c c c c c | c}
+
+  \emph{Dato}
+  & \begin{sideways}Design\end{sideways} 
+  & \begin{sideways}Impl.\end{sideways} 
+  & \begin{sideways}Test\end{sideways} 
+  & \begin{sideways}Dok.\end{sideways} 
+  & \begin{sideways}Andet\end{sideways} \\
+  \hline
+  %               & D & I & T & D & A
+  Fredag d. 1/6   &   &   &   &   & \\
+  Mandag d. 4/6   &   &   &   & 4 & 2\\
+  Tirsdag d. 5/6  & 3 &   &   &   & \\
+  Onsdag d. 6/6   &   & 6 &   &   & \\
+  Torsdag d. 7/6  & 2 & 5 &   &   & \\
+  Fredag d. 8/6   &   &   & 6 &   & \\
+  Lørdag d. 9/6   &   &   &   &   & \\
+  Søndag d. 10/6  &   &   &   &   & \\
+  Mandag d. 11/6  &   & 2 & 2 &   & 2\\
+  Tirsdag d. 12/6 &   &   &   & 3 & \\
+  Onsdag d. 13/6  &   & 1 & 2 & 2 & \\
+  Torsdag d. 14/6 &   & 2 &   & 3 & \\
+  Fredag d. 15/6  &   &   & 1 & 10 & \\
+  Lørdag d. 16/6  &   &   &   & 10 & \\
+  Søndag d. 17/6  &   &   &   &   & \\
+
+\end{tabular}
+
+
+% subsection Flemming (end)
+
+\subsection{Christian} % (fold)
+
+\begin{tabular}{l | c c c c c | c}
+
+  \emph{Dato}
+  & \begin{sideways}Design\end{sideways} 
+  & \begin{sideways}Impl.\end{sideways} 
+  & \begin{sideways}Test\end{sideways} 
+  & \begin{sideways}Dok.\end{sideways} 
+  & \begin{sideways}Andet\end{sideways} \\
+  \hline
+  %               & D & I & T & D & A
+  Fredag d. 1/6   & 2 &   &   &   & \\
+  Mandag d. 4/6   & 2 & 6 &   &   & \\
+  Tirsdag d. 5/6  &   & 6 &   &   & \\
+  Onsdag d. 6/6   & 3 &   & 4 &   & \\
+  Torsdag d. 7/6  &   & 2 & 4 &   & \\
+  Fredag d. 8/6   &   &   & 2 & 2 & \\
+  Lørdag d. 9/6   &   &   &   &   & \\
+  Søndag d. 10/6  &   &   &   &   & \\
+  Mandag d. 11/6  &   &   & 2 & 2 & \\
+  Tirsdag d. 12/6 &   &   &   & 4 & \\
+  Onsdag d. 13/6  &   &   &   & 6 & \\
+  Torsdag d. 14/6 &   &   &   & 4 & \\
+  Fredag d. 15/6  &   &   &   & 6 & \\
+  Lørdag d. 16/6  &   &   &   &   & \\
+  Søndag d. 17/6  &   &   &   &   & \\
+
+\end{tabular}
+
+
+% subsection Christian (end)
+
+\subsection{Lavdrim} % (fold)
+\begin{tabular}{l | c c c c c | c}
+
+  \emph{Dato}
+  & \begin{sideways}Design\end{sideways} 
+  & \begin{sideways}Impl.\end{sideways} 
+  & \begin{sideways}Test\end{sideways} 
+  & \begin{sideways}Dok.\end{sideways} 
+  & \begin{sideways}Andet\end{sideways} \\
+  \hline
+  %               & D & I & T & D & A
+  Fredag d. 1/6   &  &  &  &  & \\
+  Mandag d. 4/6   &  & 3 &  &  & \\
+  Tirsdag d. 5/6  &  &  &  &  & \\
+  Onsdag d. 6/6   &  & 4 &  &  & \\
+  Torsdag d. 7/6  &  &  &  &  & 6\\
+  Fredag d. 8/6   &  &  &  &  & 4\\
+  Lørdag d. 9/6   &  &  &  &  & \\
+  Søndag d. 10/6  &  &  &  &  & \\
+  Mandag d. 11/6  &  &  & 3 &  & \\
+  Tirsdag d. 12/6 &  &  & 3 &  & \\
+  Onsdag d. 13/6  &  &  &  & 5 & \\
+  Torsdag d. 14/6 &  &  &  & 5  & \\
+  Fredag d. 15/6  &  &  &  & 5 & \\
+  Lørdag d. 16/6  &  &  &  &  & \\
+  Søndag d. 17/6  &  &  &  &  & \\
+
+\end{tabular}
+
+% subsection Lavdrim (end)
+
+% section Specificeret timeregnskab (end)
+
+\section{Klassediagrammer} % (fold)
+
+\subsection{Simulator} % (fold)
+
+\begin{figure}[H]
+\begin{changemargin}{-2.5cm}{-2.5cm}
+  \centering
+  \includegraphics[scale=0.56]{graphics/sim/ClassDiagram1-complete.png}
+  \caption{Komplet klassediagram over Simulator pakken}
+\end{changemargin}
+\end{figure}
+
+
+% subsection Simulator (end)
+
+% section Klassediagrammer (end)
+\clearpage
+
+\section{Figur liste} % (fold)
+\listoffigures
+% section Figur liste (end)
 
 \end{document}
