@@ -5,7 +5,9 @@
 \usepackage{multirow}
 \renewcommand{\danishhyphenmins}{22}
 \renewcommand{\arraystretch}{1.3}
-%\usepackage{amsmath,amssymb,bm,mathtools}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\usepackage[top=3cm,bottom=3cm,left=4cm,right=4cm]{geometry}
+\usepackage{float}
 
 \usepackage{listings}
 \usepackage{color}
@@ -14,6 +16,7 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \lstset{
+  extendedchars=true,
   inputencoding=utf8,
   columns=flexible,
   basicstyle=\tt,
@@ -32,6 +35,8 @@
   showstringspaces=false,
   breaklines=true,
   morekeywords={State, Event, String}
+  aboveskip=0pt,
+  belowskip=-15pt
 }
 
 \newenvironment{changemargin}[2]{%
@@ -73,6 +78,7 @@ Sådan her er lortet forløbet
 % subsection Projektforløb (end)
 
 % section Indledning (end)
+\clearpage
 
 
 
@@ -257,6 +263,7 @@ Kommandoer:
 % subsection Simulator specifikation (end)
 
 % section Kravspecifikation (end)
+\clearpage
 
 
 
@@ -362,6 +369,7 @@ Da vores DTO’er kun består af get’er og set’er og en for DTO’ets egne f
 % subsection Test (end)
 
 % section Database (end)
+\clearpage
 
 
 
@@ -384,9 +392,14 @@ I kundens oplæg til produktet er det en del af værksførerens opgaver, at ud p
 
 Hjemmesiden bliver kodet efter Model–View–Controller principperne. Siden vil blive styret af en Java servlet som står funger som Controller. Viewet vil blive genereret af JSP sider, og Java Beans er modellen.  Hjemmesiden er event baseret, og controlleren vil ud fra disse events genererer de nødvendige modeller og dirigere brugeren ud på de korrekt views.
 
-\begin{center}
-  \textbf{Indsæt billede af MVC-model}
-\end{center}
+\begin{figure}[h!]
+\begin{changemargin}{-2cm}{-2cm}
+  \centering
+  \includegraphics[scale=0.8]{graphics/website/MVC-Princip.png}
+  \caption{MVC princippet}
+\end{changemargin}
+\end{figure}
+
 
 De forskellige views vil ikke komme til at kende hinanden, da det er controlleren som har det overordnede kendskab til alle jsp siderne. Dette betyder også at adgangskontroller kun ligger et centralt sted, og derved er det nemt at styre.
 
@@ -394,9 +407,14 @@ De forskellige views vil ikke komme til at kende hinanden, da det er controllere
 
 Til at designe den grafiske del af hjemmesiden har vi valgt at benytte 3. parts biblioteket Twitter Bootstrap .  Twitter Bootstrap er et simpelt og fleksibelt CSS og JavaScipt bibliotek som gør det nemt at sætte hjemmeside ens op på tværs af browsere. Siden vil blive bygget op af i 3 dele. Menuen som vil blive placeret yderst til venstre og altid vil være synlig. Til højre for menuen der blive vist hvad end brugeren har valgt, det kunne for eksempel være brugeradministrationen vinduet. Under dette vil der være beskeder til brugeren, det kunne være beskeder om den valgte operation er gået godt eller har fejlet.
 
-\begin{center}
-  \textbf{Indsæt billede af design-mockup}
-\end{center}
+\begin{figure}[H]
+%\begin{changemargin}{}{}
+  \centering
+  \includegraphics[scale=1]{graphics/website/mockup.png}
+  \caption{Design mockup af hjemmesiden}
+%\end{changemargin}
+\end{figure}
+
 
 % subsubsection Grafisk design (end)
 
@@ -421,7 +439,16 @@ Siden er opbygget 5 hovedsider.
 \end{itemize}
 
 Disse sider fungerer som administrations vinduer hvert emne.  Det er her at man oprette, slette eller rediger elementer inde for hvert område. 
-SITEMAP HER
+
+\begin{figure}[h!]
+\begin{changemargin}{-2cm}{-1cm}
+  \centering
+  \includegraphics[scale=0.75]{graphics/website/SiteMap.png}
+  \caption{Sitemap}
+\end{changemargin}
+\end{figure}
+
+
 Hvis man tager et kig på brugeradministrationen. Så kan man se at i toppen af siden er der knapper til at Oprette, Rediger og Slette brugere. Under knapperne er listen af brugere der er oprettet i systemet. I listen står der brugerens ID, deres navn samt hvilket niveau de har. Hvis man yderligere trykker ind på en bruger, får man alle informationer præsenteret som systemet rummer.  Disse oplysninger, undtagen brugeres ID, er mulige at ændre. 
 
 % subsubsection Hjemmesidens opbygning (end)
@@ -432,13 +459,49 @@ Hvis man tager et kig på brugeradministrationen. Så kan man se at i toppen af 
 
 Når en brugeren trykker på en knap bliver der sendt et event via POST som WebController opfanger og behandler. Flowet for hvordan et event på hjemmesiden bevæger sig igennem WebControlleren kan illustreres på denne måde. 
  
-\begin{center}
-  \textbf{ Figure 1 - WebControllerens behandling af et event }
-\end{center}
+\begin{figure}[h!]
+%\begin{changemargin}{}{}
+  \centering
+  \includegraphics[scale=1]{graphics/website/event-rejse.png}
+  \caption{WebControllerens behandling af et event}
+%\end{changemargin}
+\end{figure}
 
 Hvis konverteringen af  eventet fra en String til et Enum fejler eller hvis eventet ikke er sat, vil det blive sat til at være LoginPage hvilket vil få siden til at dirigerer brugeren hen til login siden. I setup funktionen bliver alle funktion klasser oprettet hvis de endnu ikke er oprettet. Dette sker første gang at siden bliver loadet, og de vil efterfølgende bliver lagt ind applikationens scopet. Første gang brugeren oprette forbindelse til siden bliver der lagt en login bean ind i sessions scopet. Det er denne bean som tjekker, og holder styr på om brugeren er logget ind eller om der er fejl. Hvis brugeren er logget ind, går controlleren videre til at udfører den handling brugeren har ønsket. En handling kunne være at gå til brugeradministrationen, at oprette en bruger eller noget tredje. 
 
-\textbf{Vis linje 69 til 95 fra WebController}
+\begin{changemargin}{-1.5cm}{-1.5c}
+\begin{lstlisting}
+void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  request.setCharacterEncoding("UTF-8");
+  application = request.getSession().getServletContext();
+  session = request.getSession();
+  this.request = request;
+  this.response = response;
+
+  if (request.getParameter("event") == null) {
+    event = Events.LoginPage;
+  } else {
+    event = convertToEvent(request.getParameter("event"));
+  }
+  setup();
+
+  /*
+   * Saetter event = LoginPage, hvis man ikke er logget ind, ikke forsoeger at logge ind eller hvis der er opstaaet en fejl i
+   * oprettelsen af forbindelsen til databasen
+   */
+  if (!login.isLoggedIn() && event != Events.Login && event != Events.Error) {
+    event = Events.LoginPage;
+  }
+
+  switch (event) {
+  case Login:
+    handleLogin();
+    break;
+    ...
+}}
+\end{lstlisting}
+\end{changemargin}
+
 
 \subsubsection{Data fra databasen ud til brugeren} % (fold)
 
@@ -458,7 +521,12 @@ Til at kunne kommunikerer med brugeren, er der blevet implementeret til et beske
 
 Beskeder bliver videregivet via et Arraylists af Messenges i request scopet. På hver side på hjemmesiden bliver Messenges.jsp inkluderet. Det er på Messenges.jsp at beskederne bliver håndteret og vist for brugeren. Ved at sende det via request scopet er vi sikre på at levetiden på dem, kun er for den enkelte side. Det gør at vi altid at sikre på at beskeder bliver givet på de korrekt tidspunkt, og forsvinder igen når der ikke er brug for dem.
 
-\textbf{BIILED af Beskeder / Ligger i Grafik jpg - png}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.6]{graphics/website/beskeder.png}
+  \caption{Beskeder til brugeren}
+\end{figure}
+
 
 % subsubsection Beskeder til brugeren (end)
 
@@ -467,8 +535,6 @@ Beskeder bliver videregivet via et Arraylists af Messenges i request scopet. På
 Alle jsp siderne er blevet beskyttet mod at man direkte kan tilgå dem. Dette er gjort for at sikre at alle brugere bliver styret at WebControlleren. Metoden vi har brugt til at gøre dette er ved at alle jsp siderne ligger i kataloget WEB-INF. Dette katalog kan ikke direkte tilgås, men kun ved at blive redirectet fra WebControlleren. 
 
 Når folk går ind på siden vil de vedhjælp af web.xml filen blive dirigeret til WebControlleren. Dette gøres ved at tilføje WebControlleren som en servlet, samt at tilføje servlet navnet til welcome listen. Yderligere har vi tilføjet /m,/M,/mobile og /mobile til XML filen, det gør at man vedhjælp af disse henvisninger kan få fat i den mobile udgave af hjemmesiden.
-
-\textbf{Vis et aktuelt billede af Web.XML}
 
 % subsubsection Web.XML (end)
 
@@ -482,9 +548,14 @@ På hjemmesiden kan der opstår mange former for fejl. De mest kritiske fejl der
 
 Vi har lavet en side til brug på mobiltelefoner og tablets. Fra denne side er det muligt at få et overblik over hvilke råvare der mangler at blive afvejet for alle de produktionsbatche der endnu ikke er afsluttet. Ideen er at i stedet for at skulle printe en liste af produktionskomponenterne ud, kan operatørerne vedhjælp af deres telefon altid få et hurtigt og altid opdateret overblik. 
 
-\begin{center}
-  Billeder af: Login, Produktionsbatch, Overview (i den rækkefølge, ligger i mobil hjemmeside, må gerne stå på række)
-\end{center}
+\begin{figure}[H]
+\begin{changemargin}{-1.2cm}{-1.2cm}
+  \includegraphics[scale=0.23]{graphics/website/mobile/Login.PNG}
+  \includegraphics[scale=0.23]{graphics/website/mobile/ProduktionsBatch.PNG}
+  \includegraphics[scale=0.23]{graphics/website/mobile/Oversigt.PNG}
+  \caption{Mobilt view af login, produktionsbatch og oversigten}
+\end{changemargin}
+\end{figure}
 
 Siden er opbygget på samme måde som den normale udgave. Forskellen er at den er grafiskoptimeret til at fungerer på meget små skærme. Derfor tjekkes det om brugeren bruger en mobil webbrowser, hvis det ikke er tilfældet, sendes brugeren hen til den normale version af hjemmesiden. Metoden vi benytter til at tjekke browser versionen er ved at sammenligne brugerens user-agent, som man får ved at kalde request.getHeader("user-agent"), med en liste af forskellige kendte mobilbrowsere. Det er derfor muligt, hvis brugeren manuelt ændrer deres user-agent, at komme ind på mobilsiden, men det har vi dog valgt at se bort fra, da det ikke er kritisk at afskærme brugeren.  Mobil siden er designet med et responsive style sheet, det gør at alt efter hvor stor opløsning browseren har, ændre designet sig så det passer.
 
@@ -494,11 +565,19 @@ Dette gøres ved at lave nogle regler for hvornår hvilke sektioner af css filen
 
 \subsubsection{Diagrammer} % (fold)
 
-Sekvensdiagrammer
-Recept tilføjelse
-Når man ønsker at tilføje en ny recept skal man først oprette navnet på recepten. Derefter tilføjer man de komponenter man ønsker at recepten skal indeholde. Dette gøres ved at men en efter en vælger hvilken råvare man vil benytte, mængden samt hvilken en tolerance man ønsker. 
-BILLED: Flowdiagram - Opret Recept.png
+\paragraph{Recept tilføjelse} % (fold)
 
+Når man ønsker at tilføje en ny recept skal man først oprette navnet på recepten. Derefter tilføjer man de komponenter man ønsker at recepten skal indeholde. Dette gøres ved at men en efter en vælger hvilken råvare man vil benytte, mængden samt hvilken en tolerance man ønsker. 
+
+\begin{figure}[H]
+%\begin{changemargin}{}{}
+  \centering
+  \includegraphics[scale=1]{graphics/website/flow-opret-recept.png}
+  \caption{}
+%\end{changemargin}
+\end{figure}
+
+% paragraph Recept tilføjelse (end)
 
 % subsubsection Diagrammer (end)
 
@@ -524,6 +603,7 @@ Testen af serverside valideringen er blevet lavet i 2 omgange, først har vi ved
 % subsection Test (end)
 
 % section Hjemmeside (end)
+\clearpage
 
 
 
@@ -565,12 +645,13 @@ Efter vi havde fået specificeret hvilke kommandoer, og krav vi havde til vores 
 
 Ud fra vores kode, fik vi så konstrueret et klasse diagram, vi har dog valgt at begrænse det, til kun at vise public metoder og parameter. Dette valgte vi da private, ikke kan benyttes af andre klasser, og der bliver ikke benyttede nogle med protected. Billedet der kan ses, er et uddrag fra vores klasse diagram af simulatoren, det man kan se ud fra billedet, er hvordan gui og selve simulatoren sidder sammen. Som der ses, har vi valgt også at tilføje ScaleProtocol til vores GUIButtons, da det gjorde det meget nemmere at få sendt de rigtige kommandoer, af sted til klienten.
 
-\begin{center}
-Uddrag.png
-
-Tilhørende tekst: Et uddrag fra klasse diagrammet over vores simulator, der fulde kan ses i bilaget.
-
-\end{center}
+\begin{figure}[H]
+\begin{changemargin}{-0.5cm}{}
+  \centering
+  \includegraphics[scale=0.8]{graphics/sim/uddrag.png}
+\end{changemargin}
+  \caption{Et uddrag fra klasse diagrammet over vores simulator, der fulde kan ses i bilaget.}
+\end{figure}
 
 % subsubsection Klassediagram (end)
 
@@ -584,11 +665,20 @@ I implementeringen af vægt simulatoren, har vi benyttede os af nogle af de fors
 
 Tråde, har vi også valgt at benytte, i vores vægt simulator, da det gjorde det nemmere, at få forespørgsler ind, og samme tid få simulatoren til at behandle dem. Måden vi har sat det op på, er ved at få 2 tråde til at køre, en der kørte protokollen, og en der kørte serveren. For at sørger for at vi altid behandler den nyeste forespørgsel, benytter vi os af java’s egen buffer ”ArrayBlockingQueue”. I denne benytter vi os af put, til at tilføje forespørgsler, og take til at hive forespørgslerne ud. Take sørger samme tid for at vente på en forespørgsel, hvis der ikke er en i bufferen. I koden neden under ses hvordan vores protokol tråden køre, hvor man kan se, at vi benytter os af queue.take(), til at hente og fjerne det første request, der er i bufferen queue.
 
-\begin{center}
-ScaleProtocol.java linje 30-42
-
-Tilhørende tekst: Denne metode, er tråden der tilhører vores ScaleProtocol.
-\end{center}
+\begin{figure}[h!]
+\begin{lstlisting}
+public void run() {
+  while(true) {
+    Request request;
+    try {
+      request = queue.take();
+      analyzeRequest(request);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+} } }
+\end{lstlisting}
+  \caption{Denne metode er tråden der tilhører vores ScaleProtocol}
+\end{figure}
 
 % subsubsection Threads (end)
 
@@ -598,10 +688,28 @@ For at få sat vores server op, benyttede vi os af sockets, for at kunne åbne e
 
 For at kunne få vægt simulatoren til at acceptere klienter, stater vi med at oprette en ServerSocket på port 8000. Efterfulgt af dette, skal vi gøre det muligt for en klient at skabe en forbindelse til vores server, dette gør vi ved brug af serverSocket.accept() (se kode neden under). Denne metode lytter efter en forbindelse, og venter på at en forbindelse er skabt, denne forbindelse bliver så lig en ny Socket, som så er vores klient. 
 
-\begin{center}
-ScaleServer.java linje 57-68
-Tilhørende tekst: Denne metode, sørger for at simulatoren kan acceptere en klient.
-\end{center}
+\begin{changemargin}{-1.5cm}{-1.5cm}
+\begin{lstlisting}
+void acceptClient() {
+  try {
+    System.out.format("Waiting for new client on socket %d%n%n", portNumber);
+    GUIInfo.getClientTextField()
+            .setText("Waiting for new client on socket " + portNumber);
+    clientSocket = serverSocket.accept();
+    System.out.format("Accepted new client: %s@%d%n%n",
+                        clientSocket.getInetAddress().toString(),
+                        clientSocket.getPort());
+    GUIInfo.getClientTextField()
+            .setText(clientSocket.getInetAddress().toString());
+  } catch (IOException e) {
+    System.out.format("Failed to accept client on %d", portNumber);
+    GUIInfo.getClientTextField().setText("Failed to accept client");
+  } }
+\end{lstlisting}
+\end{changemargin}
+\begin{figure}[H]
+  \caption{Denne metode, sørger for at simulatoren kan acceptere en klient.}
+\end{figure}
 
 Efter dette åbner vi så op for strømmene så vi kan få forespørgsler ind og sender svar til klienten. Klienten kan blandt andet være vores ASE, men vi kan dog også forbinde til vægt simulatoren via en Telnet klient, dette vil vi dog kommer mere ind på i test.
 
@@ -611,27 +719,54 @@ Efter dette åbner vi så op for strømmene så vi kan få forespørgsler ind og
 
 I vores implementering af GUI, har vi både benyttede os af swing og awt, da swing bliver benyttede til at sætte alle elementer op vi skal bruge som knapper, tekst felter. Awt bliver brugt til fx at lave forskellige kommandoer når man trykker på en knap, det benyttes dog også, til at definere forskellige indstillinger i swing elementerne, som fx layout. På billedet neden under ses hvordan vi har designet vores gui, der skal dog siges at den er lavet uden brug af en gui builder.
 
-\begin{center}
-screenDumb1.png
-
-Tilhørende tekst: Når programmet starter, ser gui’en således ud, hvor man kan se, at den venter på at en klient, forbinder til den.
-\end{center}
+\begin{figure}[H]
+\begin{changemargin}{-1.3cm}{}
+  \centering
+  \includegraphics[scale=0.8]{graphics/sim/screenDumb1.png}
+  \caption{Efter opstart venter simulatoren på en ny klient}
+\end{changemargin}
+\end{figure}
 
 Det layout vi har valgt at benytte os af er ”GridBagLayout”, da det giver større frihed med designet. Måden det fungere på, er at det er sat op som et gitter, hvor man så kan bestemme hvor i gitteret det skal placeres, og hvor mange felter det skal fylde. Det vi benytter os til at definere positionen i vores panel er GridBagConstraints, hvor man så kan vælge positionen, bredden, højden og meget mere.
 
-\begin{center}
-GUIDisplay.java linje 87-99
+\begin{lstlisting}
+private GridBagConstraints position(int x, int y, int width, int height, int anchor, Insets insets) {
 
-Tilhørende tekst: Metoden vi benytter til at bestemme, komponenternes position, og hvordan det skal sættes op i vores panel.
-\end{center}
+    GridBagConstraints c = new GridBagConstraints();
+
+    c.gridx = x;
+    c.gridy = y;
+    c.gridwidth = width;
+    c.gridheight = height;
+    c.fill = GridBagConstraints.BOTH;
+    c.anchor = anchor;
+    c.insets = insets;
+    
+    return c;
+  } 
+\end{lstlisting}
+\begin{figure}[h!]
+  \caption{Metoden vi benytter til at bestemme, komponenternes position, og hvordan det skal sættes op i vores panel.}
+\end{figure}
 
 Måden vi har valgt at implementere vores knapper, er lidt mere anderledes, inde de andre komponenter vi benytter os. Det vi har gjort, er at kreere 5 JButton’s arrays som alle består af 6 Jbutten’s, hvor 4 er dem er forskellige. Grunden til vi benytter os af så mange, er at det er forskelligt hvad knapperne skal gøre, for hver kommando der skal benytte sig af knapperne. Hver gang der kommer en ny kommando ind, som skal bruge et andet sæt knapper, sørger vi så for at skifte det nuværende panel ud, med det panel der høre til den kommando. For altid at kunne referere til det rigtige sæt af knapper, har vi et ekstra array, som så hele tiden bliver sat lig det nuværende sæt, så det altid er de rigtige knapper vi refererer til.
 
-\begin{center}
-GUI.java linje 67-77
-
-Tilhørende tekst: Metoden vi benytter når vi går hen til en ny kommando.
-\end{center}
+\begin{lstlisting}
+public void newCommand(JPanel panel){
+  contentPane.remove(buttonPane);
+  buttonPane = panel;
+  contentPane.add(buttonPane, BorderLayout.CENTER);
+  
+  frame.setContentPane(contentPane);
+  frame.setVisible(true);
+  
+  GUIDisplay.getEditableTextField().requestFocusInWindow();
+  GUIDisplay.getEditableTextField().selectAll();
+}
+\end{lstlisting}
+\begin{figure}[h!]
+  \caption{Metoden vi benytter når vi går hen til en ny kommando.}
+\end{figure}
 
 For at forbedre brugervenligheden i GUI, fik vi også implementeret en KeyListener. Her valgte vi at få den til trykke den femte knap ned, når man har fokus, i det tekst felt der kan skrives i, og man trykker på enter.
 
@@ -648,29 +783,35 @@ For at kunne teste simulatoren, har vi skulle bruge en klient, der kunne oprette
 
 I billedet der ses nedenunder, benytter vi os af putty’s telnet klient, til at oprette forbindelse til vores simulator. Det man kan se vi tester, er de mere simple kommandoer S, T og Z, som står for at hente, tara’ere og nulstille vægten. Som der ses på billedet, starter vi med at tjekke hvad vi egentlig har på vægten ved brug af S, her efter tara’ere vi vægten med T, og tjekker hvor meget der så er på vægten bagefter. Herefter lægger vi mere på vægten, hvorefter vi ser hvor meget vægt der ligger på vægten. Til sidst nulstiller vi så vægten med Z, og undersøger om den er blevet nulstillet med S.
 
-\begin{center}
-screenDumb2.png
-
-Tilhørende tekst: Test af S, T og Z kommandoerne, se bilag screenDumb3.png for billede af simulator efter der er tilføjet 0,87 kg.
-\end{center}
+\begin{figure}[h!]
+\begin{changemargin}{-1cm}{}
+  \centering
+  \includegraphics[scale=0.9]{graphics/sim/screenDumb2.png}
+  \caption{Test af S, T og Z kommandoer}
+\end{changemargin}
+\end{figure}
 
 Nogle af de fejl vi stødte på ved brug disse kommandoer, var måden vi tara’ere i simulatoren var forkert. Det der var meningen simulatoren skulle gøre, var at sætte tara lig den nuværende netto, det den dog gjorde, var at ligge netto til tara. Så hvis tara er lig 0.5 kg og netto er lig 1.3 kg, og man tara’ere så vil tara blive lig 1.8 kg og netto lig 0.0 kg, det den dog skulle gøre var at sætte tara lig 1.3 kg og netto lig 0.0 kg.
 
 Med de mere komplicerede kommandoer, kan der komme flere svar tilbage til klienten, som alle skal testes. Vi starter med RM20 kommandoen, og når kommandoen er sat i gang, kan man kun kontakte simulatoren med S, T og Z, ind til kommandoen er overstået, hvis man prøver andre kommandoer, kommer svaret ”RM20 I” tilbage. Derfor valgte vi med at teste taste fejl til at starte med, og så længe kommandoen starter med RM20, kan simulatoren ligesom vægten forstå kommandoen, men ikke udeføre den da en parameter er forkert. Hvis kommandoen er skrevet korrekt (RM20 8 ”Tekst” ”” ””), vil simulatoren sende ”RM20 B”, hvilket betyder kommandoen er udført, og venter på bruger input. Dette vil få vores simulator til at vise teksten, og skifte til knapperne for RM20, samt vente på bruger input, som kan ses på billedet neden under.
 
-\begin{center}
-screenDumb6.png
-
-Tilhørende tekst: Efter RM20 8 Kommandoen er sendt til simulatoren.
-\end{center}
+\begin{figure}[H]
+\begin{changemargin}{-1.3cm}{}
+  \centering
+  \includegraphics[scale=0.8]{graphics/sim/screenDumb6.png}
+  \caption{Efter RM20 8 Kommandoen er sendt til simulatoren.}
+\end{changemargin}
+\end{figure}
 
 Som der ses på screenDumb6.png, er der 2 knapper ok og cancel, hvis ok knappen bliver tastet bliver der sendt RM20 A ”Tekst” tilbage, hvor ”Tekst” er det brugeren har skrevet. Hvorimod hvis der bliver trykket cancel ville klienten få RM20 C svaret.
 
-\begin{center}
-screenDumb5.png
-
-Tilhørende tekst: Telnet konsollen for vores test af RM20 8 kommandoen.
-\end{center}
+\begin{figure}[H]
+\begin{changemargin}{-1cm}{}
+  \centering
+  \includegraphics[scale=0.9]{graphics/sim/screenDumb5.png}
+  \caption{Telnet konsollen for vores test af RM20 8 kommandoen.}
+\end{changemargin}
+\end{figure}
 
 Ved denne test, stødte vi dog ikke på nogen større fejl programmet, en af fejlene vi stødte på var at vi havde glemt at tilføje svaret hvis en kommando havde fået en forkert parameter ind.
 
@@ -695,6 +836,8 @@ Da dette blev rettet, begyndte en NullPointerException i ”AWT-EventQueue-0” 
 % subsection Test (end)
 
 % section Simulator (end)
+\clearpage
+
 
 
 
@@ -1068,6 +1211,8 @@ Vi har testet således at vi har forsøgt at dække alle scenarier der kan opst�
 % subsection Test (end)
 
 % section Afvejnings Styrings Enhed (end)
+\clearpage
+
 
 
 
@@ -1076,6 +1221,8 @@ Vi har testet således at vi har forsøgt at dække alle scenarier der kan opst�
 De her forbedringer kan man laver
 
 % section Forbedringer (end)
+\clearpage
+
 
 
 
