@@ -4,7 +4,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{multirow}
 \renewcommand{\danishhyphenmins}{22}
-\renewcommand{\arraystretch}{1.3}
+%\renewcommand{\arraystretch}{1.3}
+\linespread{1.15}
 \usepackage{amsmath,amssymb,bm,mathtools}
 \usepackage[top=3cm,bottom=3cm,left=4cm,right=4cm]{geometry}
 \usepackage{float}
@@ -56,8 +57,6 @@
 }
 
 \begin{document}
-\maketitle
-
 \section*{Installationsvejledning} % (fold)
 
 Sådan her installerer du lortet
@@ -69,11 +68,32 @@ Sådan her installerer du lortet
 
 \section{Indledning} % (fold)
 
-Det her handler det om
+Nærværende rapport dokumenterer Gruppe 17's arbejde under 3 ugers projektet på 2. semester af Diplom-IT retningen på Danmarks Tekniske Universitet.
+
+Projektet omhandler udviklingen af et softwaresystem der skal assistere en medicinalvirksomhed i arbejdet med produktion, lagerstyring samt dokumentation. Systemet skal baseres på en nuværende struktur, hvorfor det er krav at det nye system overholder de samme forretningsregler som det gamle system.
+
+Et kort oprids af firmaets ønsker:
+\begin{itemize}
+  \item Der ønskes udviklet en webapplikation hvorfra udvalgte ansatte kan styre virksomhedens lager, deres produkter og selve produktionen.
+  \item Der ønskes udviklet en program der kan styre afvejningen af råvarer der indgår i produkterne.
+  \item Begge ovenstående enheder skal arbejde ud fra en fælles database
+\end{itemize}
+Der ønskes desuden udviklet et program der kan simulere de vægte firmaet anvender til afvejning.
 
 \subsection{Projektforløb} % (fold)
 
-Sådan her er lortet forløbet
+Gruppen har inddelt imellem sådan at medlemmerne hver især har fået hovedansvaret for forskellige komponenter. I projektets første uge blev der fokuseret på design og udvikling af komponenter, og i projektets anden uge blev der fokuseret på test og dokumentation af systemet.
+
+Arbejdsfordelingen har været som følger:
+
+\begin{itemize}
+  \item Tobias har stået for udvikling og dokumentation af vægtsimulatoren
+  \item Christian har haft ansvaret for database design, udvikling af datalaget, samt dokumenteret disse.
+  \item Martin har haft ansvaret for udvikling og dokumentation af hjemmesiden, samt udarbejdelse af poster.
+  \item Lavdrim har haft ansvaret for kravspecifikation, udarbejdelse af diverse diagrammer samt hjulpet til hvor der har været behov.
+  \item Flemming har stået for udvikling og dokumentation af afvejningsstyringsenheden, udarbejdelse af rapportens øvrige tekst, samt opsætning af rapport. Har i øvrigt fungeret som projektleder med ansvar for aflevering af milestones og den endelige rapport.
+ 
+\end{itemize}
 
 % subsection Projektforløb (end)
 
